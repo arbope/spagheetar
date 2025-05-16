@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import GuitarApp from './components/guitarApp';
 
 export default function Home() {

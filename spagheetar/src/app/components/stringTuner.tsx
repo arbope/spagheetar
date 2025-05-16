@@ -8,7 +8,7 @@ interface StringProps {
 
 const StringTuner: React.FC<StringProps> = ({ strings , tuning, setTuning}) => {
     const refineTuning = (index: number, value: string) => {
-        const tuner = [...tuning]; // Create a new array to avoid direct mutation
+        const tuner = [...tuning];
         tuner[index] = value;
         setTuning(tuner);
     };
@@ -16,7 +16,7 @@ const StringTuner: React.FC<StringProps> = ({ strings , tuning, setTuning}) => {
         <div className='h-min w-7'>
             {Array.from({ length: strings }).map((_, index) => (
                 <div className="flex border-y-1 border-l-1 border-indigo-500 " key={index}>
-                    <div className="bg-[#DEF131] h-7 border-x-1 border-indigo-500 flex items-center justify-center flex-1">
+                    <div className="bg-gray-600 h-7 border-x-1 border-indigo-500 flex items-center justify-center flex-1">
                         <select
                             className="appearance-none bg-transparent text-center text-xs w-full h-full p-1 focus:outline-none cursor-pointer text-black"
                             value={tuning[index]}

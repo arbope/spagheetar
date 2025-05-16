@@ -10,8 +10,8 @@ interface FretboardProps {
 }
 
 const Fretboard: React.FC<FretboardProps> = ({ strings, frets, mode, root, tuning }) => {
-    var intervals = [0, 2, 4, 5, 7, 9, 11];
-    var keyShift = 0;
+    let intervals = [0, 2, 4, 5, 7, 9, 11];
+    let keyShift = 0;
     const MAJOR = [0, 2, 4, 5, 7, 9, 11];
     const MINOR_MEL = [0, 2, 3, 5, 7, 9, 11];
     const MINOR_HAR = [0, 2, 3, 5, 7, 8, 11];
@@ -76,7 +76,7 @@ const Fretboard: React.FC<FretboardProps> = ({ strings, frets, mode, root, tunin
             break;
     }
     const shift = (t: string) => {
-        var shft;
+        let shft;
         switch (t) {
             case 'c':
                 shft = 0;
@@ -121,7 +121,7 @@ const Fretboard: React.FC<FretboardProps> = ({ strings, frets, mode, root, tunin
         return shft;
     };
     const calculateNote = (i: number, i2: number) => {
-        var note;
+        let note;
         i = (i - keyShift + shift(tuning[i2]) + 1) % 12;
         if (i < 0) i += 12;
         if (intervals.includes(i)) {
