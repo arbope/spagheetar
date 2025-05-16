@@ -138,7 +138,7 @@ const Fretboard: React.FC<FretboardProps> = ({ strings, frets, mode, root, tunin
                 <div className="flex border-y-1 border-l-8 border-indigo-500 " key={index}>
                     {Array.from({ length: frets }).map((_, fretIndex) => (
                         <div
-                            className="bg-[#DEF131] h-7 border-x-1 border-indigo-500 flex items-center justify-center flex-1"
+                            className="bg-[#989a87] h-7 border-x-1 border-indigo-500 flex items-center justify-center flex-1"
                             key={fretIndex}
                         >
                             {calculateNote(fretIndex,index) === null ?
