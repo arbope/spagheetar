@@ -133,7 +133,7 @@ const Fretboard: React.FC<FretboardProps> = ({ strings, frets, mode, root, tunin
     };
 
     return (
-        <div className='h-min w-[65vw]'>
+        <div className='h-min w-[65vw] mt-6'>
             {Array.from({ length: strings }).map((_, index) => (
                 <div className="flex border-y-1 border-l-8 border-indigo-500 " key={index}>
                     {Array.from({ length: frets }).map((_, fretIndex) => (
