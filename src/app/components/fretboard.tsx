@@ -15,7 +15,7 @@ const Fretboard: React.FC<FretboardProps> = ({ strings, frets, mode, root, tunin
 
     const intervals = modes[mode] || modes['major'];
 
-    let keyShift = getKeyShift(root);
+    const keyShift = getKeyShift(root);
 
     const calculateNote = (i: number, i2: number) => {
         let note;

@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import Selection from './selector';
 import Fretboard from './fretboard';
 import StringTuner from './stringTuner';
+import { modes } from '../constants';
 
 const GuitarApp = () => {
     const [strings, setStrings] = useState(6);
     const [frets, setFrets] = useState(12);
-    const [mode, setMode] = useState('major');
+    const [mode, setMode] = useState<keyof typeof modes>('major');
     const [root, setRoot] = useState('c');
     const [tuning, setTuning] = useState(['e','b','g','d','a','e']);
 

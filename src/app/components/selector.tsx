@@ -9,7 +9,7 @@ interface SelectionProps {
   root: string;
   setFrets: (value: number) => void;
   setStrings: (value: number) => void;
-  setMode: (value: string) => void;
+  setMode: (value: keyof typeof modes) => void;
   setRoot: (value: string) => void;
 }
 
@@ -67,7 +67,7 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
         <select
           className="px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-center"
           value={mode}
-          onChange={(e) => setMode(String(e.target.value))}
+          onChange={(e) => setMode(e.target.value as keyof typeof modes)}
         >
           {Object.keys(modes).map((mode) => (
             <option key={mode} value={mode}>
