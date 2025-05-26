@@ -1,5 +1,7 @@
 "use client";
 
+import { modes } from "../constants";
+
 interface SelectionProps {
   strings: number;
   frets: number;
@@ -52,7 +54,7 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
           value={frets}
           onChange={(e) => setFrets(Number(e.target.value))}
         >
-          {Array.from({ length: 33 }, (_, i) => i + 1).map((num) => (
+          {Array.from({ length: 33 }, (_, i) => i + 5).map((num) => (
             <option key={num} value={num}>
               {num} Frets
             </option>
@@ -63,13 +65,13 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
       <section className="py-12 bg-purple-500 text-center">
         <h2 className="text-2xl font-semibold mb-4">MODE</h2>
         <select
-          className="px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-center"
           value={mode}
           onChange={(e) => setMode(String(e.target.value))}
         >
-          {['maj', 'min', 'mel', 'har'].map((mode) => (
+          {Object.keys(modes).map((mode) => (
             <option key={mode} value={mode}>
-              mode {mode}
+              {mode}
             </option>
           ))}
         </select>
