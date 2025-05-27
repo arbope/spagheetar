@@ -16,7 +16,7 @@ const GuitarApp = () => {
         <div>
             <Selection strings={strings} setStrings={setStrings} frets={frets} setFrets={setFrets} mode={mode} setMode={setMode}  root={root} setRoot={setRoot} />
             <div className='flex'>
-                <StringTuner root={root} strings={strings} tuning={tuning} setTuning={setTuning}/>
+                <StringTuner root={root} mode={mode} strings={strings} tuning={tuning} setTuning={setTuning}/>
                 <Fretboard strings={strings} frets={frets} tuning={tuning} mode={mode} root={root} />
             </div>
         </div>
