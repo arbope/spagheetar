@@ -38,8 +38,6 @@ export const COLORS = [
     '#111111', // 11: Major 7th (Bright Black)
 ];
 
-
-
 export const getNoteColor = (note: string | null, root: string): string => {
     if (note === null) {
         return 'transparent';
