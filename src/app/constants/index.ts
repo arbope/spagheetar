@@ -63,6 +63,22 @@ export const COLORS = [
     '#111111', // 11: Major 7th (Bright Black)
 ];
 
+
+const intervalNames = [
+    'Root',         // 0
+    'b2',           // 1
+    'Major 2nd',    // 2
+    'Minor 3rd',    // 3
+    'Major 3rd',    // 4
+    'Perfect 4th',  // 5
+    'Tritone',      // 6
+    'Perfect 5th',  // 7
+    'Minor 6th',    // 8
+    'Major 6th',    // 9
+    'Minor 7th',    // 10
+    'Major 7th',    // 11
+];
+
 export const getNoteColor = (note: string | null, root: string): string => {
     if (note === null) {
         return 'transparent';

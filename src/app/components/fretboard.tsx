@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import { notes, modes, getKeyShift, getNoteColor, getContrastingTextColor } from '../constants';
 
 interface FretboardProps {
@@ -12,36 +12,64 @@ interface FretboardProps {
     customIntervals: number[];
 }
 
+const intervalNames = [
+    'Root',         // 0
+    'b2',           // 1
+    'Major 2nd',    // 2
+    'Minor 3rd',    // 3
+    'Major 3rd',    // 4
+    'Perfect 4th',  // 5
+    'Tritone',      // 6
+    'Perfect 5th',  // 7
+    'Minor 6th',    // 8
+    'Major 6th',    // 9
+    'Minor 7th',    // 10
+    'Major 7th',    // 11
+];
+
 const Fretboard: React.FC<FretboardProps> = ({
     strings, frets, mode, root, tuning,
     onToggleCustomInterval,
     customIntervals
 }) => {
 
-    const intervals = mode === 'custom' ? customIntervals : modes[mode] || modes['major'];
+    const [hoveredInterval, setHoveredInterval] = useState<number | null>(null);
+    const [mousePos, setMousePos] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
 
+    const intervals = mode === 'custom' ? customIntervals : modes[mode] || modes['major'];
     const keyShift = getKeyShift(root);
 
-    const calculateNote = (fret: number, stringIndex: number) => {
-        let noteIndex = (fret - keyShift + getKeyShift(tuning[stringIndex]) + 1) % 12;
-        if (noteIndex < 0) noteIndex += 12;
+    const calculateInterval = (fret: number, stringIndex: number) => {
+        let interval = (fret - keyShift + getKeyShift(tuning[stringIndex]) + 1) % 12;
+        if (interval < 0) interval += 12;
+        return interval;
+    };
 
-        if (intervals.includes(noteIndex)) {
-            return notes[(noteIndex + keyShift) % 12];
-        }
-        return null;
+    const calculateNote = (interval: number) => {
+        return intervals.includes(interval) ? notes[(interval + keyShift) % 12] : null;
     };
 
     const handleFretClick = (fret: number, stringIndex: number) => {
         if (mode !== 'custom' || !onToggleCustomInterval) return;
-
-        let interval = (fret - keyShift + getKeyShift(tuning[stringIndex]) + 1) % 12;
-        if (interval < 0) interval += 12;
+        const interval = calculateInterval(fret, stringIndex);
         onToggleCustomInterval(interval);
     };
 
+    const handleMouseEnter = (fret: number, stringIndex: number) => {
+        const interval = calculateInterval(fret, stringIndex);
+        setHoveredInterval(interval);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredInterval(null);
+    };
+
     return (
-        <div className='h-min w-[65vw] mt-6'>
+        <div className='h-min w-[75vw] mt-6 relative'>
             <div className="flex ml-1.5 ">
                 {Array.from({ length: frets }).map((_, fretIndex) => (
                     <div
@@ -55,12 +83,17 @@ const Fretboard: React.FC<FretboardProps> = ({
             {Array.from({ length: strings }).map((_, stringIndex) => (
                 <div className="flex border-y-1 border-l-8 border-indigo-500" key={stringIndex}>
                     {Array.from({ length: frets }).map((_, fretIndex) => {
-                        const note = calculateNote(fretIndex, stringIndex);
+                        const interval = calculateInterval(fretIndex, stringIndex);
+                        const note = calculateNote(interval);
+
                         return (
                             <div
                                 key={fretIndex}
                                 className="bg-[#989a87] h-7 border-x-1 border-indigo-500 flex items-center justify-center flex-1 cursor-pointer"
                                 onClick={() => handleFretClick(fretIndex, stringIndex)}
+                                onMouseEnter={() => handleMouseEnter(fretIndex, stringIndex)}
+                                onMouseMove={handleMouseMove}
+                                onMouseLeave={handleMouseLeave}
                             >
                                 {note === null ? null : (
                                     <div
@@ -78,6 +111,23 @@ const Fretboard: React.FC<FretboardProps> = ({
                     })}
                 </div>
             ))}
+
+            {hoveredInterval !== null && (
+                <div
+                    className="absolute px-2 py-1 rounded text-sm text-white bg-gray-800"
+                    style={{
+                        left: mousePos.x + 10,
+                        top: mousePos.y + 10,
+                        opacity: 0.6,
+                        borderRadius: '8px',
+                        pointerEvents: 'none',
+                        position: 'fixed',
+                        zIndex: 50,
+                    }}
+                >
+                    {intervalNames[hoveredInterval]}
+                </div>
+            )}
         </div>
     );
 };

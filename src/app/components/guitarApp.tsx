@@ -43,7 +43,7 @@ const GuitarApp = () => {
                 mode={mode} setMode={setMode}
                 root={root} setRoot={setRoot}
             />
-            <div className='flex'>
+            <div className='flex justify-center '>
                 <StringTuner
                     root={root}
                     mode={mode}
