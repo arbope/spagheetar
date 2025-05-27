@@ -53,14 +53,15 @@ const StringTuner: React.FC<StringProps> = ({
                 onClick={tuneUp}
                 className="cursor-pointer text-indigo-500 hover:text-indigo-700 transition-colors duration-200 rotate-90"
             >
-                <ArrowDownFromLine color="white"/>
+                <ArrowDownFromLine color="white" />
             </div>
 
             {Array.from({ length: strings }).map((_, index) => {
                 const note = tuning[index];
-                const noteIndex = getKeyShift(note);
+                const noteIndex = (getKeyShift(note) - getKeyShift(root) + 12) % 12;
                 const isInScale = intervals.includes(noteIndex);
                 const color = isInScale ? getNoteColor(note, root) : "#EEEEEE";
+                console.log(`Cuerda ${index + 1}: ${note} => index ${noteIndex}, inScale: ${intervals.includes(noteIndex)}, intervals:`, intervals);
 
                 return (
                     <div
@@ -89,7 +90,7 @@ const StringTuner: React.FC<StringProps> = ({
                 onClick={tuneDown}
                 className="cursor-pointer text-indigo-500 hover:text-indigo-700 transition-colors duration-200 rotate-90 mt-1"
             >
-                <ArrowUpFromLine color="white"/>
+                <ArrowUpFromLine color="white" />
             </div>
         </div>
     );

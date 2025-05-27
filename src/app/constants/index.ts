@@ -44,7 +44,7 @@ export const modes = {
 
 export function getKeyShift(root: string | undefined | null): number {
     if (!root) return 0;
-    const index = notes.indexOf(root);
+    const index = notes.indexOf(root.toLocaleLowerCase());
     return index >= 0 ? index : 0;
 }
 
