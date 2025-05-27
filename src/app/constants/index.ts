@@ -15,6 +15,30 @@ export const modes = {
     flamenco: [0, 1, 4, 5, 7, 8, 10],
     whole: [0, 2, 4, 6, 8, 10],
     chromatic: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    majChord: [0, 4, 7],        // 1 - 3 - 5
+    minChord: [0, 3, 7],        // 1 - b3 - 5
+    dimiChord: [0, 3, 6],   // 1 - b3 - b5
+    augChord: [0, 4, 8],    // 1 - 3 - #5
+    sus2Chord: [0, 2, 7],   // 1 - 2 - 5
+    sus4Chord: [0, 5, 7],   // 1 - 4 - 5
+    maj7Chord: [0, 4, 7, 11],         // 1 - 3 - 5 - 7
+    dom7Chord: [0, 4, 7, 10],      // 1 - 3 - 5 - b7
+    min7Chord: [0, 3, 7, 10],         // 1 - b3 - 5 - b7
+    hlfDim7Chord: [0, 3, 6, 10],       // 1 - b3 - b5 - b7
+    dimi7Chord: [0, 3, 6, 9],     // 1 - b3 - b5 - bb7
+    minMaj7Chord: [0, 3, 7, 11],    // 1 - b3 - 5 - 7
+    aug7Chord: [0, 4, 8, 10],  
+    maj9Chord: [0, 4, 7, 11, 14],     // 1 - 3 - 5 - 7 - 9
+    dom9Chord: [0, 4, 7, 10, 14],  // 1 - 3 - 5 - b7 - 9
+    min9Chord: [0, 3, 7, 10, 14],     // 1 - b3 - 5 - b7 - 9
+    maj11Chord: [0, 4, 7, 11, 14, 17],// 1 - 3 - 5 - 7 - 9 - 11
+    min11Chord: [0, 3, 7, 10, 14, 17],// 1 - b3 - 5 - b7 - 9 - 11
+    dom13Chord: [0, 4, 7, 10, 14, 21],
+    add9Chord: [0, 4, 7, 14],       // 1 - 3 - 5 - 9
+    add11Chord: [0, 4, 7, 17],
+    maj7shrp11Chord: [0, 4, 7, 11, 18], // Lydian flavor
+    dominant7flat5: [0, 4, 6, 10],
+    dominant7sharp5: [0, 4, 8, 10],
 };
 
 export function getKeyShift(root: string | undefined | null): number {

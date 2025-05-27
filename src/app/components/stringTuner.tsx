@@ -39,7 +39,7 @@ const StringTuner: React.FC<StringProps> = ({ strings, tuning, setTuning, mode, 
     };
 
     return (
-        <div className="h-min w-7">
+        <div className="h-min w-7 mt-7">
             <div
                 onClick={tuneUp}
                 className="cursor-pointer text-indigo-500 hover:text-indigo-700 transition-colors duration-200 rotate-90 pl-1"

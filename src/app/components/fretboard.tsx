@@ -31,6 +31,13 @@ const Fretboard: React.FC<FretboardProps> = ({ strings, frets, mode, root, tunin
 
     return (
         <div className='h-min w-[65vw] mt-6'>
+            <div className="flex ml-1.5 ">
+            {Array.from({ length: frets }).map((_, fretIndex) => (
+                        <div className=" h-7 border-x-1 border-transparent flex items-center justify-center flex-1">
+                            {fretIndex + 1}
+                        </div>
+                    ))}
+            </div>
             {Array.from({ length: strings }).map((_, index) => (
                 <div className="flex border-y-1 border-l-8 border-indigo-500 " key={index}>
                     {Array.from({ length: frets }).map((_, fretIndex) => (
