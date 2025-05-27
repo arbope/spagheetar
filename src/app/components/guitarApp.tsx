@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Selection from './selector';
 import Fretboard from './fretboard';
 import StringTuner from './stringTuner';
-import { modes } from '../constants';
+import { getKeyShift, modes, notes } from '../constants';
 
 const GuitarApp = () => {
     const [strings, setStrings] = useState(6);
@@ -18,7 +18,7 @@ const GuitarApp = () => {
         if (tuning.length < strings) {
           setTuning([
             ...tuning,
-            ...Array(strings - tuning.length).fill('e')
+            ...Array(strings - tuning.length).fill(notes[(getKeyShift(tuning[tuning.length -1]) - 5 + 12) % 12])
           ]);
         } else if (tuning.length > strings) {
           setTuning(tuning.slice(0, strings));

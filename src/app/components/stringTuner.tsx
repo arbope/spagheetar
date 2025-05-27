@@ -51,9 +51,9 @@ const StringTuner: React.FC<StringProps> = ({
         <div className="h-min w-7 mt-7">
             <div
                 onClick={tuneUp}
-                className="cursor-pointer text-indigo-500 hover:text-indigo-700 transition-colors duration-200 rotate-90 pl-1"
+                className="cursor-pointer text-indigo-500 hover:text-indigo-700 transition-colors duration-200 rotate-90"
             >
-                <ArrowDownFromLine />
+                <ArrowDownFromLine color="white"/>
             </div>
 
             {Array.from({ length: strings }).map((_, index) => {
@@ -87,9 +87,9 @@ const StringTuner: React.FC<StringProps> = ({
 
             <div
                 onClick={tuneDown}
-                className="cursor-pointer text-indigo-500 hover:text-indigo-700 transition-colors duration-200 rotate-90"
+                className="cursor-pointer text-indigo-500 hover:text-indigo-700 transition-colors duration-200 rotate-90 mt-1"
             >
-                <ArrowUpFromLine />
+                <ArrowUpFromLine color="white"/>
             </div>
         </div>
     );
