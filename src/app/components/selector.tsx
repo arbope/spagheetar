@@ -24,7 +24,7 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
           value={strings}
           onChange={(e) => setStrings(Number(e.target.value))}
         >
-          {[4, 6, 7, 8, 9, 12].map((num) => (
+          {[4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
             <option key={num} value={num}>
               {num} Strings
             </option>

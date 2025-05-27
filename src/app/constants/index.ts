@@ -39,6 +39,7 @@ export const modes = {
     maj7shrp11Chord: [0, 4, 7, 11, 18], // Lydian flavor
     dominant7flat5: [0, 4, 6, 10],
     dominant7sharp5: [0, 4, 8, 10],
+    custom: [0]
 };
 
 export function getKeyShift(root: string | undefined | null): number {

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { ArrowUpFromLine, ArrowDownFromLine } from "lucide-react";
 import { getKeyShift, getNoteColor, modes } from "../constants";
 
@@ -8,11 +8,20 @@ interface StringProps {
     mode: keyof typeof modes;
     root: string;
     setTuning: (value: string[]) => void;
+    customIntervals?: number[];
 }
 
-const StringTuner: React.FC<StringProps> = ({ strings, tuning, setTuning, mode, root }) => {
+const StringTuner: React.FC<StringProps> = ({
+    strings,
+    tuning,
+    setTuning,
+    mode,
+    root,
+    customIntervals = []
+}) => {
     const notes = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
-    const intervals = modes[mode] || modes['major'];
+
+    const intervals = mode === 'custom' ? customIntervals : (modes[mode] || modes['major']);
 
     const refineTuning = (index: number, value: string) => {
         const tuner = [...tuning];
@@ -49,7 +58,8 @@ const StringTuner: React.FC<StringProps> = ({ strings, tuning, setTuning, mode, 
 
             {Array.from({ length: strings }).map((_, index) => {
                 const note = tuning[index];
-                const isInScale = intervals.includes(getKeyShift(note));
+                const noteIndex = getKeyShift(note);
+                const isInScale = intervals.includes(noteIndex);
                 const color = isInScale ? getNoteColor(note, root) : "#EEEEEE";
 
                 return (
