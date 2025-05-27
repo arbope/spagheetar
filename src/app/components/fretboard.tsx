@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { notes, modes, getKeyShift, getNoteColor, getContrastingTextColor } from '../constants';
+import { notes, modes, getKeyShift, getNoteColor, getContrastingTextColor, intervalNames    } from '../constants';
 
 interface FretboardProps {
     strings: number;
@@ -11,21 +11,6 @@ interface FretboardProps {
     onToggleCustomInterval?: (interval: number) => void;
     customIntervals: number[];
 }
-
-const intervalNames = [
-    'Root',         // 0
-    'b2',           // 1
-    'Major 2nd',    // 2
-    'Minor 3rd',    // 3
-    'Major 3rd',    // 4
-    'Perfect 4th',  // 5
-    'Tritone',      // 6
-    'Perfect 5th',  // 7
-    'Minor 6th',    // 8
-    'Major 6th',    // 9
-    'Minor 7th',    // 10
-    'Major 7th',    // 11
-];
 
 const Fretboard: React.FC<FretboardProps> = ({
     strings, frets, mode, root, tuning,

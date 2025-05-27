@@ -64,7 +64,7 @@ export const COLORS = [
 ];
 
 
-const intervalNames = [
+export const intervalNames = [
     'Root',         // 0
     'b2',           // 1
     'Major 2nd',    // 2
