@@ -61,7 +61,6 @@ const StringTuner: React.FC<StringProps> = ({
                 const noteIndex = (getKeyShift(note) - getKeyShift(root) + 12) % 12;
                 const isInScale = intervals.includes(noteIndex);
                 const color = isInScale ? getNoteColor(note, root) : "#EEEEEE";
-                console.log(`Cuerda ${index + 1}: ${note} => index ${noteIndex}, inScale: ${intervals.includes(noteIndex)}, intervals:`, intervals);
 
                 return (
                     <div

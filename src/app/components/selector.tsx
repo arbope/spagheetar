@@ -16,20 +16,17 @@ interface SelectionProps {
 export default function Selection({ strings, setStrings, frets, setFrets, mode, setMode, root, setRoot }: SelectionProps) {
   return (
     <div className="grid grid-cols-4">
-
+      
       <section className="py-12 bg-purple-500 text-center">
         <h2 className="text-2xl font-semibold mb-4">STRINGS</h2>
-        <select
-          className="px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+        <input
+          type="number"
+          min={4}
+          max={12}
+          className="w-24 px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-center"
           value={strings}
           onChange={(e) => setStrings(Number(e.target.value))}
-        >
-          {[4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
-            <option key={num} value={num}>
-              {num} Strings
-            </option>
-          ))}
-        </select>
+        />
       </section>
 
       <section className="py-12 bg-purple-500 text-center">
@@ -49,17 +46,14 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
 
       <section className="py-12 bg-purple-500 text-center">
         <h2 className="text-2xl font-semibold mb-4">FRETS</h2>
-        <select
-          className="px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+        <input
+          type="number"
+          min={5}
+          max={36}
+          className="w-24 px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-center"
           value={frets}
           onChange={(e) => setFrets(Number(e.target.value))}
-        >
-          {Array.from({ length: 33 }, (_, i) => i + 5).map((num) => (
-            <option key={num} value={num}>
-              {num} Frets
-            </option>
-          ))}
-        </select>
+        />
       </section>
 
       <section className="py-12 bg-purple-500 text-center">
