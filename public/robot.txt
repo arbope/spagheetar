@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://spagheetar.vercel.app/sitemap.xml

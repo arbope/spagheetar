@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://spagheetar.vercel.app
+
+# Sitemaps
+Sitemap: https://spagheetar.vercel.app/sitemap.xml
