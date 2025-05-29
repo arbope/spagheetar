@@ -17,7 +17,7 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
   return (
     <div className="grid grid-cols-4">
       
-      <section className="py-12 bg-purple-500 text-center">
+      <section className="py-12 text-center">
         <h2 className="text-2xl font-semibold mb-4">STRINGS</h2>
         <input
           type="number"
@@ -29,7 +29,7 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
         />
       </section>
 
-      <section className="py-12 bg-purple-500 text-center">
+      <section className="py-12 text-center">
         <h2 className="text-2xl font-semibold mb-4">KEY</h2>
         <select
           className="px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
@@ -44,7 +44,7 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
         </select>
       </section>
 
-      <section className="py-12 bg-purple-500 text-center">
+      <section className="py-12 text-center">
         <h2 className="text-2xl font-semibold mb-4">FRETS</h2>
         <input
           type="number"
@@ -56,7 +56,7 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
         />
       </section>
 
-      <section className="py-12 bg-purple-500 text-center">
+      <section className="py-12 text-center">
         <h2 className="text-2xl font-semibold mb-4">MODE</h2>
         <select
           className="px-4 py-2 rounded border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-center"
