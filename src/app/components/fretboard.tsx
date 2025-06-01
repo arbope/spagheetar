@@ -26,18 +26,11 @@ const Fretboard: React.FC<FretboardProps> = ({
     const calculateInterval = (fret: number, stringIndex: number) => {
         const stringNoteShift = getKeyShift(tuning[stringIndex]);
         const interval = (fret - keyShift + stringNoteShift + 1 + 12) % 12;
-        console.log(`[IntervalCalc] Fret ${fret}, String ${stringIndex + 1}`);
-        console.log(`  Tuning note: ${tuning[stringIndex]}`);
-        console.log(`  String note shift: ${stringNoteShift}`);
-        console.log(`  Root: ${root} -> keyShift: ${keyShift}`);
-        console.log(`  Interval calculated: ${interval}`);
         return interval;
     };
 
     const calculateNote = (interval: number) => {
         const note = intervals.includes(interval) ? notes[(interval + keyShift) % 12] : null;
-        console.log(`  -> Interval ${interval} ${intervals.includes(interval) ? 'IS' : 'IS NOT'} in scale [${intervals}]`);
-        if (note) console.log(`  -> Note: ${note}`);
         return note;
     };
 
@@ -86,12 +79,6 @@ const Fretboard: React.FC<FretboardProps> = ({
 
                         const bgColor = note ? getNoteColor(note, root) : undefined;
                         const textColor = bgColor ? getContrastingTextColor(bgColor) : undefined;
-
-                        if (note !== null) {
-                            console.log(`[RENDER] Fret ${fretIndex}, String ${stringIndex + 1}`);
-                            console.log(`  Note: ${note}, Interval: ${interval}`);
-                            console.log(`  BG Color: ${bgColor}, Text Color: ${textColor}`);
-                        }
 
                         return (
                             <div
