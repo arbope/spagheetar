@@ -130,6 +130,10 @@ export default function Home() {
             <label key={key} className="flex flex-col text-gray-900">
               <input
                 value={bgColors[key]}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  setBgColors(prev => ({ ...prev, [key]: newValue }));
+                }}
                 onClick={() => {
                   setActiveBgPickerIndex(prev => (prev === idx ? null : idx));
                   setActivePickerIndex(null);
