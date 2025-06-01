@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --first-color: #B5835A;
+  --second-color: #7873f5;
+  --third-color: #4ade80;
 }
 
 @theme inline {
@@ -23,4 +26,29 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient-bg {
+  background: linear-gradient(
+    270deg,
+    var(--first-color, #ff6ec4),
+    var(--second-color, #7873f5),
+    var(--third-color, #4ade80)
+  );
+  background-size: 600% 600%;
+  animation: gradientShift 15s ease infinite;
+  height: 100vh;
+  width: 100vw;
 }

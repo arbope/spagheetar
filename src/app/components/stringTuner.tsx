@@ -19,7 +19,8 @@ const StringTuner: React.FC<StringProps> = ({
     root,
     customIntervals = []
 }) => {
-    const notes = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
+    const notes = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b', ' '];
+    const notes2 = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
 
     const intervals = mode === 'custom' ? customIntervals : (modes[mode] || modes['major']);
 
@@ -31,18 +32,18 @@ const StringTuner: React.FC<StringProps> = ({
 
     const tuneUp = () => {
         const updatedTuning = tuning.map((note) => {
-            const currentIndex = notes.indexOf(note.toLowerCase());
-            const nextIndex = (currentIndex + 1) % notes.length;
-            return notes[nextIndex];
+            const currentIndex = notes2.indexOf(note.toLowerCase());
+            const nextIndex = (currentIndex + 1) % notes2.length;
+            return notes2[nextIndex];
         });
         setTuning(updatedTuning);
     };
 
     const tuneDown = () => {
         const updatedTuning = tuning.map((note) => {
-            const currentIndex = notes.indexOf(note.toLowerCase());
-            const prevIndex = (currentIndex - 1 + notes.length) % notes.length;
-            return notes[prevIndex];
+            const currentIndex = notes2.indexOf(note.toLowerCase());
+            const prevIndex = (currentIndex - 1 + notes2.length) % notes2.length;
+            return notes2[prevIndex];
         });
         setTuning(updatedTuning);
     };
@@ -64,10 +65,10 @@ const StringTuner: React.FC<StringProps> = ({
 
                 return (
                     <div
-                        className="flex border-y border-l border-indigo-400 hover:border-indigo-600 transition-all duration-200"
+                        className="flex border-y border-l border-transparent hover:transition-all duration-200"
                         key={index}
                     >
-                        <div className="bg-gray-700 h-7 border-x border-indigo-400 hover:bg-gray-600 transition-colors flex items-center justify-center flex-1">
+                        <div className="bg-gray-700 h-7 border-x border-transparent hover:bg-gray-600 transition-colors flex items-center justify-center flex-1">
                             <select
                                 className="appearance-none bg-transparent text-center text-s w-full h-full p-1 focus:outline-none cursor-pointer transition-all"
                                 style={{ color }}

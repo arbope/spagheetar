@@ -26,15 +26,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+
   return (
     <html lang="en">
       <Analytics />
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-        <p 
-        className="text-center text-2xl"
-        >𝔖𝔓𝔄𝔊ℌ𝔈𝔈𝔗𝔄ℜ</p>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen`}>
         {children}
       </body>
     </html>

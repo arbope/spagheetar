@@ -9,6 +9,7 @@ export const modes = {
     penta_maj: [0, 2, 4, 7, 9],
     penta_min: [0, 3, 5, 7, 10],
     bebop_maj: [0, 2, 4, 5, 7, 8, 9, 11],
+    bebop_min: [0, 2, 3, 5, 7, 8, 9, 10],
     bebop_dom: [0, 2, 4, 5, 7, 9, 10, 11],
     arabic: [0, 1, 4, 5, 7, 8, 11],
     hung_min: [0, 2, 3, 6, 7, 8, 11],
@@ -63,6 +64,20 @@ export const COLORS = [
     '#111111', // 11: Major 7th (Bright Black)
 ];
 
+export const shortcodes = [
+    "R",
+    "b2",
+    "M2",
+    "m3",
+    "M3",
+    "P4",
+    "TT",
+    "P5",
+    "m6",
+    "M6",
+    "m7",
+    "M7",
+];
 
 export const intervalNames = [
     'Root',         // 0

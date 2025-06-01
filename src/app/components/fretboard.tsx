@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { notes, modes, getKeyShift, getNoteColor, getContrastingTextColor, intervalNames    } from '../constants';
+import { notes, modes, getKeyShift, getNoteColor, getContrastingTextColor, intervalNames } from '../constants';
 
 interface FretboardProps {
     strings: number;
@@ -17,7 +17,6 @@ const Fretboard: React.FC<FretboardProps> = ({
     onToggleCustomInterval,
     customIntervals
 }) => {
-
     const [hoveredInterval, setHoveredInterval] = useState<number | null>(null);
     const [mousePos, setMousePos] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
 
@@ -25,13 +24,21 @@ const Fretboard: React.FC<FretboardProps> = ({
     const keyShift = getKeyShift(root);
 
     const calculateInterval = (fret: number, stringIndex: number) => {
-        let interval = (fret - keyShift + getKeyShift(tuning[stringIndex]) + 1) % 12;
-        if (interval < 0) interval += 12;
+        const stringNoteShift = getKeyShift(tuning[stringIndex]);
+        const interval = (fret - keyShift + stringNoteShift + 1 + 12) % 12;
+        console.log(`[IntervalCalc] Fret ${fret}, String ${stringIndex + 1}`);
+        console.log(`  Tuning note: ${tuning[stringIndex]}`);
+        console.log(`  String note shift: ${stringNoteShift}`);
+        console.log(`  Root: ${root} -> keyShift: ${keyShift}`);
+        console.log(`  Interval calculated: ${interval}`);
         return interval;
     };
 
     const calculateNote = (interval: number) => {
-        return intervals.includes(interval) ? notes[(interval + keyShift) % 12] : null;
+        const note = intervals.includes(interval) ? notes[(interval + keyShift) % 12] : null;
+        console.log(`  -> Interval ${interval} ${intervals.includes(interval) ? 'IS' : 'IS NOT'} in scale [${intervals}]`);
+        if (note) console.log(`  -> Note: ${note}`);
+        return note;
     };
 
     const handleFretClick = (fret: number, stringIndex: number) => {
@@ -41,8 +48,10 @@ const Fretboard: React.FC<FretboardProps> = ({
     };
 
     const handleMouseEnter = (fret: number, stringIndex: number) => {
-        const interval = calculateInterval(fret, stringIndex);
-        setHoveredInterval(interval);
+        if (notes.includes(tuning[stringIndex])) {
+            const interval = calculateInterval(fret, stringIndex);
+            setHoveredInterval(interval);
+        }
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
@@ -59,22 +68,35 @@ const Fretboard: React.FC<FretboardProps> = ({
                 {Array.from({ length: frets }).map((_, fretIndex) => (
                     <div
                         key={fretIndex}
-                        className="h-7 border-x-1 border-transparent flex items-center justify-center flex-1"
+                        className="h-7 border-x-1 border-transparent flex items-center justify-center flex-1 font-bold"
                     >
                         {fretIndex + 1}
                     </div>
                 ))}
             </div>
             {Array.from({ length: strings }).map((_, stringIndex) => (
-                <div className="flex border-y-1 border-l-8 border-indigo-500" key={stringIndex}>
+                <div className="flex border-y-1 border-l-8 border-transparent" key={stringIndex}>
                     {Array.from({ length: frets }).map((_, fretIndex) => {
-                        const interval = calculateInterval(fretIndex, stringIndex);
-                        const note = calculateNote(interval);
+                        let interval: number | null = null;
+                        let note: string | null = null;
+                        if (notes.includes(tuning[stringIndex])) {
+                            interval = calculateInterval(fretIndex, stringIndex);
+                            note = calculateNote(interval);
+                        }
+
+                        const bgColor = note ? getNoteColor(note, root) : undefined;
+                        const textColor = bgColor ? getContrastingTextColor(bgColor) : undefined;
+
+                        if (note !== null) {
+                            console.log(`[RENDER] Fret ${fretIndex}, String ${stringIndex + 1}`);
+                            console.log(`  Note: ${note}, Interval: ${interval}`);
+                            console.log(`  BG Color: ${bgColor}, Text Color: ${textColor}`);
+                        }
 
                         return (
                             <div
                                 key={fretIndex}
-                                className="bg-[#989a87] h-7 border-x-1 border-indigo-500 flex items-center justify-center flex-1 cursor-pointer"
+                                className="bg-[#989a87] h-7 border-x-1 mx-[0.5px] border-transparent flex items-center justify-center flex-1 cursor-pointer"
                                 onClick={() => handleFretClick(fretIndex, stringIndex)}
                                 onMouseEnter={() => handleMouseEnter(fretIndex, stringIndex)}
                                 onMouseMove={handleMouseMove}
@@ -84,8 +106,8 @@ const Fretboard: React.FC<FretboardProps> = ({
                                     <div
                                         className='rounded-full h-4 w-4 text-xs flex items-center justify-center hover:bg-blue-950'
                                         style={{
-                                            backgroundColor: getNoteColor(note, root),
-                                            color: getContrastingTextColor(getNoteColor(note, root)),
+                                            backgroundColor: bgColor,
+                                            color: textColor,
                                         }}
                                     >
                                         {note}
@@ -118,3 +140,4 @@ const Fretboard: React.FC<FretboardProps> = ({
 };
 
 export default Fretboard;
+    
