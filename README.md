@@ -1,3 +1,2 @@
 ## My personal aproach to a string instruments utility website!
-![image](https://github.com/user-attachments/assets/26170595-754a-44c7-8b3d-b397cbff86f3)
-
+![website_preview](https://github.com/user-attachments/assets/0d9e5a84-59ed-456c-94ad-b83bff33c576)
