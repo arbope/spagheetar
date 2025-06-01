@@ -136,7 +136,7 @@ export default function Home() {
                 }}
                 readOnly
                 style={{ backgroundColor: bgColors[key] }}
-                className="w-full h-8 rounded border border-gray-300 cursor-pointer"
+                className="w-full h-8 rounded border border-gray-300 cursor-pointer text-center"
               />
             </label>
           ))}
