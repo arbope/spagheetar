@@ -100,29 +100,31 @@ export default function Home() {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className="fixed top-0 -left-2 h-full w-64 bg-amber-50 backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg"
       >
-        <h2 className="text-lg font-bold mb-4 text-gray-950 text-center">Intervals</h2>
 
-        <ul className="grid grid-cols-3 grid-rows-4 w-[28vh] h-[28vh] ml-3 -mt-3 gap-4 text-gray-950 p-9 rounded-full border-1 border-black">
-          {intervalNames.map((name, i) => (
-            <li
-              key={name}
-              className="flex justify-center items-center cursor-pointer select-none"
-              style={{ color: customColors[i] }}
-            >
-              <label
-                onClick={() => {
-                  setActivePickerIndex(prev => (prev === i ? null : i));
-                  setActiveBgPickerIndex(null);
-                }}
-                className="text-sm font-medium"
-                title={name}
+        <div className="flex flex-col items-center w-full">
+          <h2 className="text-lg font-bold mb-4 text-gray-950 text-center">Intervals</h2>
+          <ul className="grid grid-cols-3 grid-rows-4 w-[28vh] h-[28vh] -mt-3 gap-4 text-gray-950 p-9 rounded-full border-1 border-black">
+            {intervalNames.map((name, i) => (
+              <li
+                key={name}
+                className="flex justify-center items-center cursor-pointer select-none"
+                style={{ color: customColors[i] }}
               >
-                {shortcodes[i]}
-              </label>
-            </li>
-          ))}
-        </ul>
+                <label
+                  onClick={() => {
+                    setActivePickerIndex(prev => (prev === i ? null : i));
+                    setActiveBgPickerIndex(null);
+                  }}
+                  className="text-sm font-medium"
+                  title={name}
+                >
+                  {shortcodes[i]}
+                </label>
+              </li>
+            ))}
+          </ul>
 
+        </div>
         <h2 className="text-lg font-bold mb-4 text-gray-950 text-center mt-4">Background</h2>
 
         <div className="flex flex-col gap-3 px-4 -mt-3">
