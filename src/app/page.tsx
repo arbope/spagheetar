@@ -12,6 +12,7 @@ export default function Home() {
   const [animatedBg, setAnimatedBg] = useState(false);
   const [activePickerIndex, setActivePickerIndex] = useState<number | null>(null);
   const [activeBgPickerIndex, setActiveBgPickerIndex] = useState<number | null>(null);
+  const [duration, setDuration] = useState(15);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ export default function Home() {
 
   function updateColor(index: number, newColor: string) {
     const updated = [...customColors];
-    updated[index] = newColor;
+    DEFAULT_COLORS[index] = newColor;
     setCustomColors(updated);
   }
 
@@ -42,6 +43,12 @@ export default function Home() {
     root.style.setProperty(`--${name}-color`, color);
     setBgColors(prev => ({ ...prev, [name]: color }));
   }
+
+  useEffect(() => {
+    if (root && animatedBg) {
+      root.style.setProperty('--duration', duration.toString());
+    }
+  }, [duration, animatedBg, root]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -91,11 +98,11 @@ export default function Home() {
         initial={{ x: -250 }}
         animate={{ x: sidebarOpen ? 5 : -250 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed top-0 -left-2 h-full w-64 bg-white/80 backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10"
+        className="fixed top-0 -left-2 h-full w-64 bg-amber-50 backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg"
       >
-        <h2 className="text-lg font-bold mb-4 text-gray-950 text-center">Interval Colors</h2>
+        <h2 className="text-lg font-bold mb-4 text-gray-950 text-center">Intervals</h2>
 
-        <ul className="grid grid-cols-3 grid-rows-4 w-[28vh] h-[28vh] ml-3 gap-4 text-gray-950 p-9 rounded-full border-1 border-black">
+        <ul className="grid grid-cols-3 grid-rows-4 w-[28vh] h-[28vh] ml-3 -mt-3 gap-4 text-gray-950 p-9 rounded-full border-1 border-black">
           {intervalNames.map((name, i) => (
             <li
               key={name}
@@ -115,6 +122,33 @@ export default function Home() {
             </li>
           ))}
         </ul>
+
+        <h2 className="text-lg font-bold mb-4 text-gray-950 text-center mt-4">Background</h2>
+
+        <div className="flex flex-col gap-3 px-4 -mt-3">
+          {(['first', 'second', 'third'] as const).map((key, idx) => (
+            <label key={key} className="flex flex-col text-gray-900">
+              <input
+                value={bgColors[key]}
+                onClick={() => {
+                  setActiveBgPickerIndex(prev => (prev === idx ? null : idx));
+                  setActivePickerIndex(null);
+                }}
+                readOnly
+                style={{ backgroundColor: bgColors[key] }}
+                className="w-full h-8 rounded border border-gray-300 cursor-pointer"
+              />
+            </label>
+          ))}
+        </div>
+        <div className="mt-1 px-auto mx-auto py-2 flex justify-center">
+          <button
+            onClick={() => setAnimatedBg(prev => !prev)}
+            className="text-black rounded border-1 border-black w-full"
+          >
+            {!animatedBg ? 'ANIMATE' : "ANIMATEN'T"}
+          </button>
+        </div>
 
         {(activePickerIndex !== null || activeBgPickerIndex !== null) && (
           <div
@@ -141,35 +175,27 @@ export default function Home() {
           </div>
         )}
 
-        <h2 className="text-lg font-bold mb-4 text-gray-950 text-center mt-4">Background Colors</h2>
-
-        <div className="flex flex-col gap-3 px-4">
-          {(['first', 'second', 'third'] as const).map((key, idx) => (
-            <label key={key} className="flex flex-col text-gray-900">
+        {animatedBg && (
+          <div className="">
+            <h1 className="text-lg font-bold text-gray-950 text-center mt-3">Duration</h1>
+            <div className="left-1/2 flex items-center gap-3 z-30 bg-transparent p-2 rounded -mt-4">
               <input
-                value={bgColors[key]}
-                onClick={() => {
-                  setActiveBgPickerIndex(prev => (prev === idx ? null : idx));
-                  setActivePickerIndex(null);
-                }}
-                readOnly
-                style={{ backgroundColor: bgColors[key] }}
-                className="w-full h-8 rounded border border-gray-300 cursor-pointer"
+                id="duration-slider"
+                type="range"
+                min="5"
+                max="120"
+                step="1"
+                value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
+                className="cursor-pointer w-full"
               />
-            </label>
-          ))}
-        </div>
-
-        <button
-          onClick={() => setAnimatedBg(prev => !prev)}
-          className="mt-4 px-auto mx-auto py-2 bg-gray-300 text-black rounded hover:bg-gray-500 transition"
-        >
-          ANIMATE!
-        </button>
+            </div>
+          </div>
+        )}
       </motion.div>
 
       <p className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center">
-      𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
+        𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
       </p>
 
       <div className="relative z-0">
