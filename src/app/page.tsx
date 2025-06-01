@@ -169,7 +169,7 @@ export default function Home() {
       </motion.div>
 
       <p className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center">
-        𝔖𝔓𝔄𝔊ℌ𝔈𝔈𝔗𝔄ℜ
+      𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
       </p>
 
       <div className="relative z-0">
