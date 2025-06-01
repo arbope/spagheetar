@@ -134,7 +134,6 @@ export default function Home() {
                   setActiveBgPickerIndex(prev => (prev === idx ? null : idx));
                   setActivePickerIndex(null);
                 }}
-                readOnly
                 style={{ backgroundColor: bgColors[key] }}
                 className="w-full h-8 rounded border border-gray-300 cursor-pointer text-center"
               />
