@@ -20,7 +20,7 @@ export default function Home() {
   const root = typeof window !== 'undefined' ? document.documentElement : null;
 
   const [customColors, setCustomColors] = useState([...DEFAULT_COLORS]);
-
+  
   const getCssVar = (name: string, fallback: string) =>
     root ? getComputedStyle(root).getPropertyValue(name).trim() || fallback : fallback;
 
