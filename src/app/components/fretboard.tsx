@@ -7,13 +7,14 @@ interface FretboardProps {
     frets: number;
     mode: keyof typeof modes;
     root: string;
+    setRoot: (value: string) => void;
     tuning: string[];
     onToggleCustomInterval?: (interval: number) => void;
     customIntervals: number[];
 }
 
 const Fretboard: React.FC<FretboardProps> = ({
-    strings, frets, mode, root, tuning,
+    strings, frets, mode, root, setRoot, tuning,
     onToggleCustomInterval,
     customIntervals
 }) => {
@@ -36,8 +37,15 @@ const Fretboard: React.FC<FretboardProps> = ({
 
     const handleFretClick = (fret: number, stringIndex: number) => {
         if (mode !== 'custom' || !onToggleCustomInterval) return;
+
         const interval = calculateInterval(fret, stringIndex);
-        onToggleCustomInterval(interval);
+        if (customIntervals.length === 0) {
+            const rawNote = notes[(interval + keyShift) % 12];
+            setRoot(rawNote.toLowerCase());
+            onToggleCustomInterval(0);
+        } else {
+            onToggleCustomInterval(interval);   
+        }
     };
 
     const handleMouseEnter = (fret: number, stringIndex: number) => {
@@ -127,4 +135,3 @@ const Fretboard: React.FC<FretboardProps> = ({
 };
 
 export default Fretboard;
-    

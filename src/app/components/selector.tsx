@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { modes } from "../constants";
 
 interface SelectionProps {
@@ -13,7 +14,7 @@ interface SelectionProps {
   setRoot: (value: string) => void;
 }
 
-export default function Selection({ strings, setStrings, frets, setFrets, mode, setMode, root, setRoot }: SelectionProps) {
+export default function Selection({ strings, setStrings, frets, setFrets, mode, setMode, root, setRoot }: SelectionProps) {  
   return (
     <div className="grid grid-cols-4">
       

@@ -57,7 +57,7 @@ const GuitarApp = () => {
                     frets={frets}
                     tuning={tuning}
                     mode={mode}
-                    root={root}
+                    root={root} setRoot={setRoot}
                     onToggleCustomInterval={toggleCustomInterval}
                     customIntervals={customIntervals}
                 />
