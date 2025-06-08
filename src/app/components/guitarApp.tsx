@@ -47,7 +47,7 @@ const GuitarApp = () => {
         } else if (tuning.length > strings) {
           setTuning(tuning.slice(0, strings));
         }
-    }, [strings]);
+    }, [strings,tuning]);
 
     useEffect(() => {
       localStorage.setItem('strings', JSON.stringify(strings));

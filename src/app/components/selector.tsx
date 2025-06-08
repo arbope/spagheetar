@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { modes } from "../constants";
 
 interface SelectionProps {
