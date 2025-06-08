@@ -16,6 +16,7 @@ export default function Home() {
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const paintBrushRef = useRef<HTMLDivElement>(null);
 
   const root = typeof window !== 'undefined' ? document.documentElement : null;
 
@@ -63,7 +64,7 @@ export default function Home() {
         activePickerIndex === null &&
         activeBgPickerIndex === null &&
         sidebarRef.current &&
-        !sidebarRef.current.contains(target)
+        (!sidebarRef.current.contains(target) || paintBrushRef.current?.contains(target))
       ) {
         setSidebarOpen(false);
       }
@@ -88,7 +89,7 @@ export default function Home() {
     >
       <div
         onClick={() => setSidebarOpen(prev => !prev)}
-        className="absolute top-0 left-0 pt-1 pl-1 w-min h-min cursor-pointer duration-700 z-20"
+        className={`${sidebarOpen ? 'hidden' : 'block'} absolute top-0 left-0 pt-1 pl-1 w-min h-min cursor-pointer duration-700 z-20`}
       >
         <PaintbrushVertical />
       </div>
