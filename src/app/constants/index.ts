@@ -1,4 +1,5 @@
 export const notes = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
+export const notes2 = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b', ' '];
 
 export const modes = {
     major: [0, 2, 4, 5, 7, 9, 11],

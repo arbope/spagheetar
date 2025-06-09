@@ -44,7 +44,7 @@ const Fretboard: React.FC<FretboardProps> = ({
             setRoot(rawNote.toLowerCase());
             onToggleCustomInterval(0);
         } else {
-            onToggleCustomInterval(interval);   
+            onToggleCustomInterval(interval);
         }
     };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { modes } from "../constants";
+import { modes, notes } from "../constants";
 
 interface SelectionProps {
   strings: number;
@@ -36,7 +36,7 @@ export default function Selection({ strings, setStrings, frets, setFrets, mode, 
           value={root}
           onChange={(e) => setRoot(String(e.target.value))}
         >
-          {['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'].map((note) => (
+          {notes.map((note) => (
             <option key={note} value={note}>
               {note}
             </option>
