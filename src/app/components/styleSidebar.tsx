@@ -34,7 +34,6 @@ export default function StyleSidebar({
   activeBgPickerIndex,
   setActiveBgPickerIndex,
   customColors,
-  setCustomColors,
   bgColors,
   setBgColors,
   updateColor,
@@ -85,7 +84,11 @@ export default function StyleSidebar({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [setActivePickerIndex, setActiveBgPickerIndex]);
+  }, [activePickerIndex,
+    activeBgPickerIndex,
+    setActivePickerIndex,
+    setActiveBgPickerIndex,
+    setStylesSidebarOpen,]);
 
   function updateBgColor(name: 'first' | 'second' | 'third', color: string) {
     setBgColors(prev => ({ ...prev, [name]: color }));
@@ -151,8 +154,10 @@ export default function StyleSidebar({
           />
           <div
             className="absolute left-1/2 top-1/2 w-[1px] h-[45%] origin-bottom"
-            style={{ transform: `translate(-50%, -100%) rotate(${secondAngle}deg)`,
-                 backgroundColor: COLORS[0]}}
+            style={{
+              transform: `translate(-50%, -100%) rotate(${secondAngle}deg)`,
+              backgroundColor: COLORS[0]
+            }}
           />
 
         </div>

@@ -1,16 +1,16 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Fretboard from './fretboard';
 import StringTuner from './stringTuner';
 import { modes} from '../constants';
 
 const GuitarApp = ({
-  mode, setMode,
+  mode,
   root, setRoot,
-  strings, setStrings,
-  frets, setFrets,
+  strings,
+  frets,
   tuning, setTuning,
-  customIntervals, setCustomIntervals,
+  customIntervals,
   toggleCustomInterval
 }: {
   mode: keyof typeof modes;
@@ -24,7 +24,6 @@ const GuitarApp = ({
   tuning: string[];
   setTuning: React.Dispatch<React.SetStateAction<string[]>>;
   customIntervals: number[];
-  setCustomIntervals: React.Dispatch<React.SetStateAction<number[]>>;
   toggleCustomInterval: (interval: number) => void;
 }) => {
 

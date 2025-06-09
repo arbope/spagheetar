@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { RefreshCcw, Github } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GuitarApp from './components/guitarApp';
 import StyleSidebar from './components/styleSidebar';
 import SettingsSidebar from './components/settingsSidebar';
-import { PaintbrushVertical } from 'lucide-react';
-import { COLORS as DEFAULT_COLORS, intervalNames, shortcodes, modes, notes, getKeyShift } from './constants';
+import { COLORS as DEFAULT_COLORS, modes, notes, getKeyShift } from './constants';
 
 export default function Home() {
   const [stylesSidebarOpen, setStylesSidebarOpen] = useState(false);
@@ -159,10 +159,35 @@ export default function Home() {
         setSettingsSidebarOpen={setSettingsSidebarOpen}
       />
 
-      <p className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center">
+      <p className="absolute top-2 left-1/2 -translate-x-1/2 text-2xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center">
         𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
       </p>
 
+
+      <a
+        href="https://github.com/arbope/spagheetar"
+        className="group absolute bottom-2 left-1/2 translate-x-2/3 text-2xl transform transition-all duration-1500 hover:-translate-y-1.5 hover:text-black text-center"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Github />
+      </a>
+      <RefreshCcw
+        className="absolute bottom-2 left-1/2 -translate-x-2/3 text-2xl transform transition-all duration-1500 hover:-rotate-z-180 hover:text-black"
+        onClick={() => {
+          localStorage.removeItem('strings');
+          setStrings(6);
+          localStorage.removeItem('frets');
+          setFrets(12);
+          localStorage.removeItem('mode');
+          setMode('major');
+          localStorage.removeItem('root');
+          setRoot('C');
+          localStorage.removeItem('tuning');
+          setTuning(['e','a','b','g','b','e']);
+          }
+        }
+      />
       <div className="">
         <GuitarApp
           mode={mode} setMode={setMode}
@@ -170,7 +195,7 @@ export default function Home() {
           strings={strings} setStrings={setStrings}
           frets={frets} setFrets={setFrets}
           tuning={tuning} setTuning={setTuning}
-          customIntervals={customIntervals} setCustomIntervals={setCustomIntervals}
+          customIntervals={customIntervals}
           toggleCustomInterval={toggleCustomInterval}
         />
       </div>
