@@ -108,8 +108,8 @@ export default function Home() {
     setCustomColors(updated);
   }
 
-  function resetColors(){
-    for (let i = 0; i<COLORS.length -1 ; i++){
+  function resetColors() {
+    for (let i = 0; i < COLORS.length - 1; i++) {
       COLORS[i] = DEF_COLORS[i];
     }
   }
@@ -169,7 +169,6 @@ export default function Home() {
         𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
       </p>
 
-
       <a
         href="https://github.com/arbope/spagheetar"
         className="group absolute bottom-2 left-1/2 translate-x-2/3 text-2xl transform transition-all duration-1500 hover:-translate-y-1.5 hover:text-black text-center"
@@ -178,7 +177,8 @@ export default function Home() {
       >
         <Github />
       </a>
-      <RefreshCcw
+      <button
+        type="button"
         className="absolute bottom-2 left-1/2 -translate-x-2/3 text-2xl transform transition-all duration-1500 hover:-rotate-z-180 hover:text-black"
         onClick={() => {
           localStorage.removeItem('strings');
@@ -190,11 +190,13 @@ export default function Home() {
           localStorage.removeItem('root');
           setRoot('C');
           localStorage.removeItem('tuning');
-          setTuning(['e','a','b','g','b','e']);
+          setTuning(['e', 'a', 'b', 'g', 'b', 'e']);
           resetColors();
-          }
-        }
-      />
+        }}
+        aria-label="Reset settings"
+      >
+        <RefreshCcw />
+      </button>
       <div className="">
         <GuitarApp
           mode={mode} setMode={setMode}

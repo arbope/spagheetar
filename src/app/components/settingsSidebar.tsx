@@ -28,6 +28,20 @@ export default function SettingsSidebar({
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape' && settingsSidebarOpen) {
+          setSettingsSidebarOpen(false);
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [settingsSidebarOpen, setSettingsSidebarOpen]);
+
+  useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
 

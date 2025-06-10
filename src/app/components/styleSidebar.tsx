@@ -60,6 +60,23 @@ export default function StyleSidebar({
   const minuteAngle = minutes * 6 + seconds * 0.1; // 360 / 60 + extra
   const hourAngle = ((hours % 12) + minutes / 60) * 30; // 360 / 12
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        if (stylesSidebarOpen) {
+          setStylesSidebarOpen(false);
+          setActivePickerIndex(null);
+          setActiveBgPickerIndex(null);
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [stylesSidebarOpen, setStylesSidebarOpen, setActivePickerIndex, setActiveBgPickerIndex]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
