@@ -65,6 +65,21 @@ export const COLORS = [
     '#111111', // 11: Major 7th (Bright Black)
 ];
 
+export const DEF_COLORS = [
+    '#FF4136', // 0: Root (Red)
+    '#FF851B', // 1: b2 (Dark Orange)
+    '#FFB347', // 2: Major 2nd
+    '#FFD700', // 3: Minor 3rd
+    '#FFFF00', // 4: Major 3rd
+    '#2ECC40', // 5: Perfect 4th (Green)
+    '#ADFF2F', // 6: Tritone (Bright Green)
+    '#0074D9', // 7: Perfect 5th (Blue)
+    '#B10DC9', // 8: Minor 6th (Violet)
+    '#DA70D6', // 9: Major 6th (Light Violet)
+    '#D87093', // 10: Minor 7th (Soft Magenta)
+    '#111111', // 11: Major 7th (Bright Black)
+];
+
 export const shortcodes = [
     "R",
     "b2",

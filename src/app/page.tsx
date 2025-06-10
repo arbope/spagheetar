@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import GuitarApp from './components/guitarApp';
 import StyleSidebar from './components/styleSidebar';
 import SettingsSidebar from './components/settingsSidebar';
-import { COLORS as DEFAULT_COLORS, modes, notes, getKeyShift } from './constants';
+import { COLORS, modes, notes, getKeyShift, DEF_COLORS } from './constants';
 
 export default function Home() {
   const [stylesSidebarOpen, setStylesSidebarOpen] = useState(false);
@@ -15,7 +15,7 @@ export default function Home() {
   const [activePickerIndex, setActivePickerIndex] = useState<number | null>(null);
   const [activeBgPickerIndex, setActiveBgPickerIndex] = useState<number | null>(null);
   const [customIntervals, setCustomIntervals] = useState<number[]>([]);
-  const [customColors, setCustomColors] = useState([...DEFAULT_COLORS]);
+  const [customColors, setCustomColors] = useState([...COLORS]);
   const [duration, setDuration] = useState(15);
 
   const [strings, setStrings] = useState<number>(() => {
@@ -104,8 +104,14 @@ export default function Home() {
 
   function updateColor(index: number, newColor: string) {
     const updated = [...customColors];
-    DEFAULT_COLORS[index] = newColor;
+    COLORS[index] = newColor;
     setCustomColors(updated);
+  }
+
+  function resetColors(){
+    for (let i = 0; i<COLORS.length -1 ; i++){
+      COLORS[i] = DEF_COLORS[i];
+    }
   }
 
   function updateBgColor(name: 'first' | 'second' | 'third', color: string) {
@@ -185,6 +191,7 @@ export default function Home() {
           setRoot('C');
           localStorage.removeItem('tuning');
           setTuning(['e','a','b','g','b','e']);
+          resetColors();
           }
         }
       />

@@ -180,7 +180,7 @@ export default function StyleSidebar({
                   setActivePickerIndex(null);
                 }}
                 style={{ backgroundColor: bgColors[key] }}
-                className="w-full h-8 rounded border border-gray-300 cursor-pointer text-center focus:outline-none focus:ring-1 focus:ring-black"
+                className="w-full h-8 rounded border cursor-pointer text-center focus:outline focus:ring-1 focus:ring-black"
               />
             </label>
           ))}
@@ -194,6 +194,24 @@ export default function StyleSidebar({
             {!animatedBg ? 'ANIMATE' : "ANIMATEN'T"}
           </button>
         </div>
+
+        {animatedBg && (
+          <div className="">
+            <h1 className="text-lg font-bold text-gray-950 text-center mt-3">Duration</h1>
+            <div className="left-1/2 flex items-center gap-3 z-30 bg-transparent p-2 rounded -mt-4">
+              <input
+                id="duration-slider"
+                type="range"
+                min="5"
+                max="120"
+                step="1"
+                value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
+                className="cursor-pointer w-full"
+              />
+            </div>
+          </div>
+        )}
 
         {(activePickerIndex !== null || activeBgPickerIndex !== null) && (
           <div
@@ -217,24 +235,6 @@ export default function StyleSidebar({
                 }
               }}
             />
-          </div>
-        )}
-
-        {animatedBg && (
-          <div className="">
-            <h1 className="text-lg font-bold text-gray-950 text-center mt-3">Duration</h1>
-            <div className="left-1/2 flex items-center gap-3 z-30 bg-transparent p-2 rounded -mt-4">
-              <input
-                id="duration-slider"
-                type="range"
-                min="5"
-                max="120"
-                step="1"
-                value={duration}
-                onChange={(e) => setDuration(Number(e.target.value))}
-                className="cursor-pointer w-full"
-              />
-            </div>
           </div>
         )}
       </motion.div>
