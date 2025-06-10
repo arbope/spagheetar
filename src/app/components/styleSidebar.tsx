@@ -101,7 +101,7 @@ export default function StyleSidebar({
     <>
       <div
         onClick={() => setStylesSidebarOpen(prev => !prev)}
-        className={`${stylesSidebarOpen ? 'hidden' : 'block'} absolute top-0 left-0 pt-2 pl-1 w-min h-min cursor-pointer duration-700 z-20`}
+        className={`${stylesSidebarOpen ? 'hidden' : 'block'} absolute top-0 left-0 pt-2 pl-1 w-min h-min cursor-pointer duration-700 z-20 hover:text-black`}
       >
         <PaintbrushVertical />
       </div>

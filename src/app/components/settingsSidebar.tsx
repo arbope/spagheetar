@@ -45,7 +45,7 @@ export default function SettingsSidebar({
     <>
       <div
         onClick={() => setSettingsSidebarOpen(prev => !prev)}
-        className={`${settingsSidebarOpen ? 'hidden' : 'block'} absolute top-0 right-0 pt-2 pr-2 w-min h-min cursor-pointer duration-700 z-20`}
+        className={`${settingsSidebarOpen ? 'hidden' : 'block'} absolute top-0 right-0 pt-2 pr-2 w-min h-min cursor-pointer duration-700 z-20 hover:text-black`}
       >
         <Cog />
       </div>
