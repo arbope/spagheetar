@@ -130,10 +130,10 @@ export default function StyleSidebar({
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className="fixed top-0 -left-2 h-[100vh] w-[200px] bg-transparent backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg"
       >
-        <div className="relative w-[25vh] h-[25vh] mx-auto rounded-full">
+        <div className="relative w-[180px] h-[180px] mx-auto rounded-full -ml-1">
           {intervalNames.map((name, i) => {
             const total = intervalNames.length;
-            const angle = (i / total) * 2 * Math.PI;
+            const angle = (i / total) * 2 * Math.PI - Math.PI / 2;
             const radius = 45;
             const x = 50 + radius * Math.cos(angle);
             const y = 50 + radius * Math.sin(angle);
