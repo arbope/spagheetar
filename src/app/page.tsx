@@ -120,6 +120,21 @@ export default function Home() {
     setBgColors(prev => ({ ...prev, [name]: color }));
   }
 
+  function resetSettings(){
+    localStorage.removeItem('strings');
+    setStrings(6);
+    localStorage.removeItem('frets');
+    setFrets(12);
+    localStorage.removeItem('mode');
+    // setMode('major');
+    localStorage.removeItem('root');
+    setRoot('C');
+    localStorage.removeItem('tuning');
+    setTuning(['e', 'a', 'b', 'g', 'b', 'e']);
+    setCustomIntervals([]);
+    resetColors();
+  }
+
   useEffect(() => {
     if (body && animatedBg) {
       body.style.setProperty('--duration', duration.toString());
@@ -181,17 +196,7 @@ export default function Home() {
         type="button"
         className="absolute bottom-2 left-1/2 -translate-x-2/3 text-2xl transform transition-all duration-1500 hover:-rotate-z-180 hover:text-black"
         onClick={() => {
-          localStorage.removeItem('strings');
-          setStrings(6);
-          localStorage.removeItem('frets');
-          setFrets(12);
-          localStorage.removeItem('mode');
-          setMode('major');
-          localStorage.removeItem('root');
-          setRoot('C');
-          localStorage.removeItem('tuning');
-          setTuning(['e', 'a', 'b', 'g', 'b', 'e']);
-          resetColors();
+          resetSettings();
         }}
         aria-label="Reset settings"
       >

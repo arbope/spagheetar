@@ -128,7 +128,7 @@ export default function StyleSidebar({
         initial={{ x: -250 }}
         animate={{ x: stylesSidebarOpen ? 5 : -250 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed top-0 -left-2 h-full w-56 bg-transparent backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg"
+        className="fixed top-0 -left-2 h-[100vh] w-[200px] bg-transparent backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg"
       >
         <div className="relative w-[25vh] h-[25vh] mx-auto rounded-full">
           {intervalNames.map((name, i) => {
@@ -145,7 +145,7 @@ export default function StyleSidebar({
                 key={name}
                 className="absolute flex items-center justify-center w-6 h-6 text-xs font-medium rounded-full cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
                 style={{
-                  top: `${y}%`,
+                  top: `calc(${y}% + 4px)`,
                   left: `${x}%`,
                   backgroundColor: bgColor,
                   color: textColor,
@@ -162,21 +162,20 @@ export default function StyleSidebar({
           })}
 
           <div
-            className="absolute left-1/2 top-1/2 w-[2px] h-[30%] bg-black origin-bottom"
+            className="absolute left-1/2 top-[calc(50%+5px)] w-[2px] h-[30%] bg-black origin-bottom"
             style={{ transform: `translate(-50%, -100%) rotate(${hourAngle}deg)` }}
           />
           <div
-            className="absolute left-1/2 top-1/2 w-[1px] h-[40%] bg-black origin-bottom"
+            className="absolute left-1/2 top-[calc(50%+5px)] w-[1px] h-[40%] bg-black origin-bottom"
             style={{ transform: `translate(-50%, -100%) rotate(${minuteAngle}deg)` }}
           />
           <div
-            className="absolute left-1/2 top-1/2 w-[1px] h-[45%] origin-bottom"
+            className="absolute left-1/2 top-[calc(50%+5px)] w-[1px] h-[45%] origin-bottom"
             style={{
               transform: `translate(-50%, -100%) rotate(${secondAngle}deg)`,
               backgroundColor: COLORS[0]
             }}
           />
-
         </div>
 
 
@@ -233,25 +232,27 @@ export default function StyleSidebar({
         {(activePickerIndex !== null || activeBgPickerIndex !== null) && (
           <div
             ref={popupRef}
-            className="mt-6 rounded-lg shadow-lg sticky bottom-4 left-1/2 transform  z-20"
+            className="mt-4 rounded-lg shadow-lg sticky bottom-4  transform  z-20 flex justify-center"
           >
-            <HexColorPicker
-              color={
-                activePickerIndex !== null
-                  ? customColors[activePickerIndex]
-                  : activeBgPickerIndex !== null
-                    ? bgColors[(['first', 'second', 'third'] as const)[activeBgPickerIndex]]
-                    : "#ffffff"
-              }
-              onChange={(color) => {
-                if (activePickerIndex !== null) {
-                  updateColor(activePickerIndex, color);
-                } else if (activeBgPickerIndex !== null) {
-                  const key = (['first', 'second', 'third'] as const)[activeBgPickerIndex];
-                  updateBgColor(key, color);
+            <div className="w-[200px] h-[200px]">
+              <HexColorPicker
+                color={
+                  activePickerIndex !== null
+                    ? customColors[activePickerIndex]
+                    : activeBgPickerIndex !== null
+                      ? bgColors[(['first', 'second', 'third'] as const)[activeBgPickerIndex]]
+                      : "#ffffff"
                 }
-              }}
-            />
+                onChange={(color) => {
+                  if (activePickerIndex !== null) {
+                    updateColor(activePickerIndex, color);
+                  } else if (activeBgPickerIndex !== null) {
+                    const key = (['first', 'second', 'third'] as const)[activeBgPickerIndex];
+                    updateBgColor(key, color);
+                  }
+                }}
+              />
+            </div>
           </div>
         )}
       </motion.div>

@@ -30,18 +30,18 @@ const StringTuner: React.FC<StringProps> = ({
 
   const tuneUp = () => {
     const updatedTuning = tuning.map((note) => {
-      const currentIndex = notes2.indexOf(note.toLowerCase());
-      const nextIndex = (currentIndex + 1) % notes2.length;
-      return notes2[nextIndex];
+      const currentIndex = notes.indexOf(note.toLowerCase());
+      const nextIndex = (currentIndex + 1) % notes.length;
+      return notes[nextIndex];
     });
     setTuning(updatedTuning);
   };
 
   const tuneDown = () => {
     const updatedTuning = tuning.map((note) => {
-      const currentIndex = notes2.indexOf(note.toLowerCase());
-      const prevIndex = (currentIndex - 1 + notes2.length) % notes2.length;
-      return notes2[prevIndex];
+      const currentIndex = notes.indexOf(note.toLowerCase());
+      const prevIndex = (currentIndex - 1 + notes.length) % notes.length;
+      return notes[prevIndex];
     });
     setTuning(updatedTuning);
   };
