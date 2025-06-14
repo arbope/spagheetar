@@ -179,6 +179,26 @@ export default function Home() {
           updateBgColor={updateBgColor}
         />
 
+        <a
+          href="https://github.com/arbope/spagheetar"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-2xl text-center cursor-pointer transition-transform duration-700 transform hover:text-gray-800"
+        >
+          <Github />
+        </a>
+
+        <button
+          type="button"
+          onClick={() => resetSettings()}
+          aria-label="Reset settings"
+          className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-gray-800"
+        >
+          <RefreshCcw />
+        </button>
+        
+        <Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
+
         <SettingsSidebar
           strings={strings} setStrings={setStrings}
           frets={frets} setFrets={setFrets}
@@ -188,25 +208,6 @@ export default function Home() {
           setSettingsSidebarOpen={setSettingsSidebarOpen}
         />
 
-
-        <button
-          type="button"
-          onClick={() => resetSettings()}
-          aria-label="Reset settings"
-          className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-black hover:scale-110"
-        >
-          <RefreshCcw />
-        </button>
-        <a
-          href="https://github.com/arbope/spagheetar"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-2xl text-center cursor-pointer transition-transform duration-700 transform hover:text-black hover:scale-110"
-        >
-          <Github />
-        </a>
-
-        <Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
       </div>
 
 

@@ -124,7 +124,7 @@ export default function StyleSidebar({
       <div
         ref={painbrushRef}
         onClick={() => setStylesSidebarOpen(prev => !prev)}
-        className="w-min h-min cursor-pointer transition-transform duration-700 transform hover:text-black hover:scale-110"
+        className="w-min h-min cursor-pointer transition-transform duration-700 transform hover:text-gray-800"
       >
         <PaintbrushVertical />
       </div>

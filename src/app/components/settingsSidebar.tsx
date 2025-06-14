@@ -65,7 +65,7 @@ export default function SettingsSidebar({
       <div
         ref={settingsRef}
         onClick={() => setSettingsSidebarOpen(prev => !prev)}
-        className="w-min h-min cursor-pointer transition-transform duration-700 transform hover:rotate-[360deg] hover:text-black hover:scale-110"
+        className="w-min h-min cursor-pointer transition-transform duration-2000 transform hover:rotate-[360deg] hover:text-gray-800"
       >
         <Cog />
       </div>

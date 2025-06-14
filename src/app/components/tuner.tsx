@@ -131,7 +131,7 @@ export default function Tuner({ setShowTuner, showTuner }: TunerProps) {
         ref={tunerIconRef}
         onClick={() => setShowTuner((prev) => !prev)}
         aria-label="Open tuner"
-        className="text-2xl -ml-0.5 cursor-pointer transition-transform duration-700 transform hover:text-black hover:scale-x-125"
+        className="text-2xl cursor-pointer transition-transform duration-700 transform hover:text-gray-800"
       >
         <Waves />
       </div>
