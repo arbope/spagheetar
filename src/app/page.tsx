@@ -1,6 +1,7 @@
 'use client';
 
 import { RefreshCcw, Github } from 'lucide-react';
+import Tuner from './components/tuner';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GuitarApp from './components/guitarApp';
@@ -17,6 +18,7 @@ export default function Home() {
   const [customIntervals, setCustomIntervals] = useState<number[]>([]);
   const [customColors, setCustomColors] = useState([...COLORS]);
   const [duration, setDuration] = useState(15);
+  const [showTuner, setShowTuner] = useState(false);
 
   const [strings, setStrings] = useState<number>(() => {
     if (typeof window === 'undefined') return 6;
@@ -120,7 +122,7 @@ export default function Home() {
     setBgColors(prev => ({ ...prev, [name]: color }));
   }
 
-  function resetSettings(){
+  function resetSettings() {
     localStorage.removeItem('strings');
     setStrings(6);
     localStorage.removeItem('frets');
@@ -130,7 +132,7 @@ export default function Home() {
     localStorage.removeItem('root');
     setRoot('C');
     localStorage.removeItem('tuning');
-    setTuning(['e', 'a', 'b', 'g', 'b', 'e']);
+    setTuning(['e', 'b', 'g', 'd', 'a', 'e']);
     setCustomIntervals([]);
     resetColors();
   }
@@ -152,56 +154,63 @@ export default function Home() {
       }}
       className={`${animationClass} flex flex-col justify-center min-h-screen font-[family-name:var(--font-geist-sans)]`}
     >
-      <StyleSidebar
-        stylesSidebarOpen={stylesSidebarOpen}
-        setStylesSidebarOpen={setStylesSidebarOpen}
-        activePickerIndex={activePickerIndex}
-        setActivePickerIndex={setActivePickerIndex}
-        activeBgPickerIndex={activeBgPickerIndex}
-        setActiveBgPickerIndex={setActiveBgPickerIndex}
-        customColors={customColors}
-        setCustomColors={setCustomColors}
-        bgColors={bgColors}
-        setBgColors={setBgColors}
-        animatedBg={animatedBg}
-        setAnimatedBg={setAnimatedBg}
-        duration={duration}
-        setDuration={setDuration}
-        updateColor={updateColor}
-        updateBgColor={updateBgColor}
-      />
-
-      <SettingsSidebar
-        strings={strings} setStrings={setStrings}
-        frets={frets} setFrets={setFrets}
-        mode={mode} setMode={setMode}
-        root={root} setRoot={setRoot}
-        settingsSidebarOpen={settingsSidebarOpen}
-        setSettingsSidebarOpen={setSettingsSidebarOpen}
-      />
 
       <p className="absolute top-2 left-1/2 -translate-x-1/2 text-2xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center">
         𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
       </p>
 
-      <a
-        href="https://github.com/arbope/spagheetar"
-        className="group absolute bottom-2 left-1/2 translate-x-2/3 text-2xl transform transition-all duration-1500 hover:-translate-y-1.5 hover:text-black text-center"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Github />
-      </a>
-      <button
-        type="button"
-        className="absolute bottom-2 left-1/2 -translate-x-2/3 text-2xl transform transition-all duration-1500 hover:-rotate-z-180 hover:text-black"
-        onClick={() => {
-          resetSettings();
-        }}
-        aria-label="Reset settings"
-      >
-        <RefreshCcw />
-      </button>
+      <div className="absolute bottom-2 w-screen flex gap-3 justify-center items-center">
+        <StyleSidebar
+          stylesSidebarOpen={stylesSidebarOpen}
+          setStylesSidebarOpen={setStylesSidebarOpen}
+          activePickerIndex={activePickerIndex}
+          setActivePickerIndex={setActivePickerIndex}
+          activeBgPickerIndex={activeBgPickerIndex}
+          setActiveBgPickerIndex={setActiveBgPickerIndex}
+          customColors={customColors}
+          setCustomColors={setCustomColors}
+          bgColors={bgColors}
+          setBgColors={setBgColors}
+          animatedBg={animatedBg}
+          setAnimatedBg={setAnimatedBg}
+          duration={duration}
+          setDuration={setDuration}
+          updateColor={updateColor}
+          updateBgColor={updateBgColor}
+        />
+
+        <SettingsSidebar
+          strings={strings} setStrings={setStrings}
+          frets={frets} setFrets={setFrets}
+          mode={mode} setMode={setMode}
+          root={root} setRoot={setRoot}
+          settingsSidebarOpen={settingsSidebarOpen}
+          setSettingsSidebarOpen={setSettingsSidebarOpen}
+        />
+
+
+        <button
+          type="button"
+          onClick={() => resetSettings()}
+          aria-label="Reset settings"
+          className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-black hover:scale-110"
+        >
+          <RefreshCcw />
+        </button>
+        <a
+          href="https://github.com/arbope/spagheetar"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-2xl text-center cursor-pointer transition-transform duration-700 transform hover:text-black hover:scale-110"
+        >
+          <Github />
+        </a>
+
+        <Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
+      </div>
+
+
+
       <div className="">
         <GuitarApp
           mode={mode} setMode={setMode}

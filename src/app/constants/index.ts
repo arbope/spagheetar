@@ -41,7 +41,8 @@ export const modes = {
     maj7shrp11Chord: [0, 4, 7, 11, 18], // Lydian flavor
     dominant7flat5: [0, 4, 6, 10],
     dominant7sharp5: [0, 4, 8, 10],
-    custom: [0]
+    custom: [0],
+    detection: []
 };
 
 export function getKeyShift(root: string | undefined | null): number {
@@ -132,3 +133,17 @@ export function getContrastingTextColor(bgColor: string) {
   
     return luminance > 0.5 ? 'black' : 'white';
   }
+
+
+ export function frequencyToNoteName(frequency: number): string | null {
+    if (frequency <= 0) return null;
+    
+    const midiNote = Math.round(12 * (Math.log2(frequency / 440)) + 69);
+    
+    const octave = Math.floor(midiNote / 12) - 1;
+    const noteIndex = midiNote % 12;
+    const noteName = notes[noteIndex];
+    
+    return `${noteName}${octave}`;
+  }
+  

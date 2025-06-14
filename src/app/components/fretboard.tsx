@@ -1,6 +1,8 @@
 'use client'
 import React, { useState } from 'react';
 import { notes, modes, getKeyShift, getNoteColor, getContrastingTextColor, intervalNames } from '../constants';
+import RangeSlider from 'react-range-slider-input';
+import 'react-range-slider-input/dist/style.css';
 
 interface FretboardProps {
     strings: number;
@@ -11,18 +13,24 @@ interface FretboardProps {
     tuning: string[];
     onToggleCustomInterval?: (interval: number) => void;
     customIntervals: number[];
+    mutedStrings: number[];
 }
 
 const Fretboard: React.FC<FretboardProps> = ({
     strings, frets, mode, root, setRoot, tuning,
     onToggleCustomInterval,
-    customIntervals
+    customIntervals,
+    mutedStrings
 }) => {
     const [hoveredInterval, setHoveredInterval] = useState<number | null>(null);
     const [mousePos, setMousePos] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
-
+    const [range, setRange] = useState<[number, number]>([0, frets | 12]);
     const intervals = mode === 'custom' ? customIntervals : modes[mode] || modes['major'];
     const keyShift = getKeyShift(root);
+
+    const handleInput = (newRange: [number, number]) => {
+        setRange(newRange);
+    };
 
     const calculateInterval = (fret: number, stringIndex: number) => {
         const stringNoteShift = getKeyShift(tuning[stringIndex]);
@@ -97,17 +105,19 @@ const Fretboard: React.FC<FretboardProps> = ({
                                 onMouseMove={handleMouseMove}
                                 onMouseLeave={handleMouseLeave}
                             >
-                                {note === null ? null : (
-                                    <div
-                                        className='rounded-full h-4 w-4 text-xs flex items-center justify-center hover:bg-blue-950'
-                                        style={{
-                                            backgroundColor: bgColor,
-                                            color: textColor,
-                                        }}
-                                    >
-                                        {note}
-                                    </div>
-                                )}
+                                {
+                                    (fretIndex >= range[0] && fretIndex <= range[1] - 1 && stringIndex >= mutedStrings[0] && stringIndex <= mutedStrings[1] - 1) && note ? (
+                                        <div
+                                            className='rounded-full h-4 w-4 text-xs flex items-center justify-center hover:bg-blue-950'
+                                            style={{
+                                                backgroundColor: bgColor,
+                                                color: textColor,
+                                            }}
+                                        >
+                                            {note}
+                                        </div>
+                                    ) : null
+                                }
                             </div>
                         );
                     })}
@@ -130,6 +140,15 @@ const Fretboard: React.FC<FretboardProps> = ({
                     {intervalNames[hoveredInterval]}
                 </div>
             )}
+            <div className='ml-2 pt-2.5'>
+                <RangeSlider
+                    id="range-slider"
+                    min={0}
+                    max={frets}
+                    step={1}
+                    value={range}
+                    onInput={handleInput} />
+            </div>
         </div>
     );
 };

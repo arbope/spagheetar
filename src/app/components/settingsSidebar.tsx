@@ -26,6 +26,7 @@ export default function SettingsSidebar({
   setSettingsSidebarOpen,
 }: SidebarProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const settingsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -45,6 +46,10 @@ export default function SettingsSidebar({
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
 
+      if (settingsRef.current?.contains(target)){
+        return;
+      }
+      
       if (sidebarRef.current && !sidebarRef.current.contains(target)) {
         setSettingsSidebarOpen(false);
       }
@@ -58,8 +63,9 @@ export default function SettingsSidebar({
   return (
     <>
       <div
+        ref={settingsRef}
         onClick={() => setSettingsSidebarOpen(prev => !prev)}
-        className={`${settingsSidebarOpen ? 'hidden' : 'block'} absolute top-0 right-0 pt-2 pr-2 w-min h-min cursor-pointer duration-700 z-20 hover:text-black`}
+        className="w-min h-min cursor-pointer transition-transform duration-700 transform hover:rotate-[360deg] hover:text-black hover:scale-110"
       >
         <Cog />
       </div>

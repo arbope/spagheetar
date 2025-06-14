@@ -1,8 +1,10 @@
 'use client'
 import React from 'react';
+import { useState } from 'react';
 import Fretboard from './fretboard';
 import StringTuner from './stringTuner';
-import { modes} from '../constants';
+import { modes } from '../constants';
+import StringMuter from './stringMuter';
 
 const GuitarApp = ({
   mode,
@@ -27,6 +29,8 @@ const GuitarApp = ({
   toggleCustomInterval: (interval: number) => void;
 }) => {
 
+  const [mutedStrings, setMutedStrings] = useState<[number, number]>([0, strings])
+
   return (
     <div>
       <div className='flex justify-center '>
@@ -46,6 +50,12 @@ const GuitarApp = ({
           root={root} setRoot={setRoot}
           onToggleCustomInterval={toggleCustomInterval}
           customIntervals={customIntervals}
+          mutedStrings={mutedStrings}
+        />
+        <StringMuter
+          strings={strings}
+          mutedStrings={mutedStrings}
+          setMutedStrings={setMutedStrings}
         />
       </div>
     </div>

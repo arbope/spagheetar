@@ -43,6 +43,7 @@ export default function StyleSidebar({
   setDuration,
 }: SidebarProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const painbrushRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
   const [time, setTime] = useState(new Date());
@@ -82,6 +83,10 @@ export default function StyleSidebar({
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
 
+      if (painbrushRef.current?.contains(target)) {
+        return;
+      }
+
       if (popupRef.current && !popupRef.current.contains(target)) {
         setActivePickerIndex(null);
         setActiveBgPickerIndex(null);
@@ -117,8 +122,9 @@ export default function StyleSidebar({
   return (
     <>
       <div
+        ref={painbrushRef}
         onClick={() => setStylesSidebarOpen(prev => !prev)}
-        className={`${stylesSidebarOpen ? 'hidden' : 'block'} absolute top-0 left-0 pt-2 pl-1 w-min h-min cursor-pointer duration-700 z-20 hover:text-black`}
+        className="w-min h-min cursor-pointer transition-transform duration-700 transform hover:text-black hover:scale-110"
       >
         <PaintbrushVertical />
       </div>
