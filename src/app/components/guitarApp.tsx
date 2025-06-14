@@ -13,7 +13,9 @@ const GuitarApp = ({
   frets,
   tuning, setTuning,
   customIntervals,
-  toggleCustomInterval
+  toggleCustomInterval,
+  mutedStrings, setMutedStrings,
+  mutedFrets, setMutedFrets
 }: {
   mode: keyof typeof modes;
   setMode: React.Dispatch<React.SetStateAction<keyof typeof modes>>;
@@ -27,9 +29,11 @@ const GuitarApp = ({
   setTuning: React.Dispatch<React.SetStateAction<string[]>>;
   customIntervals: number[];
   toggleCustomInterval: (interval: number) => void;
+  mutedStrings: [number,number];
+  setMutedStrings: React.Dispatch<React.SetStateAction<[number,number]>>;
+  mutedFrets: [number,number];
+  setMutedFrets: React.Dispatch<React.SetStateAction<[number,number]>>;
 }) => {
-
-  const [mutedStrings, setMutedStrings] = useState<[number, number]>([0, strings])
 
   return (
     <div>
@@ -51,6 +55,7 @@ const GuitarApp = ({
           onToggleCustomInterval={toggleCustomInterval}
           customIntervals={customIntervals}
           mutedStrings={mutedStrings}
+          mutedFrets={mutedFrets} setMutedFrets={setMutedFrets}
         />
         <StringMuter
           strings={strings}

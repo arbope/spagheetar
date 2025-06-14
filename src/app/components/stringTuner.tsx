@@ -73,7 +73,7 @@ const StringTuner: React.FC<StringProps> = ({
                 value={note}
                 onChange={(e) => refineTuning(index, String(e.target.value))}
               >
-                {notes2.map((noteOption) => (
+                {notes2.slice().reverse().map((noteOption) => (
                   <option key={noteOption} value={noteOption} className="text-black">
                     {noteOption.toUpperCase()}
                   </option>

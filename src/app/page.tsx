@@ -135,6 +135,8 @@ export default function Home() {
     setTuning(['e', 'b', 'g', 'd', 'a', 'e']);
     setCustomIntervals([]);
     resetColors();
+    setMutedFrets([0,12]);
+    setMutedStrings([0,6]);
   }
 
   useEffect(() => {
@@ -142,6 +144,18 @@ export default function Home() {
       body.style.setProperty('--duration', duration.toString());
     }
   }, [duration, animatedBg, body]);
+
+
+  useEffect(() => {
+    setMutedStrings([0,strings]);
+  }, [strings]);
+
+  useEffect(() => {
+    setMutedFrets([0,frets]);
+  }, [frets]);
+
+  const [mutedStrings, setMutedStrings] = useState<[number, number]>([0, strings]);
+  const [mutedFrets, setMutedFrets] = useState<[number, number]>([0, frets]);
 
   return (
     <motion.div
@@ -196,7 +210,7 @@ export default function Home() {
         >
           <RefreshCcw />
         </button>
-        
+
         <Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
 
         <SettingsSidebar
@@ -210,8 +224,6 @@ export default function Home() {
 
       </div>
 
-
-
       <div className="">
         <GuitarApp
           mode={mode} setMode={setMode}
@@ -221,6 +233,8 @@ export default function Home() {
           tuning={tuning} setTuning={setTuning}
           customIntervals={customIntervals}
           toggleCustomInterval={toggleCustomInterval}
+          mutedStrings={mutedStrings} setMutedStrings={setMutedStrings}
+          mutedFrets={mutedFrets} setMutedFrets={setMutedFrets}
         />
       </div>
     </motion.div>

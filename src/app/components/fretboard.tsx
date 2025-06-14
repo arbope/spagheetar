@@ -13,23 +13,26 @@ interface FretboardProps {
     tuning: string[];
     onToggleCustomInterval?: (interval: number) => void;
     customIntervals: number[];
-    mutedStrings: number[];
+    mutedStrings: [number,number];
+    mutedFrets: [number,number];
+    setMutedFrets: React.Dispatch<React.SetStateAction<[number,number]>>;
 }
 
 const Fretboard: React.FC<FretboardProps> = ({
     strings, frets, mode, root, setRoot, tuning,
     onToggleCustomInterval,
     customIntervals,
-    mutedStrings
+    mutedStrings,
+    mutedFrets,
+    setMutedFrets
 }) => {
     const [hoveredInterval, setHoveredInterval] = useState<number | null>(null);
     const [mousePos, setMousePos] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
-    const [range, setRange] = useState<[number, number]>([0, frets | 12]);
     const intervals = mode === 'custom' ? customIntervals : modes[mode] || modes['major'];
     const keyShift = getKeyShift(root);
 
     const handleInput = (newRange: [number, number]) => {
-        setRange(newRange);
+        setMutedFrets(newRange);
     };
 
     const calculateInterval = (fret: number, stringIndex: number) => {
@@ -106,7 +109,7 @@ const Fretboard: React.FC<FretboardProps> = ({
                                 onMouseLeave={handleMouseLeave}
                             >
                                 {
-                                    (fretIndex >= range[0] && fretIndex <= range[1] - 1 && stringIndex >= mutedStrings[0] && stringIndex <= mutedStrings[1] - 1) && note ? (
+                                    (fretIndex >= mutedFrets[0] && fretIndex <= mutedFrets[1] - 1 && stringIndex >= mutedStrings[0] && stringIndex <= mutedStrings[1] - 1) && note ? (
                                         <div
                                             className='rounded-full h-4 w-4 text-xs flex items-center justify-center hover:bg-blue-950'
                                             style={{
@@ -146,7 +149,7 @@ const Fretboard: React.FC<FretboardProps> = ({
                     min={0}
                     max={frets}
                     step={1}
-                    value={range}
+                    value={mutedFrets}
                     onInput={handleInput} />
             </div>
         </div>
