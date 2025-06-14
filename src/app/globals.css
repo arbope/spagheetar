@@ -90,21 +90,18 @@ body {
 
 /* Filled range */
 #range-slider .range-slider__range {
-  background-color: #3b82f6;
-  height: 100%;
-  width: 25vh;
-  border-radius: 0px;
+  background-color: #c7cace5d;
 }
 
 #range-slider .range-slider__range[data-active] {
-  background-color: #2563eb;
+  background-color: #595959;
 }
 
 /* All thumbs */
 #range-slider .range-slider__thumb {
   width: 10px;
   height: 10px;
-  background-color: #3b82f6;
+  background-color: #c7cace;
   border-radius: 9999px;
   position: absolute;
   top: 50%;
@@ -116,7 +113,7 @@ body {
 /* Shift the lower thumb 6px to the left */
 #range-slider .range-slider__thumb[data-lower] {
   transform: translate(-6px, -50%);
-  background-color: #3b82f6;
+  background-color: #c7cace;
 }
 
 /* Upper thumb stays centered */
@@ -126,47 +123,38 @@ body {
 
 /* Dragging */
 #range-slider .range-slider__thumb[data-active] {
-  background-color: #1d4ed8;
+  background-color: #c5c4c3;
 }
 
 /* Base vertical slider */
 #range-slider2 {
-  width: 4px;
+  width: 5px;
   height: 100%;
   background-color: transparent;
-  border-radius: 2px;
-  position: relative;
 }
 
 /* Filled range */
 #range-slider2 .range-slider__range {
-  background-color: #3b82f6;
+  background-color: #c7cace5d;
   width: 100%;
-  height: 25vh;
+  height: 100%;
   border-radius: 0px;
 }
 
 #range-slider2 .range-slider__range[data-active] {
-  background-color: #2563eb;
+  background-color: #595959;
 }
 
 /* All thumbs */
 #range-slider2 .range-slider__thumb {
   width: 10px;
   height: 10px;
-  background-color: #3b82f6;
-  border-radius: 9999px;
-  position: absolute;
-  /* left: 50%; */
-  /* transform: translateX(-50%); */
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
 /* Lower thumb shifted up */
 #range-slider2 .range-slider__thumb[data-lower] {
-  transform: translate(-50%, -6px);
-  background-color: #3b82f6;
+  background-color: #c7cace;
 }
 
 /* Upper thumb centered */
@@ -176,5 +164,5 @@ body {
 
 /* Dragging */
 #range-slider2 .range-slider__thumb[data-active] {
-  background-color: #1d4ed8;
+  background-color: #c7cace;
 }

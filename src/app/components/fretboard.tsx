@@ -99,7 +99,7 @@ const Fretboard: React.FC<FretboardProps> = ({
                         return (
                             <div
                                 key={fretIndex}
-                                className="bg-[#989a87] h-7 border-x-1 mx-[0.5px] border-transparent flex items-center justify-center flex-1 cursor-pointer"
+                                className="bg-[#989a87] h-7 border-x-1 mx-[0.5px] border-transparent flex items-center justify-center flex-1 cursor-pointer hover:bg-[#7f81746a]"
                                 onClick={() => handleFretClick(fretIndex, stringIndex)}
                                 onMouseEnter={() => handleMouseEnter(fretIndex, stringIndex)}
                                 onMouseMove={handleMouseMove}

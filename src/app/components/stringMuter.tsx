@@ -15,12 +15,11 @@ const StringMuter: React.FC<MuterProps> = ({ strings, mutedStrings, setMutedStri
   };
 
   return (
-    <div className="h-[180px] w-7 mt-[50px] flex items-center justify-center">
+    <div className="min-h-max w-1 ml-2.5 mt-12 mb-6 flex items-center justify-center">
       <RangeSlider
         id="range-slider2"
         min={0}
         max={strings}
-        step={1}
         value={mutedStrings}
         orientation="vertical"
         className="range-slider-vertical"

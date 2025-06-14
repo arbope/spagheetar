@@ -85,7 +85,7 @@ const StringTuner: React.FC<StringProps> = ({
       })}
       <div
         onClick={tuneDown}
-        className="rotate-90 cursor-pointer transition-transform transform hover:text-gray-600"
+        className="rotate-90 mt-1 cursor-pointer transition-transform transform hover:text-gray-600"
       >
         <ArrowUpFromLine />
       </div>
