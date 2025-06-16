@@ -83,8 +83,8 @@ export default function SettingsSidebar({
             <h2 className="text-2xl font-semibold mb-4">STRINGS</h2>
             <input
               type="number"
-              min={4}
-              max={12}
+              min={1}
+              max={99}
               className="w-24 px-4 py-2 rounded border-1 border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black-100 text-center"
               value={strings}
               onChange={(e) => setStrings(Number(e.target.value))}
@@ -98,7 +98,7 @@ export default function SettingsSidebar({
               value={root}
               onChange={(e) => setRoot(String(e.target.value))}
             >
-              {notes.map((note) => (
+              {notes.slice().reverse().map((note) => (
                 <option key={note} value={note}>
                   {note}
                 </option>
@@ -110,8 +110,8 @@ export default function SettingsSidebar({
             <h2 className="text-2xl font-semibold mb-4">FRETS</h2>
             <input
               type="number"
-              min={5}
-              max={36}
+              min={1}
+              max={99}
               className="w-24 px-4 py-2 rounded border-1 border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black-100 text-center"
               value={frets}
               onChange={(e) => setFrets(Number(e.target.value))}
