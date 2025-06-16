@@ -1,6 +1,5 @@
 'use client'
 import React from 'react';
-import { useState } from 'react';
 import Fretboard from './fretboard';
 import StringTuner from './stringTuner';
 import { modes } from '../constants';
