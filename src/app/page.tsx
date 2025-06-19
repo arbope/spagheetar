@@ -1,82 +1,91 @@
-'use client';
+"use client";
 
-import { RefreshCcw, Github } from 'lucide-react';
-import Tuner from './components/tuner';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import GuitarApp from './components/guitarApp';
-import StyleSidebar from './components/styleSidebar';
-import SettingsSidebar from './components/settingsSidebar';
-import { COLORS, modes, notes, getKeyShift, DEF_COLORS } from './constants';
+import { RefreshCcw, Github } from "lucide-react";
+import Tuner from "./components/tuner";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import GuitarApp from "./components/guitarApp";
+import StyleSidebar from "./components/styleSidebar";
+import SettingsSidebar from "./components/settingsSidebar";
+import { COLORS, modes, notes, getKeyShift, DEF_COLORS } from "./constants";
 
 export default function Home() {
   const [stylesSidebarOpen, setStylesSidebarOpen] = useState(false);
   const [settingsSidebarOpen, setSettingsSidebarOpen] = useState(false);
   const [animatedBg, setAnimatedBg] = useState(false);
-  const [activePickerIndex, setActivePickerIndex] = useState<number | null>(null);
-  const [activeBgPickerIndex, setActiveBgPickerIndex] = useState<number | null>(null);
+  const [activePickerIndex, setActivePickerIndex] = useState<number | null>(
+    null,
+  );
+  const [activeBgPickerIndex, setActiveBgPickerIndex] = useState<number | null>(
+    null,
+  );
   const [customIntervals, setCustomIntervals] = useState<number[]>([]);
+  const [detectionIntervals, setDetectionIntervals] = useState<number[]>([]);
+  const [prevMode, setPrevMode] = useState<keyof typeof modes>("major");
+  const [matchedModes, setMatchedModes] = useState<string[]>([]);
   const [customColors, setCustomColors] = useState([...COLORS]);
   const [duration, setDuration] = useState(15);
   const [showTuner, setShowTuner] = useState(false);
 
   const [strings, setStrings] = useState<number>(() => {
-    if (typeof window === 'undefined') return 6;
-    const saved = localStorage.getItem('strings');
+    if (typeof window === "undefined") return 6;
+    const saved = localStorage.getItem("strings");
     return saved ? JSON.parse(saved) : 6;
   });
 
   const [frets, setFrets] = useState<number>(() => {
-    if (typeof window === 'undefined') return 12;
-    const saved = localStorage.getItem('frets');
+    if (typeof window === "undefined") return 12;
+    const saved = localStorage.getItem("frets");
     return saved ? JSON.parse(saved) : 12;
   });
 
   const [mode, setMode] = useState<keyof typeof modes>(() => {
-    if (typeof window === 'undefined') return 'major';
-    const saved = localStorage.getItem('mode');
-    return saved ? JSON.parse(saved) : 'major';
+    if (typeof window === "undefined") return "major";
+    const saved = localStorage.getItem("mode");
+    return saved ? JSON.parse(saved) : "major";
   });
 
   const [root, setRoot] = useState<string>(() => {
-    if (typeof window === 'undefined') return 'c';
-    const saved = localStorage.getItem('root');
-    return saved ? JSON.parse(saved) : 'c';
+    if (typeof window === "undefined") return "c";
+    const saved = localStorage.getItem("root");
+    return saved ? JSON.parse(saved) : "c";
   });
 
   const [tuning, setTuning] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return ['e', 'b', 'g', 'd', 'a', 'e'];
-    const saved = localStorage.getItem('tuning');
-    return saved ? JSON.parse(saved) : ['e', 'b', 'g', 'd', 'a', 'e'];
+    if (typeof window === "undefined") return ["e", "b", "g", "d", "a", "e"];
+    const saved = localStorage.getItem("tuning");
+    return saved ? JSON.parse(saved) : ["e", "b", "g", "d", "a", "e"];
   });
 
   useEffect(() => {
-    localStorage.setItem('strings', JSON.stringify(strings));
+    localStorage.setItem("strings", JSON.stringify(strings));
   }, [strings]);
 
   useEffect(() => {
-    localStorage.setItem('frets', JSON.stringify(frets));
+    localStorage.setItem("frets", JSON.stringify(frets));
   }, [frets]);
 
   useEffect(() => {
-    localStorage.setItem('mode', JSON.stringify(mode));
+    localStorage.setItem("mode", JSON.stringify(mode));
   }, [mode]);
 
   useEffect(() => {
-    localStorage.setItem('root', JSON.stringify(root));
+    localStorage.setItem("root", JSON.stringify(root));
   }, [root]);
 
   useEffect(() => {
-    localStorage.setItem('tuning', JSON.stringify(tuning));
+    localStorage.setItem("tuning", JSON.stringify(tuning));
   }, [tuning]);
 
-  const body = typeof window !== 'undefined' ? document.documentElement : null;
+  const body = typeof window !== "undefined" ? document.documentElement : null;
 
   useEffect(() => {
     if (tuning.length < strings) {
       setTuning([
         ...tuning,
-        ...Array(strings - tuning.length).fill(notes[(getKeyShift(tuning[tuning.length - 1]) - 5 + 12) % 12])
+        ...Array(strings - tuning.length).fill(
+          notes[(getKeyShift(tuning[tuning.length - 1]) - 5 + 12) % 12],
+        ),
       ]);
     } else if (tuning.length > strings) {
       setTuning(tuning.slice(0, strings));
@@ -86,20 +95,60 @@ export default function Home() {
   const toggleCustomInterval = (interval: number) => {
     setCustomIntervals((prev) => {
       if (prev.includes(interval)) {
-        return prev.filter(i => i !== interval);
+        return prev.filter((i) => i !== interval);
       } else {
         return [...prev, interval];
       }
     });
   };
 
+  const toggleDetectionInterval = (interval: number) => {
+    setDetectionIntervals((prev) => {
+      if (prev.includes(interval)) {
+        return prev.filter((i) => i !== interval);
+      } else {
+        return [...prev, interval];
+      }
+    });
+  };
+
+  const previewMode = (preview: keyof typeof modes) => {
+    if (mode == preview) return;
+    setPrevMode(mode);
+    setMode(preview);
+  };
+
+  useEffect(() => {
+    setMatchedModes([]);
+    if (detectionIntervals.length > 1) {
+      const matched: string[] = [];
+
+      for (const key in modes) {
+        const cand = modes[key as keyof typeof modes];
+
+        const match = detectionIntervals.every((interval) =>
+          cand.includes(interval),
+        );
+
+        if (match) {
+          matched.push(key);
+        }
+      }
+
+      setMatchedModes(matched);
+      console.log("Matched Modes:", matched);
+    }
+  }, [detectionIntervals]);
+
   const getCssVar = (name: string, fallback: string) =>
-    body ? getComputedStyle(body).getPropertyValue(name).trim() || fallback : fallback;
+    body
+      ? getComputedStyle(body).getPropertyValue(name).trim() || fallback
+      : fallback;
 
   const [bgColors, setBgColors] = useState({
-    first: getCssVar('--first-color', '#ff6ec4'),
-    second: getCssVar('--second-color', '#7873f5'),
-    third: getCssVar('--third-color', '#4ade80'),
+    first: getCssVar("--first-color", "#ff6ec4"),
+    second: getCssVar("--second-color", "#7873f5"),
+    third: getCssVar("--third-color", "#4ade80"),
   });
 
   const animationClass = animatedBg ? "animated-gradient-bg" : "";
@@ -116,45 +165,49 @@ export default function Home() {
     }
   }
 
-  function updateBgColor(name: 'first' | 'second' | 'third', color: string) {
+  function updateBgColor(name: "first" | "second" | "third", color: string) {
     if (!body) return;
     body.style.setProperty(`--${name}-color`, color);
-    setBgColors(prev => ({ ...prev, [name]: color }));
+    setBgColors((prev) => ({ ...prev, [name]: color }));
   }
 
   function resetSettings() {
-    localStorage.removeItem('strings');
+    localStorage.removeItem("strings");
     setStrings(6);
-    localStorage.removeItem('frets');
+    localStorage.removeItem("frets");
     setFrets(12);
-    localStorage.removeItem('mode');
-    // setMode('major');
-    localStorage.removeItem('root');
-    setRoot('C');
-    localStorage.removeItem('tuning');
-    setTuning(['e', 'b', 'g', 'd', 'a', 'e']);
+    localStorage.removeItem("mode");
+    setMode("major");
+    localStorage.removeItem("root");
+    setRoot("C");
+    localStorage.removeItem("tuning");
+    setTuning(["e", "b", "g", "d", "a", "e"]);
     setCustomIntervals([]);
     resetColors();
-    setMutedFrets([0,12]);
-    setMutedStrings([0,6]);
+    setMutedFrets([0, 12]);
+    setMutedStrings([0, 6]);
+    setMatchedModes([]);
+    setDetectionIntervals([]);
   }
 
   useEffect(() => {
     if (body && animatedBg) {
-      body.style.setProperty('--duration', duration.toString());
+      body.style.setProperty("--duration", duration.toString());
     }
   }, [duration, animatedBg, body]);
 
-
   useEffect(() => {
-    setMutedStrings([0,strings]);
+    setMutedStrings([0, strings]);
   }, [strings]);
 
   useEffect(() => {
-    setMutedFrets([0,frets]);
+    setMutedFrets([0, frets]);
   }, [frets]);
 
-  const [mutedStrings, setMutedStrings] = useState<[number, number]>([0, strings]);
+  const [mutedStrings, setMutedStrings] = useState<[number, number]>([
+    0,
+    strings,
+  ]);
   const [mutedFrets, setMutedFrets] = useState<[number, number]>([0, frets]);
 
   return (
@@ -164,15 +217,13 @@ export default function Home() {
       style={{
         background: animatedBg
           ? undefined
-          : `linear-gradient(135deg, var(--first-color), var(--second-color), var(--third-color))`
+          : `linear-gradient(135deg, var(--first-color), var(--second-color), var(--third-color))`,
       }}
       className={`${animationClass} flex flex-col justify-center min-h-screen font-[family-name:var(--font-geist-sans)]`}
     >
-
       <p className="absolute top-2 left-1/2 -translate-x-1/2 text-2xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center">
         𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
       </p>
-
       <div className="absolute bottom-2 w-screen flex gap-3 justify-center items-center">
         <StyleSidebar
           stylesSidebarOpen={stylesSidebarOpen}
@@ -214,28 +265,58 @@ export default function Home() {
         <Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
 
         <SettingsSidebar
-          strings={strings} setStrings={setStrings}
-          frets={frets} setFrets={setFrets}
-          mode={mode} setMode={setMode}
-          root={root} setRoot={setRoot}
+          strings={strings}
+          setStrings={setStrings}
+          frets={frets}
+          setFrets={setFrets}
+          mode={mode}
+          setMode={setMode}
+          root={root}
+          setRoot={setRoot}
           settingsSidebarOpen={settingsSidebarOpen}
           setSettingsSidebarOpen={setSettingsSidebarOpen}
         />
-
       </div>
-
       <div className="">
         <GuitarApp
-          mode={mode} setMode={setMode}
-          root={root} setRoot={setRoot}
-          strings={strings} setStrings={setStrings}
-          frets={frets} setFrets={setFrets}
-          tuning={tuning} setTuning={setTuning}
+          mode={mode}
+          setMode={setMode}
+          root={root}
+          setRoot={setRoot}
+          strings={strings}
+          setStrings={setStrings}
+          frets={frets}
+          setFrets={setFrets}
+          tuning={tuning}
+          setTuning={setTuning}
           customIntervals={customIntervals}
           toggleCustomInterval={toggleCustomInterval}
-          mutedStrings={mutedStrings} setMutedStrings={setMutedStrings}
-          mutedFrets={mutedFrets} setMutedFrets={setMutedFrets}
+          detectionIntervals={detectionIntervals}
+          toggleDetectionInterval={toggleDetectionInterval}
+          mutedStrings={mutedStrings}
+          setMutedStrings={setMutedStrings}
+          mutedFrets={mutedFrets}
+          setMutedFrets={setMutedFrets}
         />
+      </div>
+      <div className="absolute top-180 left-1/2 -translate-x-1/2 text-xl text-center flex flex-wrap gap-3 justify-center max-w-[60vw]">
+        {matchedModes.length > 0
+          ? matchedModes.map((match, i) => (
+              <span
+                key={i}
+                className="px-2 py-1 bg-white/10 rounded cursor-pointer hover:bg-black"
+                onMouseEnter={() => setMode(match as keyof typeof modes)}
+                onMouseLeave={() => setMode("detection")}
+                onClick={() => {
+                  setMode(match as keyof typeof modes);
+                  setMatchedModes([]);
+                  setDetectionIntervals([]);
+                }}
+              >
+                {match}
+              </span>
+            ))
+          : ""}
       </div>
     </motion.div>
   );

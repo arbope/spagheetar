@@ -1,11 +1,16 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
-import { motion } from 'framer-motion';
-import { PaintbrushVertical } from 'lucide-react';
-import { intervalNames, shortcodes, getContrastingTextColor, COLORS } from '../constants';
-import { HexColorPicker } from 'react-colorful';
-import { useEffect, useState } from 'react';
+import { useRef } from "react";
+import { motion } from "framer-motion";
+import { PaintbrushVertical } from "lucide-react";
+import {
+  intervalNames,
+  shortcodes,
+  getContrastingTextColor,
+  COLORS,
+} from "../constants";
+import { HexColorPicker } from "react-colorful";
+import { useEffect, useState } from "react";
 
 interface SidebarProps {
   stylesSidebarOpen: boolean;
@@ -17,13 +22,15 @@ interface SidebarProps {
   customColors: string[];
   setCustomColors: React.Dispatch<React.SetStateAction<string[]>>;
   bgColors: { first: string; second: string; third: string };
-  setBgColors: React.Dispatch<React.SetStateAction<{ first: string; second: string; third: string }>>;
+  setBgColors: React.Dispatch<
+    React.SetStateAction<{ first: string; second: string; third: string }>
+  >;
   animatedBg: boolean;
   setAnimatedBg: React.Dispatch<React.SetStateAction<boolean>>;
   duration: number;
   setDuration: React.Dispatch<React.SetStateAction<number>>;
   updateColor: (index: number, newColor: string) => void;
-  updateBgColor: (name: 'first' | 'second' | 'third', color: string) => void;
+  updateBgColor: (name: "first" | "second" | "third", color: string) => void;
 }
 
 export default function StyleSidebar({
@@ -63,7 +70,7 @@ export default function StyleSidebar({
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         if (stylesSidebarOpen) {
           setStylesSidebarOpen(false);
           setActivePickerIndex(null);
@@ -72,12 +79,17 @@ export default function StyleSidebar({
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [stylesSidebarOpen, setStylesSidebarOpen, setActivePickerIndex, setActiveBgPickerIndex]);
+  }, [
+    stylesSidebarOpen,
+    setStylesSidebarOpen,
+    setActivePickerIndex,
+    setActiveBgPickerIndex,
+  ]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -96,7 +108,7 @@ export default function StyleSidebar({
         activePickerIndex === null &&
         activeBgPickerIndex === null &&
         sidebarRef.current &&
-        (!sidebarRef.current.contains(target))
+        !sidebarRef.current.contains(target)
       ) {
         setStylesSidebarOpen(false);
       }
@@ -106,15 +118,17 @@ export default function StyleSidebar({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [activePickerIndex,
+  }, [
+    activePickerIndex,
     activeBgPickerIndex,
     setActivePickerIndex,
     setActiveBgPickerIndex,
-    setStylesSidebarOpen,]);
+    setStylesSidebarOpen,
+  ]);
 
-  function updateBgColor(name: 'first' | 'second' | 'third', color: string) {
-    setBgColors(prev => ({ ...prev, [name]: color }));
-    if (typeof window !== 'undefined') {
+  function updateBgColor(name: "first" | "second" | "third", color: string) {
+    setBgColors((prev) => ({ ...prev, [name]: color }));
+    if (typeof window !== "undefined") {
       document.documentElement.style.setProperty(`--${name}-color`, color);
     }
   }
@@ -123,7 +137,7 @@ export default function StyleSidebar({
     <>
       <div
         ref={painbrushRef}
-        onClick={() => setStylesSidebarOpen(prev => !prev)}
+        onClick={() => setStylesSidebarOpen((prev) => !prev)}
         className="w-min h-min cursor-pointer transition-transform duration-700 transform hover:text-gray-800"
       >
         <PaintbrushVertical />
@@ -134,7 +148,7 @@ export default function StyleSidebar({
         initial={{ x: -250 }}
         animate={{ x: stylesSidebarOpen ? 5 : -250 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed top-0 -left-2 h-[100vh] w-[200px] bg-transparent backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg"
+        className="fixed top-0 -left-2 h-[100vh] w-[200px] pt-12 bg-transparent backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg"
       >
         <div className="relative w-[180px] h-[180px] mx-auto rounded-full -ml-1">
           {intervalNames.map((name, i) => {
@@ -158,7 +172,7 @@ export default function StyleSidebar({
                 }}
                 title={name}
                 onClick={() => {
-                  setActivePickerIndex(prev => (prev === i ? null : i));
+                  setActivePickerIndex((prev) => (prev === i ? null : i));
                   setActiveBgPickerIndex(null);
                 }}
               >
@@ -169,36 +183,41 @@ export default function StyleSidebar({
 
           <div
             className="absolute left-1/2 top-[calc(50%+5px)] w-[2px] h-[30%] bg-black origin-bottom"
-            style={{ transform: `translate(-50%, -100%) rotate(${hourAngle}deg)` }}
+            style={{
+              transform: `translate(-50%, -100%) rotate(${hourAngle}deg)`,
+            }}
           />
           <div
             className="absolute left-1/2 top-[calc(50%+5px)] w-[1px] h-[40%] bg-black origin-bottom"
-            style={{ transform: `translate(-50%, -100%) rotate(${minuteAngle}deg)` }}
+            style={{
+              transform: `translate(-50%, -100%) rotate(${minuteAngle}deg)`,
+            }}
           />
           <div
             className="absolute left-1/2 top-[calc(50%+5px)] w-[1px] h-[45%] origin-bottom"
             style={{
               transform: `translate(-50%, -100%) rotate(${secondAngle}deg)`,
-              backgroundColor: COLORS[0]
+              backgroundColor: COLORS[0],
             }}
           />
         </div>
 
-
-        <h2 className="text-lg font-bold mb-4 text-gray-950 text-center mt-4">Background</h2>
+        <h2 className="pt-12 text-lg font-bold mb-4 text-gray-950 text-center mt-4">
+          Background
+        </h2>
 
         <div className="flex flex-col gap-3 px-4 -mt-3">
-          {(['first', 'second', 'third'] as const).map((key, idx) => (
+          {(["first", "second", "third"] as const).map((key, idx) => (
             <label key={key} className="flex flex-col text-gray-900">
               <input
                 type="text"
                 value={bgColors[key]}
                 onChange={(e) => {
                   const newValue = e.target.value;
-                  setBgColors(prev => ({ ...prev, [key]: newValue }));
+                  setBgColors((prev) => ({ ...prev, [key]: newValue }));
                 }}
                 onClick={() => {
-                  setActiveBgPickerIndex(prev => (prev === idx ? null : idx));
+                  setActiveBgPickerIndex((prev) => (prev === idx ? null : idx));
                   setActivePickerIndex(null);
                 }}
                 style={{ backgroundColor: bgColors[key] }}
@@ -210,22 +229,24 @@ export default function StyleSidebar({
 
         <div className="mt-1 px-auto mx-auto py-2 flex justify-center">
           <button
-            onClick={() => setAnimatedBg(prev => !prev)}
+            onClick={() => setAnimatedBg((prev) => !prev)}
             className="text-black rounded border-1 border-black focus:ring-1 focus:ring-black-100 w-full"
           >
-            {!animatedBg ? 'ANIMATE' : "ANIMATEN'T"}
+            {!animatedBg ? "ANIMATE" : "ANIMATEN'T"}
           </button>
         </div>
 
         {animatedBg && (
           <div className="">
-            <h1 className="text-lg font-bold text-gray-950 text-center mt-3">Duration</h1>
+            <h1 className="text-lg font-bold text-gray-950 text-center mt-3">
+              Duration
+            </h1>
             <div className="left-1/2 flex items-center gap-3 z-30 bg-transparent p-2 rounded -mt-4">
               <input
                 id="duration-slider"
                 type="range"
-                min="5"
-                max="120"
+                min="120"
+                max="3"
                 step="1"
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
@@ -246,14 +267,20 @@ export default function StyleSidebar({
                   activePickerIndex !== null
                     ? customColors[activePickerIndex]
                     : activeBgPickerIndex !== null
-                      ? bgColors[(['first', 'second', 'third'] as const)[activeBgPickerIndex]]
+                      ? bgColors[
+                          (["first", "second", "third"] as const)[
+                            activeBgPickerIndex
+                          ]
+                        ]
                       : "#ffffff"
                 }
                 onChange={(color) => {
                   if (activePickerIndex !== null) {
                     updateColor(activePickerIndex, color);
                   } else if (activeBgPickerIndex !== null) {
-                    const key = (['first', 'second', 'third'] as const)[activeBgPickerIndex];
+                    const key = (["first", "second", "third"] as const)[
+                      activeBgPickerIndex
+                    ];
                     updateBgColor(key, color);
                   }
                 }}

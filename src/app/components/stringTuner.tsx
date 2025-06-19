@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { ArrowUpFromLine, ArrowDownFromLine } from "lucide-react";
 import { getKeyShift, getNoteColor, modes, notes, notes2 } from "../constants";
 
@@ -17,10 +17,10 @@ const StringTuner: React.FC<StringProps> = ({
   setTuning,
   mode,
   root,
-  customIntervals = []
+  customIntervals = [],
 }) => {
-
-  const intervals = mode === 'custom' ? customIntervals : (modes[mode] || modes['major']);
+  const intervals =
+    mode === "custom" ? customIntervals : modes[mode] || modes["major"];
 
   const refineTuning = (index: number, value: string) => {
     const tuner = [...tuning];
@@ -66,18 +66,27 @@ const StringTuner: React.FC<StringProps> = ({
             className="flex border-y border-l border-transparent hover:transition-all duration-200"
             key={index}
           >
-            <div className="bg-gray-700 h-7 border-x border-transparent hover:bg-gray-600 transition-colors flex items-center justify-center flex-1">
+            <div
+              className={`bg-gray-700 h-7 hover:bg-gray-600 transition-colors text-md flex items-center justify-center flex-1 ${isInScale ? "border-l-2 border-white" : ""}`}
+            >
               <select
                 className="appearance-none bg-transparent text-center text-s w-full h-full p-1 focus:outline-none cursor-pointer transition-all"
                 style={{ color }}
                 value={note}
                 onChange={(e) => refineTuning(index, String(e.target.value))}
               >
-                {notes2.slice().reverse().map((noteOption) => (
-                  <option key={noteOption} value={noteOption} className="text-black">
-                    {noteOption.toUpperCase()}
-                  </option>
-                ))}
+                {notes2
+                  .slice()
+                  .reverse()
+                  .map((noteOption) => (
+                    <option
+                      key={noteOption}
+                      value={noteOption}
+                      className="text-black"
+                    >
+                      {noteOption.toUpperCase()}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>

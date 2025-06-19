@@ -1,20 +1,26 @@
-'use client'
-import React from 'react';
-import Fretboard from './fretboard';
-import StringTuner from './stringTuner';
-import { modes } from '../constants';
-import StringMuter from './stringMuter';
+"use client";
+import React from "react";
+import Fretboard from "./fretboard";
+import StringTuner from "./stringTuner";
+import { modes } from "../constants";
+import StringMuter from "./stringMuter";
 
 const GuitarApp = ({
   mode,
-  root, setRoot,
+  root,
+  setRoot,
   strings,
   frets,
-  tuning, setTuning,
+  tuning,
+  setTuning,
   customIntervals,
   toggleCustomInterval,
-  mutedStrings, setMutedStrings,
-  mutedFrets, setMutedFrets
+  detectionIntervals,
+  toggleDetectionInterval,
+  mutedStrings,
+  setMutedStrings,
+  mutedFrets,
+  setMutedFrets,
 }: {
   mode: keyof typeof modes;
   setMode: React.Dispatch<React.SetStateAction<keyof typeof modes>>;
@@ -28,15 +34,16 @@ const GuitarApp = ({
   setTuning: React.Dispatch<React.SetStateAction<string[]>>;
   customIntervals: number[];
   toggleCustomInterval: (interval: number) => void;
-  mutedStrings: [number,number];
-  setMutedStrings: React.Dispatch<React.SetStateAction<[number,number]>>;
-  mutedFrets: [number,number];
-  setMutedFrets: React.Dispatch<React.SetStateAction<[number,number]>>;
+  detectionIntervals: number[];
+  toggleDetectionInterval: (interval: number) => void;
+  mutedStrings: [number, number];
+  setMutedStrings: React.Dispatch<React.SetStateAction<[number, number]>>;
+  mutedFrets: [number, number];
+  setMutedFrets: React.Dispatch<React.SetStateAction<[number, number]>>;
 }) => {
-
   return (
     <div>
-      <div className='flex justify-center '>
+      <div className="flex justify-center ">
         <StringTuner
           root={root}
           mode={mode}
@@ -44,17 +51,22 @@ const GuitarApp = ({
           tuning={tuning}
           setTuning={setTuning}
           customIntervals={customIntervals}
+          detectionIntervals={detectionIntervals}
         />
         <Fretboard
           strings={strings}
           frets={frets}
           tuning={tuning}
           mode={mode}
-          root={root} setRoot={setRoot}
+          root={root}
+          setRoot={setRoot}
           onToggleCustomInterval={toggleCustomInterval}
           customIntervals={customIntervals}
+          onToggleDetectionInterval={toggleDetectionInterval}
+          detectionIntervals={detectionIntervals}
           mutedStrings={mutedStrings}
-          mutedFrets={mutedFrets} setMutedFrets={setMutedFrets}
+          mutedFrets={mutedFrets}
+          setMutedFrets={setMutedFrets}
         />
         <StringMuter
           strings={strings}
