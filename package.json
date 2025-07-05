@@ -19,7 +19,8 @@
     "react": "^19.0.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^19.0.0",
-    "react-range-slider-input": "^3.2.1"
+    "react-range-slider-input": "^3.2.1",
+    "tonal": "^6.4.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
