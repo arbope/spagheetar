@@ -1,17 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { PitchDetector } from 'pitchy';
-import { frequencyToNoteName } from '../constants';
-import { Waves } from 'lucide-react';
+import { useEffect, useRef, useCallback } from "react";
+import { PitchDetector } from "pitchy";
+import { frequencyToNoteName } from "../constants";
+import { Waves } from "lucide-react";
 
 interface TunerProps {
   setShowTuner: React.Dispatch<React.SetStateAction<boolean>>;
   showTuner: boolean;
 }
 
+// Utility functions (moved outside to avoid re-creation)
 function getClosestMidiNote(frequency: number): number {
-  return Math.round(12 * (Math.log2(frequency / 440)) + 69);
+  return Math.round(12 * Math.log2(frequency / 440) + 69);
 }
 
 function midiNoteToFrequency(midiNote: number): number {
@@ -29,41 +30,55 @@ export default function Tuner({ setShowTuner, showTuner }: TunerProps) {
   const tunerIconRef = useRef<HTMLDivElement>(null);
   const tunerRef = useRef<HTMLDivElement>(null);
 
-  function updatePitch(
-    analyserNode: AnalyserNode,
-    detector: PitchDetector<Float32Array>,
-    input: Float32Array,
-    sampleRate: number
-  ): void {
-    analyserNode.getFloatTimeDomainData(input);
-    const [pitch, clarity] = detector.findPitch(input, sampleRate);
+  const updatePitch = useCallback(
+    (
+      analyserNode: AnalyserNode,
+      detector: PitchDetector<Float32Array>,
+      input: Float32Array,
+      sampleRate: number,
+    ): void => {
+      analyserNode.getFloatTimeDomainData(input);
+      const [pitch, clarity] = detector.findPitch(input, sampleRate);
 
-    pitchRef.current!.textContent = pitch > 0 ? `${Math.round(pitch * 10) / 10} Hz` : '--';
-    clarityRef.current!.textContent = clarity > 0 ? `${Math.round(clarity * 100)} %` : '--';
+      if (pitchRef.current)
+        pitchRef.current.textContent =
+          pitch > 0 ? `${Math.round(pitch * 10) / 10} Hz` : "--";
+      if (clarityRef.current)
+        clarityRef.current.textContent =
+          clarity > 0 ? `${Math.round(clarity * 100)} %` : "--";
 
-    if (pitch > 0) {
-      const midiNote = getClosestMidiNote(pitch);
-      const noteName = frequencyToNoteName(pitch) ?? '--';
-      noteRef.current!.textContent = noteName;
+      if (pitch > 0) {
+        const midiNote = getClosestMidiNote(pitch);
+        const noteName = frequencyToNoteName(pitch) ?? "--";
 
-      const exactFreq = midiNoteToFrequency(midiNote);
-      const centsDiff = 1200 * Math.log2(pitch / exactFreq);
-      const maxCents = 50;
-      const pct = Math.max(-maxCents, Math.min(centsDiff, maxCents)) / maxCents;
+        if (noteRef.current) noteRef.current.textContent = noteName;
 
-      indicatorRef.current!.style.setProperty('--offset', `${pct * 50}%`);
-      indicatorRef.current!.style.backgroundColor =
-        Math.abs(centsDiff) <= 10 ? '#22c55e' : '#ef4444';
-    } else {
-      noteRef.current!.textContent = '--';
-      indicatorRef.current!.style.setProperty('--offset', '0%');
-      indicatorRef.current!.style.backgroundColor = '#3b82f6';
-    }
+        const exactFreq = midiNoteToFrequency(midiNote);
+        const centsDiff = 1200 * Math.log2(pitch / exactFreq);
+        const maxCents = 50;
+        const pct =
+          Math.max(-maxCents, Math.min(centsDiff, maxCents)) / maxCents;
 
-    rafIdRef.current = requestAnimationFrame(() =>
-      updatePitch(analyserNode, detector, input, sampleRate)
-    );
-  }
+        if (indicatorRef.current) {
+          indicatorRef.current.style.setProperty("--offset", `${pct * 50}%`);
+          indicatorRef.current.style.backgroundColor =
+            Math.abs(centsDiff) <= 10 ? "#22c55e" : "#ef4444";
+        }
+      } else {
+        if (noteRef.current) noteRef.current.textContent = "--";
+        if (indicatorRef.current) {
+          indicatorRef.current.style.setProperty("--offset", "0%");
+          indicatorRef.current.style.backgroundColor = "#3b82f6";
+        }
+      }
+
+      cancelAnimationFrame(rafIdRef.current); // cancel any previous frame
+      rafIdRef.current = requestAnimationFrame(() =>
+        updatePitch(analyserNode, detector, input, sampleRate),
+      );
+    },
+    [],
+  );
 
   function stopTuner() {
     if (audioContextRef.current) {
@@ -85,9 +100,15 @@ export default function Tuner({ setShowTuner, showTuner }: TunerProps) {
     const audioContext = new AudioContext();
     audioContextRef.current = audioContext;
 
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
+    (async () => {
+      if (audioContext.state === "suspended") {
+        await audioContext.resume();
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
         streamRef.current = stream;
 
         const analyserNode = audioContext.createAnalyser();
@@ -98,16 +119,16 @@ export default function Tuner({ setShowTuner, showTuner }: TunerProps) {
         const input = new Float32Array(detector.inputLength);
 
         updatePitch(analyserNode, detector, input, audioContext.sampleRate);
-      })
-      .catch((err) => {
-        alert('Microphone access is required to use the tuner.');
-        console.error('Mic error:', err);
-      });
+      } catch (err) {
+        alert("Microphone access is required to use the tuner.");
+        console.error("Mic error:", err);
+      }
+    })();
 
     return () => {
       stopTuner();
     };
-  }, [showTuner,updatePitch]);
+  }, [showTuner, updatePitch]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -119,11 +140,11 @@ export default function Tuner({ setShowTuner, showTuner }: TunerProps) {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [setShowTuner]);
 
   return (
     <>
@@ -158,8 +179,8 @@ export default function Tuner({ setShowTuner, showTuner }: TunerProps) {
               ref={indicatorRef}
               className="absolute top-0 left-1/2 w-3 h-4 rounded transition-transform"
               style={{
-                transform: 'translateX(var(--offset, 0%))',
-                backgroundColor: '#3b82f6',
+                transform: "translateX(var(--offset, 0%))",
+                backgroundColor: "#3b82f6",
               }}
             />
           </div>
