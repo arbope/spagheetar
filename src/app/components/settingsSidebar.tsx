@@ -31,41 +31,35 @@ export default function SettingsSidebar({
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape' && settingsSidebarOpen) {
-          setSettingsSidebarOpen(false);
+        setSettingsSidebarOpen(false);
       }
     }
 
     document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [settingsSidebarOpen, setSettingsSidebarOpen]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
 
-      if (settingsRef.current?.contains(target)){
-        return;
-      }
-      
+      if (settingsRef.current?.contains(target)) return;
+
       if (sidebarRef.current && !sidebarRef.current.contains(target)) {
         setSettingsSidebarOpen(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  })
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [settingsSidebarOpen]);
 
   return (
     <>
       <div
         ref={settingsRef}
         onClick={() => setSettingsSidebarOpen(prev => !prev)}
-        className="w-min h-min cursor-pointer transition-transform duration-2000 transform hover:rotate-[360deg] hover:text-gray-800"
+        className="w-min h-min cursor-pointer transition-transform duration-1000 transform hover:rotate-[360deg] hover:text-gray-800"
       >
         <Cog />
       </div>
@@ -75,28 +69,28 @@ export default function SettingsSidebar({
         initial={{ x: 250 }}
         animate={{ x: settingsSidebarOpen ? 0 : 250 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed top-0 -right-2 h-full w-56 bg-transparent backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tl-lg rounded-bl-lg"
+        className={`fixed top-0 right-0 h-full w-56 bg-red/80 backdrop-blur-md shadow-lg p-4 overflow-y-auto z-50 rounded-tl-lg rounded-bl-lg transition-opacity duration-300 ${settingsSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       >
-        <div className="grid grid-rows-4 text-gray-950 h-full">
+        <div className="flex flex-col justify-evenly h-full text-sm text-gray-900">
 
-          <section className="py-6 text-center">
-            <h2 className="text-2xl font-semibold mb-4">STRINGS</h2>
+          <div className='text-center'>
+            <h2 className="text-lg font-semibold mb-2">Strings</h2>
             <input
               type="number"
               min={1}
               max={99}
-              className="w-24 px-4 py-2 rounded border-1 border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black-100 text-center"
+              className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
               value={strings}
               onChange={(e) => setStrings(Number(e.target.value))}
             />
-          </section>
+          </div>
 
-          <section className="py-6 text-center">
-            <h2 className="text-2xl font-semibold mb-4">KEY</h2>
+          <div className='text-center'>
+            <h2 className="text-lg font-semibold mb-2">Key</h2>
             <select
-              className="px-4 py-2 rounded border-1 border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black-100"
+              className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
               value={root}
-              onChange={(e) => setRoot(String(e.target.value))}
+              onChange={(e) => setRoot(e.target.value)}
             >
               {notes.slice().reverse().map((note) => (
                 <option key={note} value={note}>
@@ -104,24 +98,24 @@ export default function SettingsSidebar({
                 </option>
               ))}
             </select>
-          </section>
+          </div>
 
-          <section className="py-6 text-center">
-            <h2 className="text-2xl font-semibold mb-4">FRETS</h2>
+          <div className='text-center'>
+            <h2 className="text-lg font-semibold mb-2">Frets</h2>
             <input
               type="number"
               min={1}
               max={99}
-              className="w-24 px-4 py-2 rounded border-1 border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black-100 text-center"
+              className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
               value={frets}
               onChange={(e) => setFrets(Number(e.target.value))}
             />
-          </section>
+          </div>
 
-          <section className="py-6 text-center">
-            <h2 className="text-2xl font-semibold mb-4">MODE</h2>
+          <div className='text-center'>
+            <h2 className="text-lg font-semibold mb-2">Mode</h2>
             <select
-              className="px-4 py-2 rounded border-1 border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black-100 text-center"
+              className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black truncate"
               value={mode}
               onChange={(e) => setMode(e.target.value as keyof typeof modes)}
             >
@@ -131,10 +125,9 @@ export default function SettingsSidebar({
                 </option>
               ))}
             </select>
-          </section>
+          </div>
 
         </div>
-
       </motion.div>
     </>
   );

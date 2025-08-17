@@ -5,6 +5,7 @@ import Tuner from "./components/tuner";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import GuitarApp from "./components/guitarApp";
+import { Scale } from "tonal";
 import StyleSidebar from "./components/styleSidebar";
 import SettingsSidebar from "./components/settingsSidebar";
 import { COLORS, modes, notes, getKeyShift, DEF_COLORS } from "./constants";
@@ -20,6 +21,7 @@ export default function Home() {
     null,
   );
   const [customIntervals, setCustomIntervals] = useState<number[]>([]);
+  const [detectionIntervals, setDetectionIntervals] = useState<number[]>([]);
   const [customColors, setCustomColors] = useState([...COLORS]);
   const [duration, setDuration] = useState(15);
   const [showTuner, setShowTuner] = useState(false);
@@ -99,6 +101,41 @@ export default function Home() {
     });
   };
 
+////REVISISARR
+////REVISISARR
+////REVISISARR
+////REVISISARR
+////REVISISARR
+////REVISISARR
+////REVISISARR
+  const toggleDetectionInterval = (interval: number) => {
+    setDetectionIntervals((prev) => {
+      if (prev.includes(interval)) {
+        return prev.filter((i) => i !== interval);
+      } else {
+        return [...prev, interval];
+      }
+    });
+
+    if (mode === 'detection') {
+      // Detectar la escala basada en los intervals y la raíz
+      const detectedScale = detectScale(detectionIntervals, root);
+      console.log("Detected Scale:", detectedScale);
+    }
+  };
+
+  const detectScale = (intervals: number[], root: string) => {
+    // Convertir los intervals a notas
+    const notesInScale = intervals.map(interval => {
+      const scale = Scale.get(`${root} ${interval}`); // Obtener la escala
+      return scale.notes; // Extraer las notas de la escala
+    }).flat();
+
+    // Obtener la escala más cercana
+    const detectedScale = Scale.detect(notesInScale);
+    return detectedScale;
+  };
+
   const getCssVar = (name: string, fallback: string) =>
     body
       ? getComputedStyle(body).getPropertyValue(name).trim() || fallback
@@ -142,6 +179,7 @@ export default function Home() {
     localStorage.removeItem("tuning");
     setTuning(["e", "b", "g", "d", "a", "e"]);
     setCustomIntervals([]);
+    setDetectionIntervals([]);
     resetColors();
     setMutedFrets([0, 12]);
     setMutedStrings([0, 6]);
@@ -215,7 +253,6 @@ export default function Home() {
           type="button"
           onClick={() => {
             resetSettings();
-            console.log(modes);
           }}
           aria-label="Reset settings"
           className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-gray-800"
@@ -253,6 +290,8 @@ export default function Home() {
           setTuning={setTuning}
           customIntervals={customIntervals}
           toggleCustomInterval={toggleCustomInterval}
+          toggleDetectionInterval={toggleDetectionInterval}
+          detectionIntervals={detectionIntervals}
           mutedStrings={mutedStrings}
           setMutedStrings={setMutedStrings}
           mutedFrets={mutedFrets}

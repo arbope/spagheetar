@@ -1,5 +1,5 @@
 'use client';
-import { ArrowUpFromLine, ArrowDownFromLine } from "lucide-react";
+import { ArrowDownFromLine } from "lucide-react";
 import { getKeyShift, getNoteColor, modes, notes, notes2 } from "../constants";
 
 interface StringProps {
@@ -85,9 +85,9 @@ const StringTuner: React.FC<StringProps> = ({
       })}
       <div
         onClick={tuneDown}
-        className="rotate-90 mt-1 cursor-pointer transition-transform transform hover:text-gray-600"
+        className="rotate-270 cursor-pointer transition-transform transform hover:text-gray-600"
       >
-        <ArrowUpFromLine />
+        <ArrowDownFromLine />
       </div>
     </div>
   );

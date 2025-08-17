@@ -12,23 +12,27 @@ interface FretboardProps {
     setRoot: (value: string) => void;
     tuning: string[];
     onToggleCustomInterval?: (interval: number) => void;
+    onToggleDetectionInterval?: (interval: number) => void;
     customIntervals: number[];
-    mutedStrings: [number,number];
-    mutedFrets: [number,number];
-    setMutedFrets: React.Dispatch<React.SetStateAction<[number,number]>>;
+    detectionIntervals: number[];
+    mutedStrings: [number, number];
+    mutedFrets: [number, number];
+    setMutedFrets: React.Dispatch<React.SetStateAction<[number, number]>>;
 }
 
 const Fretboard: React.FC<FretboardProps> = ({
     strings, frets, mode, root, setRoot, tuning,
     onToggleCustomInterval,
     customIntervals,
+    onToggleDetectionInterval,
+    detectionIntervals,
     mutedStrings,
     mutedFrets,
     setMutedFrets
 }) => {
     const [hoveredInterval, setHoveredInterval] = useState<number | null>(null);
     const [mousePos, setMousePos] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
-    const intervals = mode === 'custom' ? customIntervals : modes[mode] || modes['major'];
+    const intervals = mode === 'custom' ? customIntervals : mode === 'detection' ? detectionIntervals : modes[mode] || modes['major'];
     const keyShift = getKeyShift(root);
 
     const handleInput = (newRange: [number, number]) => {
@@ -47,15 +51,28 @@ const Fretboard: React.FC<FretboardProps> = ({
     };
 
     const handleFretClick = (fret: number, stringIndex: number) => {
-        if (mode !== 'custom' || !onToggleCustomInterval) return;
+        if (mode !== 'custom' && mode !== 'detection') return;
+        if (!onToggleCustomInterval) return;
+        if (!onToggleDetectionInterval) return;
 
         const interval = calculateInterval(fret, stringIndex);
-        if (customIntervals.length === 0) {
-            const rawNote = notes[(interval + keyShift) % 12];
-            setRoot(rawNote.toLowerCase());
-            onToggleCustomInterval(0);
+        if (mode === 'custom') {
+            if (customIntervals.length === 0) {
+                const rawNote = notes[(interval + keyShift) % 12];
+                setRoot(rawNote.toLowerCase());
+                onToggleCustomInterval(0);
+            } else {
+                onToggleCustomInterval(interval);
+            }
         } else {
-            onToggleCustomInterval(interval);
+            console.log('pepe')
+            if (detectionIntervals.length === 0) {
+                const rawNote = notes[(interval + keyShift) % 12];
+                setRoot(rawNote.toLowerCase());
+                onToggleDetectionInterval(0);
+            } else {
+                onToggleDetectionInterval(interval);
+            }
         }
     };
 
@@ -76,6 +93,7 @@ const Fretboard: React.FC<FretboardProps> = ({
 
     return (
         <div className='h-min w-[75vw] mt-6 relative'>
+            
             <div className="flex ml-1.5 ">
                 {Array.from({ length: frets }).map((_, fretIndex) => (
                     <div

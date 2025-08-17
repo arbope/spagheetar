@@ -132,11 +132,11 @@ export default function StyleSidebar({
       <motion.div
         ref={sidebarRef}
         initial={{ x: -250 }}
-        animate={{ x: stylesSidebarOpen ? 5 : -250 }}
+        animate={{ x: stylesSidebarOpen ? 10 : -250 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed top-0 -left-2 h-[100vh] w-[200px] bg-transparent backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg"
+        className={`fixed top-0 -left-2 h-[100vh] w-[250px] bg-transparent backdrop-blur-sm shadow-lg p-4 overflow-y-auto z-10 rounded-tr-lg rounded-br-lg ${stylesSidebarOpen ? 'opacity-100' : 'opacity-0'}`}
       >
-        <div className="relative w-[180px] h-[180px] mx-auto rounded-full -ml-1">
+        <div className="relative w-[180px] h-[180px] mx-auto rounded-full mt-14">
           {intervalNames.map((name, i) => {
             const total = intervalNames.length;
             const angle = (i / total) * 2 * Math.PI - Math.PI / 2;
@@ -149,7 +149,7 @@ export default function StyleSidebar({
             return (
               <span
                 key={name}
-                className="absolute flex items-center justify-center w-6 h-6 text-xs font-medium rounded-full cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
+                className="absolute flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
                 style={{
                   top: `calc(${y}% + 4px)`,
                   left: `${x}%`,
@@ -184,38 +184,39 @@ export default function StyleSidebar({
           />
         </div>
 
-
-        <h2 className="text-lg font-bold mb-4 text-gray-950 text-center mt-4">Background</h2>
-
-        <div className="flex flex-col gap-3 px-4 -mt-3">
-          {(['first', 'second', 'third'] as const).map((key, idx) => (
-            <label key={key} className="flex flex-col text-gray-900">
-              <input
-                type="text"
-                value={bgColors[key]}
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  setBgColors(prev => ({ ...prev, [key]: newValue }));
-                }}
-                onClick={() => {
-                  setActiveBgPickerIndex(prev => (prev === idx ? null : idx));
-                  setActivePickerIndex(null);
-                }}
-                style={{ backgroundColor: bgColors[key] }}
-                className="w-full h-8 rounded border cursor-pointer text-center focus:outline focus:ring-1 focus:ring-black"
-              />
-            </label>
-          ))}
+        <div>
+          <h2 className="text-lg font-bold mb-4 text-gray-950 text-center mt-34">Background</h2>
+          <div className="flex flex-col gap-3 px-4 -mt-3">
+            {(['first', 'second', 'third'] as const).map((key, idx) => (
+              <label key={key} className="flex flex-col text-gray-900">
+                <input
+                  type="text"
+                  value={bgColors[key]}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setBgColors(prev => ({ ...prev, [key]: newValue }));
+                  }}
+                  onClick={() => {
+                    setActiveBgPickerIndex(prev => (prev === idx ? null : idx));
+                    setActivePickerIndex(null);
+                  }}
+                  style={{ backgroundColor: bgColors[key] }}
+                  className="w-full h-8 rounded border cursor-pointer text-center focus:outline focus:ring-1 focus:ring-black"
+                />
+              </label>
+            ))}
+          </div>
+          <div className="mt-1 px-auto mx-auto py-2 flex justify-center">
+            <button
+              onClick={() => setAnimatedBg(prev => !prev)}
+              className="text-black rounded border-1 border-black focus:ring-1 focus:ring-black-100 w-full"
+            >
+              {!animatedBg ? 'ANIMATE' : "ANIMATEN'T"}
+            </button>
+          </div>
         </div>
 
-        <div className="mt-1 px-auto mx-auto py-2 flex justify-center">
-          <button
-            onClick={() => setAnimatedBg(prev => !prev)}
-            className="text-black rounded border-1 border-black focus:ring-1 focus:ring-black-100 w-full"
-          >
-            {!animatedBg ? 'ANIMATE' : "ANIMATEN'T"}
-          </button>
-        </div>
+
 
         {animatedBg && (
           <div className="">
