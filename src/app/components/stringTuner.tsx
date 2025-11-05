@@ -47,7 +47,7 @@ const StringTuner: React.FC<StringProps> = ({
   };
 
   return (
-    <div className="h-min w-7 mt-7">
+    <div className="h-min w-7 mt-9">
       <div
         onClick={tuneUp}
         className="rotate-90 cursor-pointer transition-transform transform hover:text-gray-600"
@@ -66,7 +66,7 @@ const StringTuner: React.FC<StringProps> = ({
             className="flex border-y border-l border-transparent hover:transition-all duration-200"
             key={index}
           >
-            <div className="bg-gray-700 h-7 border-x border-transparent hover:bg-gray-600 transition-colors flex items-center justify-center flex-1">
+            <div className="bg-gray-700 h-9 border-x border-transparent hover:bg-gray-600 transition-colors flex items-center justify-center flex-1 rounded-xs">
               <select
                 className="appearance-none bg-transparent text-center text-s w-full h-full p-1 focus:outline-none cursor-pointer transition-all"
                 style={{ color }}

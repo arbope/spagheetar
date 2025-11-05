@@ -3,9 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --first-color: #B5835A;
-  --second-color: #7873f5;
-  --third-color: #4ade80;
+  --first-color: #0e630e;
+  --second-color: #b30000ce;
+  --third-color: #FFD700;
   --duration: 15;
 }
 
@@ -57,9 +57,9 @@ body {
 
 .animated-gradient-bg {
   background: linear-gradient(270deg,
-      var(--first-color, #ff6ec4),
-      var(--second-color, #7873f5),
-      var(--third-color, #4ade80));
+      var(--first-color, #0e630e),
+      var(--second-color, #b30000ce),
+      var(--third-color, #FFD700));
   background-size: 600% 600%;
   animation-name: gradientShift;
   animation-duration: calc(var(--duration) * 1s);

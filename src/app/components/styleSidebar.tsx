@@ -126,7 +126,7 @@ export default function StyleSidebar({
         onClick={() => setStylesSidebarOpen(prev => !prev)}
         className="w-min h-min cursor-pointer transition-transform duration-700 transform hover:text-gray-800"
       >
-        <PaintbrushVertical />
+        <PaintbrushVertical size={36}/>
       </div>
 
       <motion.div

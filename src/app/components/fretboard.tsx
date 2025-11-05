@@ -98,7 +98,7 @@ const Fretboard: React.FC<FretboardProps> = ({
                 {Array.from({ length: frets }).map((_, fretIndex) => (
                     <div
                         key={fretIndex}
-                        className="h-7 border-x-1 border-transparent flex items-center justify-center flex-1 font-bold"
+                        className="h-9 border-x-1 border-transparent flex items-center justify-center flex-1 font-bold text-xl"
                     >
                         {fretIndex + 1}
                     </div>
@@ -120,7 +120,7 @@ const Fretboard: React.FC<FretboardProps> = ({
                         return (
                             <div
                                 key={fretIndex}
-                                className="bg-[#989a87] h-7 border-x-1 mx-[0.5px] border-transparent flex items-center justify-center flex-1 cursor-pointer hover:bg-[#7f81746a]"
+                                className="bg-[#989a87] h-9 border-x-1 mx-[0.5px] border-transparent flex items-center justify-center flex-1 cursor-pointer hover:bg-[#7f81746a]"
                                 onClick={() => handleFretClick(fretIndex, stringIndex)}
                                 onMouseEnter={() => handleMouseEnter(fretIndex, stringIndex)}
                                 onMouseMove={handleMouseMove}
@@ -129,7 +129,7 @@ const Fretboard: React.FC<FretboardProps> = ({
                                 {
                                     (fretIndex >= mutedFrets[0] && fretIndex <= mutedFrets[1] - 1 && stringIndex >= mutedStrings[0] && stringIndex <= mutedStrings[1] - 1) && note ? (
                                         <div
-                                            className='rounded-full h-4 w-4 text-xs flex items-center justify-center hover:bg-blue-950'
+                                            className='rounded-full h-5 w-5 text-xs flex items-center justify-center hover:bg-blue-950'
                                             style={{
                                                 backgroundColor: bgColor,
                                                 color: textColor,
@@ -147,7 +147,7 @@ const Fretboard: React.FC<FretboardProps> = ({
 
             {hoveredInterval !== null && (
                 <div
-                    className="absolute px-2 py-1 rounded text-sm text-white bg-gray-800"
+                    className="absolute px-2 py-1 rounded text-xl text-white bg-gray-800"
                     style={{
                         left: mousePos.x + 10,
                         top: mousePos.y + 10,
