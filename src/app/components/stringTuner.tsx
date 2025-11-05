@@ -52,7 +52,7 @@ const StringTuner: React.FC<StringProps> = ({
         onClick={tuneUp}
         className="rotate-90 cursor-pointer transition-transform transform hover:text-gray-600"
       >
-        <ArrowDownFromLine />
+        <ArrowDownFromLine strokeWidth={3}/>
       </div>
 
       {Array.from({ length: strings }).map((_, index) => {
@@ -87,7 +87,7 @@ const StringTuner: React.FC<StringProps> = ({
         onClick={tuneDown}
         className="rotate-270 cursor-pointer transition-transform transform hover:text-gray-600"
       >
-        <ArrowDownFromLine />
+        <ArrowDownFromLine strokeWidth={3}/>
       </div>
     </div>
   );
