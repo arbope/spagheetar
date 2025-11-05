@@ -223,7 +223,7 @@ export default function Home() {
 				𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
 			</p>
 
-			<div className="absolute bottom-2 w-screen flex gap-3 justify-center items-center">
+			<div className="absolute bottom-2 w-screen flex gap-3 justify-center items-center z-10">
 				<StyleSidebar
 					stylesSidebarOpen={stylesSidebarOpen}
 					setStylesSidebarOpen={setStylesSidebarOpen}
@@ -247,7 +247,7 @@ export default function Home() {
 					href="https://github.com/arbope/spagheetar"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="text-2xl text-center cursor-pointer transition-transform duration-700 transform hover:text-gray-800"
+					className="text-2xl text-center cursor-pointer transition-transform duration-700 transform hover:text-gray-800 z-10"
 				>
 					<Github size={36}/>
 				</a>
@@ -258,7 +258,7 @@ export default function Home() {
 						resetSettings();
 					}}
 					aria-label="Reset settings"
-					className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-gray-800"
+					className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-gray-800 z-10"
 				>
 					<RefreshCcw size={36}/>
 				</button>
@@ -279,7 +279,7 @@ export default function Home() {
 				/>
 			</div>
 
-			<div className="">
+			<div className='max-h-[55h] overflow-hidden'>
 				<GuitarApp
 					mode={mode}
 					setMode={setMode}

@@ -59,7 +59,7 @@ export default function SettingsSidebar({
       <div
         ref={settingsRef}
         onClick={() => setSettingsSidebarOpen(prev => !prev)}
-        className="w-min h-min cursor-pointer transition-transform duration-1000 transform hover:rotate-[360deg] hover:text-gray-800"
+        className="w-min h-min cursor-pointer transition-transform duration-1000 transform hover:rotate-[360deg] hover:text-gray-800 z-10"
       >
         <Cog size={36}/>
       </div>
@@ -78,7 +78,7 @@ export default function SettingsSidebar({
             <input
               type="number"
               min={1}
-              max={99}
+              max={20}
               className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
               value={strings}
               onChange={(e) => setStrings(Number(e.target.value))}
@@ -104,8 +104,8 @@ export default function SettingsSidebar({
             <h2 className="text-lg font-semibold mb-2">Frets</h2>
             <input
               type="number"
-              min={1}
-              max={99}
+              min={3}
+              max={50}
               className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
               value={frets}
               onChange={(e) => setFrets(Number(e.target.value))}
