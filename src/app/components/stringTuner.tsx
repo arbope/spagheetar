@@ -47,10 +47,10 @@ const StringTuner: React.FC<StringProps> = ({
   };
 
   return (
-    <div className="h-min w-7 mt-9">
+    <div className="h-min w-8 mt-9">
       <div
         onClick={tuneUp}
-        className="rotate-90 cursor-pointer transition-transform transform hover:text-gray-600"
+        className="rotate-90 cursor-pointer transition-transform transform text-xl hover:text-gray-400"
       >
         <ArrowDownFromLine strokeWidth={3}/>
       </div>
@@ -68,7 +68,7 @@ const StringTuner: React.FC<StringProps> = ({
           >
             <div className="bg-gray-700 h-9 border-x border-transparent hover:bg-gray-600 transition-colors flex items-center justify-center flex-1 rounded-xs">
               <select
-                className="appearance-none bg-transparent text-center text-s w-full h-full p-1 focus:outline-none cursor-pointer transition-all"
+                className="appearance-none bg-transparent text-center w-full h-full p-1 focus:outline-none cursor-pointer transition-all"
                 style={{ color }}
                 value={note}
                 onChange={(e) => refineTuning(index, String(e.target.value))}
