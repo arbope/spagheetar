@@ -1,193 +1,205 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --first-color: #0e630e;
-  --second-color: #b30000ce;
-  --third-color: #FFD700;
-  --duration: 15;
+	--background: #ffffff;
+	--foreground: #171717;
+	--first-color: #0e630e;
+	--second-color: #b30000ce;
+	--third-color: #ffd700;
+	--duration: 15;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes fall {
+	0% {
+		transform: translateY(-10%);
+	}
+
+	100% {
+		transform: translateY(100vh);
+	}
 }
 
 @keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
+	0% {
+		background-position: 0% 50%;
+	}
 
-  23% {
-    background-position: 70% 30%;
-  }
+	23% {
+		background-position: 70% 30%;
+	}
 
-  47% {
-    background-position: 20% 80%;
-  }
+	47% {
+		background-position: 20% 80%;
+	}
 
-  68% {
-    background-position: 90% 40%;
-  }
+	68% {
+		background-position: 90% 40%;
+	}
 
-  82% {
-    background-position: 10% 20%;
-  }
+	82% {
+		background-position: 10% 20%;
+	}
 
-  100% {
-    background-position: 0% 50%;
-  }
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 .animated-gradient-bg {
-  background: linear-gradient(270deg,
-      var(--first-color, #0e630e),
-      var(--second-color, #b30000ce),
-      var(--third-color, #FFD700));
-  background-size: 600% 600%;
-  animation-name: gradientShift;
-  animation-duration: calc(var(--duration) * 1s);
-  animation-timing-function: ease;
-  animation-iteration-count: infinite;
-  height: 100vh;
-  width: 100vw;
+	background: linear-gradient(
+		270deg,
+		var(--first-color, #0e630e),
+		var(--second-color, #b30000ce),
+		var(--third-color, #ffd700)
+	);
+	background-size: 600% 600%;
+	animation-name: gradientShift;
+	animation-duration: calc(var(--duration) * 1s);
+	animation-timing-function: ease;
+	animation-iteration-count: infinite;
+	height: 100vh;
+	width: 100vw;
 }
 
 .react-colorful {
-  width: 100% !important;
-  height: 100% !important;
-  box-sizing: border-box;
+	width: 100% !important;
+	height: 100% !important;
+	box-sizing: border-box;
 }
 
 .react-colorful__saturation,
 .react-colorful__hue {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 /* Base slider */
 #range-slider {
-  height: 4px;
-  background-color: transparent;
-  border-radius: 2px;
-  position: relative;
+	height: 4px;
+	background-color: transparent;
+	border-radius: 2px;
+	position: relative;
 }
 
 #range-slider .range-slider__range {
-  position: relative;
-  background-color: #c7cace5d;
-  z-index: 1;
+	position: relative;
+	background-color: #c7cace5d;
+	z-index: 1;
 }
 
 /* Pseudo element for hit area */
 #range-slider .range-slider__range::before {
-  content: "";
-  position: absolute;
-  top: -10px; 
-  bottom: -10px;
-  left: 0px;
-  right: 0px;
-  background: transparent;
-  pointer-events: auto;
-  z-index: 0;
+	content: "";
+	position: absolute;
+	top: -10px;
+	bottom: -10px;
+	left: 0px;
+	right: 0px;
+	background: transparent;
+	pointer-events: auto;
+	z-index: 0;
 }
 
 #range-slider .range-slider__range[data-active] {
-  background-color: #595959;
+	background-color: #595959;
 }
 
 /* All thumbs */
 #range-slider .range-slider__thumb {
-  width: 10px;
-  height: 10px;
-  background-color: #c7cace;
-  border-radius: 9999px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+	width: 10px;
+	height: 10px;
+	background-color: #c7cace;
+	border-radius: 9999px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 
 /* Shift the lower thumb 6px to the left */
 #range-slider .range-slider__thumb[data-lower] {
-  transform: translate(-6px, -50%);
-  background-color: #c7cace;
+	transform: translate(-6px, -50%);
+	background-color: #c7cace;
 }
 
 /* Upper thumb stays centered */
 #range-slider .range-slider__thumb[data-upper] {
-  background-color: #93c5fd;
+	background-color: #93c5fd;
 }
 
 /* Dragging */
 #range-slider .range-slider__thumb[data-active] {
-  background-color: #c5c4c3;
+	background-color: #c5c4c3;
 }
 
 /* Base vertical slider */
 #range-slider2 {
-  width: 5px;
-  height: 100%;
-  background-color: transparent;
-  z-index: 1;
+	width: 5px;
+	height: 100%;
+	background-color: transparent;
+	z-index: 1;
 }
 
 #range-slider2 .range-slider__range::before {
-  content: "";
-  position: absolute;
-  top: -10px; 
-  bottom: -10px;
-  left: -10px;
-  right: -10px;
-  background: transparent;
-  pointer-events: auto;
-  z-index: 0;
+	content: "";
+	position: absolute;
+	top: -10px;
+	bottom: -10px;
+	left: -10px;
+	right: -10px;
+	background: transparent;
+	pointer-events: auto;
+	z-index: 0;
 }
 
 #range-slider2 .range-slider__range {
-  position: relative;
-  background-color: #c7cace5d;
-  z-index: 1;
+	position: relative;
+	background-color: #c7cace5d;
+	z-index: 1;
 }
 
 #range-slider2 .range-slider__range[data-active] {
-  background-color: #595959;
+	background-color: #595959;
 }
 
 /* All thumbs */
 #range-slider2 .range-slider__thumb {
-  width: 10px;
-  height: 10px;
-  cursor: pointer;
+	width: 10px;
+	height: 10px;
+	cursor: pointer;
 }
 
 /* Lower thumb shifted up */
 #range-slider2 .range-slider__thumb[data-lower] {
-  background-color: #c7cace;
+	background-color: #c7cace;
 }
 
 /* Upper thumb centered */
 #range-slider2 .range-slider__thumb[data-upper] {
-  background-color: #93c5fd;
+	background-color: #93c5fd;
 }
 
 /* Dragging */
 #range-slider2 .range-slider__thumb[data-active] {
-  background-color: #c7cace;
+	background-color: #c7cace;
 }

@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import GuitarApp from "./components/guitarApp";
 import { Scale } from "tonal";
 import StyleSidebar from "./components/styleSidebar";
+import SnowFlake from "./components/snowFlake";
 import SettingsSidebar from "./components/settingsSidebar";
 import { COLORS, modes, notes, getKeyShift, DEF_COLORS } from "./constants";
 
@@ -214,11 +215,12 @@ export default function Home() {
 			style={{
 				background: animatedBg
 					? undefined
-					// : `linear-gradient(135deg, var(--first-color), var(--second-color), var(--third-color))`,
-					 : `linear-gradient(180deg, var(--second-color), var(--first-color))`,
+					: // : `linear-gradient(135deg, var(--first-color), var(--second-color), var(--third-color))`,
+						`linear-gradient(180deg, var(--second-color), var(--first-color))`,
 			}}
 			className={`${animationClass} flex flex-col justify-center min-h-screen font-[family-name:var(--font-geist-sans)]`}
 		>
+			<SnowFlake enabled={animatedBg}></SnowFlake>
 			<p className="absolute top-2 left-1/2 -translate-x-1/2 text-5xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center">
 				𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
 			</p>
@@ -249,7 +251,7 @@ export default function Home() {
 					rel="noopener noreferrer"
 					className="text-2xl text-center cursor-pointer transition-transform duration-700 transform hover:text-gray-800 z-10"
 				>
-					<Github size={36}/>
+					<Github size={36} />
 				</a>
 
 				<button
@@ -260,7 +262,7 @@ export default function Home() {
 					aria-label="Reset settings"
 					className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-gray-800 z-10"
 				>
-					<RefreshCcw size={36}/>
+					<RefreshCcw size={36} />
 				</button>
 
 				<Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
@@ -279,7 +281,7 @@ export default function Home() {
 				/>
 			</div>
 
-			<div className='max-h-[55h] overflow-hidden'>
+			<div className="max-h-[55h] overflow-hidden">
 				<GuitarApp
 					mode={mode}
 					setMode={setMode}
