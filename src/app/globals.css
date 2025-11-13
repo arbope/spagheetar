@@ -5,7 +5,7 @@
 	--foreground: #171717;
 	--first-color: #0e630e;
 	--second-color: #b30000ce;
-	--third-color: #ffd700;
+	--third-color: #ffffff;
 	--duration: 15;
 }
 
@@ -13,7 +13,7 @@
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--font-sans: var(--font-geist-sans);
-	--font-mono: var(--font-geist-mono);
+	--font-mono: var(--font-geist-moro);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -66,12 +66,10 @@ body {
 }
 
 .animated-gradient-bg {
-	background: linear-gradient(
-		270deg,
-		var(--first-color, #0e630e),
-		var(--second-color, #b30000ce),
-		var(--third-color, #ffd700)
-	);
+	background: linear-gradient(270deg,
+			var(--first-color, #0e630e),
+			var(--second-color, #b30000ce),
+			var(--third-color, #ffd700));
 	background-size: 600% 600%;
 	animation-name: gradientShift;
 	animation-duration: calc(var(--duration) * 1s);

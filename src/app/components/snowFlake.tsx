@@ -12,7 +12,7 @@ interface Flake {
 interface SnowFlakeProps {
 	enabled: boolean;
 }
-const snowFlake: React.FC<SnowFlakeProps> = ({ enabled }) => {
+const SnowFlake: React.FC<SnowFlakeProps> = ({ enabled }) => {
 	const [flakes, setFlakes] = useState<Flake[]>([]);
 
 	useEffect(() => {
@@ -64,4 +64,4 @@ const snowFlake: React.FC<SnowFlakeProps> = ({ enabled }) => {
 	);
 };
 
-export default snowFlake;
+export default SnowFlake;

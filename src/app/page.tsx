@@ -147,7 +147,7 @@ export default function Home() {
 	const [bgColors, setBgColors] = useState({
 		first: getCssVar("--first-color", "#0e630e"),
 		second: getCssVar("--second-color", "#b30000ce"),
-		third: getCssVar("--third-color", "#FFD700"),
+		third: getCssVar("--third-color", "#FFFFFF"),
 	});
 
 	const animationClass = animatedBg ? "animated-gradient-bg" : "";
