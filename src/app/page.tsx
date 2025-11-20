@@ -145,9 +145,9 @@ export default function Home() {
 			: fallback;
 
 	const [bgColors, setBgColors] = useState({
-		first: getCssVar("--first-color", "#0e630e"),
-		second: getCssVar("--second-color", "#b30000ce"),
-		third: getCssVar("--third-color", "#FFFFFF"),
+		first: getCssVar("--first-color", "#034f1b"),
+		second: getCssVar("--second-color", "#bd3634"),
+		third: getCssVar("--third-color", "#ceac5c"),
 	});
 
 	const animationClass = animatedBg ? "animated-gradient-bg" : "";
@@ -215,8 +215,8 @@ export default function Home() {
 			style={{
 				background: animatedBg
 					? undefined
-					: // : `linear-gradient(135deg, var(--first-color), var(--second-color), var(--third-color))`,
-						`linear-gradient(180deg, var(--second-color), var(--first-color))`,
+					: `linear-gradient(135deg, var(--first-color), var(--third-color), var(--second-color))`,
+				//`linear-gradient(180deg, var(--second-color), var(--first-color))`,
 			}}
 			className={`${animationClass} flex flex-col justify-center min-h-screen font-[family-name:var(--font-geist-sans)]`}
 		>
