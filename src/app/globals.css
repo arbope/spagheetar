@@ -68,9 +68,9 @@ body {
 .animated-gradient-bg {
 	background: linear-gradient(
 		270deg,
-		var(--first-color, #0e630e),
-		var(--second-color, #b30000ce),
-		var(--third-color, #ffd700)
+		var(--first-color, #034f1b),
+		var(--second-color, #bd3634),
+		var(--third-color, #ceac5c)
 	);
 	background-size: 600% 600%;
 	animation-name: gradientShift;
