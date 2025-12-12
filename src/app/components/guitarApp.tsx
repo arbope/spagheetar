@@ -43,7 +43,7 @@ const GuitarApp = ({
 }) => {
 	return (
 		<div>
-			<div className="flex justify-center max-h-[85vh] overflow-hidden">
+			<div className="flex justify-center max-h-[85vh]">
 				<StringTuner
 					root={root}
 					mode={mode}
