@@ -186,6 +186,7 @@ export default function Home() {
 		resetColors();
 		setMutedFrets([0, 12]);
 		setMutedStrings([0, 6]);
+		setAnimatedBg(false);
 	}
 
 	useEffect(() => {
@@ -281,27 +282,29 @@ export default function Home() {
 				/>
 			</div>
 
-			<div className="max-h-[55h] overflow-hidden">
-				<GuitarApp
-					mode={mode}
-					setMode={setMode}
-					root={root}
-					setRoot={setRoot}
-					strings={strings}
-					setStrings={setStrings}
-					frets={frets}
-					setFrets={setFrets}
-					tuning={tuning}
-					setTuning={setTuning}
-					customIntervals={customIntervals}
-					toggleCustomInterval={toggleCustomInterval}
-					toggleDetectionInterval={toggleDetectionInterval}
-					detectionIntervals={detectionIntervals}
-					mutedStrings={mutedStrings}
-					setMutedStrings={setMutedStrings}
-					mutedFrets={mutedFrets}
-					setMutedFrets={setMutedFrets}
-				/>
+			<div className="w-screen h-screen md:max-h-[55vh] overflow-hidden flex items-center justify-center">
+				<div className="rotate-90 md:rotate-0 origin-center">
+					<GuitarApp
+						mode={mode}
+						setMode={setMode}
+						root={root}
+						setRoot={setRoot}
+						strings={strings}
+						setStrings={setStrings}
+						frets={frets}
+						setFrets={setFrets}
+						tuning={tuning}
+						setTuning={setTuning}
+						customIntervals={customIntervals}
+						toggleCustomInterval={toggleCustomInterval}
+						toggleDetectionInterval={toggleDetectionInterval}
+						detectionIntervals={detectionIntervals}
+						mutedStrings={mutedStrings}
+						setMutedStrings={setMutedStrings}
+						mutedFrets={mutedFrets}
+						setMutedFrets={setMutedFrets}
+					/>
+				</div>
 			</div>
 		</motion.div>
 	);
