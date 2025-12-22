@@ -176,9 +176,9 @@ export default function Home() {
 		localStorage.removeItem("frets");
 		setFrets(12);
 		localStorage.removeItem("mode");
-		// setMode('major');
+		setMode("major");
 		localStorage.removeItem("root");
-		setRoot("C");
+		setRoot("c");
 		localStorage.removeItem("tuning");
 		setTuning(["e", "b", "g", "d", "a", "e"]);
 		setCustomIntervals([]);

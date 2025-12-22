@@ -90,7 +90,7 @@ export default function SettingsSidebar({
 					</div>
 
 					<div className="text-center">
-						<h2 className="text-lg font-semibold mb-2">Key</h2>
+						<h2 className="text-lg font-semibold mb-2">Root</h2>
 						<select
 							className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
 							value={root}
