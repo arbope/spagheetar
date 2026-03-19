@@ -27,7 +27,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
+		<html lang="en" style={{ fontSize: "145%" }}>
 			<head>
 				<meta
 					name="google-site-verification"
