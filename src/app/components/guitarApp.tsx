@@ -1,26 +1,31 @@
 "use client";
-import React from "react";
+
+import React, { useState, useEffect } from "react";
 import Fretboard from "./fretboard";
 import StringTuner from "./stringTuner";
 import { modes } from "../constants";
 import StringMuter from "./stringMuter";
-
 const GuitarApp = ({
 	mode,
+	setMode,
 	root,
 	setRoot,
 	strings,
+	setStrings,
 	frets,
+	setFrets,
 	tuning,
 	setTuning,
 	customIntervals,
 	toggleCustomInterval,
 	detectionIntervals,
 	toggleDetectionInterval,
-	mutedStrings,
-	setMutedStrings,
+	activeStrings,
+	sliderRanges,
+	handleActiveStringsChange: handleSliderChange,
+	setActiveStrings,
 	mutedFrets,
-	setMutedFrets,
+	handleFretSliderChange,
 }: {
 	mode: keyof typeof modes;
 	setMode: React.Dispatch<React.SetStateAction<keyof typeof modes>>;
@@ -36,10 +41,15 @@ const GuitarApp = ({
 	toggleCustomInterval: (interval: number) => void;
 	toggleDetectionInterval: (interval: number) => void;
 	detectionIntervals: number[];
-	mutedStrings: [number, number];
-	setMutedStrings: React.Dispatch<React.SetStateAction<[number, number]>>;
-	mutedFrets: [number, number];
-	setMutedFrets: React.Dispatch<React.SetStateAction<[number, number]>>;
+	activeStrings: boolean[];
+	sliderRanges: [number, number][];
+	handleActiveStringsChange: (
+		index: number,
+		newRange: [number, number],
+	) => void;
+	setActiveStrings: React.Dispatch<React.SetStateAction<boolean[]>>;
+	mutedFrets: [number, number][];
+	handleFretSliderChange: (index: number, newRange: [number, number]) => void;
 }) => {
 	return (
 		<div>
@@ -52,6 +62,7 @@ const GuitarApp = ({
 					setTuning={setTuning}
 					customIntervals={customIntervals}
 				/>
+
 				<Fretboard
 					strings={strings}
 					frets={frets}
@@ -63,15 +74,20 @@ const GuitarApp = ({
 					customIntervals={customIntervals}
 					onToggleDetectionInterval={toggleDetectionInterval}
 					detectionIntervals={detectionIntervals}
-					mutedStrings={mutedStrings}
+					activeStrings={activeStrings}
+					handleFretSliderChange={handleFretSliderChange}
 					mutedFrets={mutedFrets}
-					setMutedFrets={setMutedFrets}
 				/>
-				<StringMuter
-					strings={strings}
-					mutedStrings={mutedStrings}
-					setMutedStrings={setMutedStrings}
-				/>
+
+				{sliderRanges.map((range, idx) => (
+					<StringMuter
+						key={idx}
+						sliderIndex={idx}
+						strings={strings}
+						range={range}
+						onChange={handleSliderChange}
+					/>
+				))}
 			</div>
 		</div>
 	);

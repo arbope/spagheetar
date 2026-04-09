@@ -66,12 +66,10 @@ body {
 }
 
 .animated-gradient-bg {
-	background: linear-gradient(
-		270deg,
-		var(--first-color, #034f1b),
-		var(--second-color, #bd3634),
-		var(--third-color, #ceac5c)
-	);
+	background: linear-gradient(270deg,
+			var(--first-color, #0e630e),
+			var(--second-color, #b30000ce),
+			var(--third-color, #ffd700));
 	background-size: 600% 600%;
 	animation-name: gradientShift;
 	animation-duration: calc(var(--duration) * 1s);
@@ -92,114 +90,65 @@ body {
 	box-sizing: border-box;
 }
 
-/* Base slider */
-#range-slider {
-	height: 4px;
-	background-color: transparent;
-	border-radius: 2px;
-	position: relative;
+/* Unified Thin Slider Style */
+.thin-slider {
+	background-color: transparent !important;
 }
 
-#range-slider .range-slider__range {
-	position: relative;
-	background-color: #c7cace5d;
-	z-index: 1;
+/* 1. Base Track Dimensions */
+.range-slider.thin-slider[data-orientation="horizontal"] {
+	height: 4px !important;
+	background: rgba(255, 255, 255, 0.1);
+	/* Slight background so you can see the track */
 }
 
-/* Pseudo element for hit area */
-#range-slider .range-slider__range::before {
-	content: "";
-	position: absolute;
-	top: -10px;
-	bottom: -10px;
-	left: 0px;
-	right: 0px;
-	background: transparent;
-	pointer-events: auto;
-	z-index: 0;
-}
-
-#range-slider .range-slider__range[data-active] {
-	background-color: #595959;
-}
-
-/* All thumbs */
-#range-slider .range-slider__thumb {
-	width: 10px;
-	height: 10px;
-	background-color: #c7cace;
-	border-radius: 9999px;
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-}
-
-/* Shift the lower thumb 6px to the left */
-#range-slider .range-slider__thumb[data-lower] {
-	transform: translate(-6px, -50%);
-	background-color: #c7cace;
-}
-
-/* Upper thumb stays centered */
-#range-slider .range-slider__thumb[data-upper] {
-	background-color: #93c5fd;
-}
-
-/* Dragging */
-#range-slider .range-slider__thumb[data-active] {
-	background-color: #c5c4c3;
-}
-
-/* Base vertical slider */
-#range-slider2 {
-	width: 5px;
+.range-slider.thin-slider[data-orientation="vertical"] {
+	width: 4px !important;
 	height: 100%;
-	background-color: transparent;
-	z-index: 1;
+	background: rgba(255, 255, 255, 0.1);
 }
 
-#range-slider2 .range-slider__range::before {
+/* 2. The Active Range (the bar between thumbs) */
+.range-slider.thin-slider .range-slider__range {
+	background-color: #c7cace5d !important;
+}
+
+/* 3. Thumbs Styling */
+.range-slider.thin-slider .range-slider__thumb {
+	width: 12px !important;
+	height: 12px !important;
+	border-radius: 50%;
+}
+
+/* 4. Thumb Colors */
+.range-slider.thin-slider .range-slider__thumb[data-lower] {
+	background-color: #c7cace !important;
+}
+
+.range-slider.thin-slider .range-slider__thumb[data-upper] {
+	background-color: #3b82f6 !important;
+}
+
+/* 5. Centering Fixes */
+.range-slider.thin-slider[data-orientation="horizontal"] .range-slider__thumb {
+	top: 50%;
+	transform: translate(-50%, -50%);
+	/* Centers horizontally and vertically */
+}
+
+.range-slider.thin-slider[data-orientation="vertical"] .range-slider__thumb {
+	left: 50%;
+	transform: translate(-50%, -50%);
+	/* Centers horizontally and vertically */
+}
+
+/* 6. Hit Area (Invisible expansion for mobile/mouse) */
+.range-slider.thin-slider .range-slider__range::before {
 	content: "";
 	position: absolute;
 	top: -10px;
 	bottom: -10px;
 	left: -10px;
 	right: -10px;
-	background: transparent;
-	pointer-events: auto;
-	z-index: 0;
-}
-
-#range-slider2 .range-slider__range {
-	position: relative;
-	background-color: #c7cace5d;
-	z-index: 1;
-}
-
-#range-slider2 .range-slider__range[data-active] {
-	background-color: #595959;
-}
-
-/* All thumbs */
-#range-slider2 .range-slider__thumb {
-	width: 10px;
-	height: 10px;
-	cursor: pointer;
-}
-
-/* Lower thumb shifted up */
-#range-slider2 .range-slider__thumb[data-lower] {
-	background-color: #c7cace;
-}
-
-/* Upper thumb centered */
-#range-slider2 .range-slider__thumb[data-upper] {
-	background-color: #93c5fd;
-}
-
-/* Dragging */
-#range-slider2 .range-slider__thumb[data-active] {
-	background-color: #c7cace;
+	Stringscursor: pointer;
 }

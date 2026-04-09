@@ -1,31 +1,34 @@
-'use client';
-import RangeSlider from 'react-range-slider-input';
-import 'react-range-slider-input/dist/style.css';
+"use client";
+import React from "react";
+import RangeSlider from "react-range-slider-input";
+import "react-range-slider-input/dist/style.css";
 
 interface MuterProps {
-  strings: number;
-  mutedStrings: [number,number];
-  setMutedStrings: (range: [number,number]) => void;
+	sliderIndex: number;
+	strings: number;
+	range: [number, number];
+	onChange: (index: number, newRange: [number, number]) => void;
 }
 
-const StringMuter: React.FC<MuterProps> = ({ strings, mutedStrings, setMutedStrings }) => {
-
-  const handleInput = (newRange: [number, number]) => {
-    setMutedStrings(newRange);
-  };
-
-  return (
-    <div className="min-h-max w-1 ml-2.5 mt-15 mb-6 flex items-center justify-center">
-      <RangeSlider
-        id="range-slider2"
-        min={0}
-        max={strings}
-        value={mutedStrings}
-        orientation="vertical"
-        className="range-slider-vertical"
-        onInput={handleInput} />
-    </div>
-  );
+const StringMuter: React.FC<MuterProps> = ({
+	sliderIndex,
+	strings,
+	range,
+	onChange,
+}) => {
+	return (
+		<div className="min-h-max w-1 ml-2.5 mt-15 mb-4 flex items-center justify-center">
+			<RangeSlider
+				className="thin-slider"
+				min={0}
+				max={strings}
+				step={1}
+				value={range}
+				orientation="vertical"
+				onInput={(val: [number, number]) => onChange(sliderIndex, val)}
+			/>
+		</div>
+	);
 };
 
 export default StringMuter;

@@ -1,5 +1,7 @@
 "use client";
+
 import React, { useState } from "react";
+
 import {
 	notes,
 	modes,
@@ -22,9 +24,9 @@ interface FretboardProps {
 	onToggleDetectionInterval?: (interval: number) => void;
 	customIntervals: number[];
 	detectionIntervals: number[];
-	mutedStrings: [number, number];
-	mutedFrets: [number, number];
-	setMutedFrets: React.Dispatch<React.SetStateAction<[number, number]>>;
+	activeStrings: boolean[];
+	mutedFrets: [number, number][]; // Change to array
+	handleFretSliderChange: (index: number, newRange: [number, number]) => void; // Add this
 }
 
 const Fretboard: React.FC<FretboardProps> = ({
@@ -38,9 +40,9 @@ const Fretboard: React.FC<FretboardProps> = ({
 	customIntervals,
 	onToggleDetectionInterval,
 	detectionIntervals,
-	mutedStrings,
+	activeStrings,
+	handleFretSliderChange,
 	mutedFrets,
-	setMutedFrets,
 }) => {
 	const [hoveredInterval, setHoveredInterval] = useState<number | null>(null);
 	const [mousePos, setMousePos] = useState<{ x: number; y: number }>({
@@ -54,10 +56,6 @@ const Fretboard: React.FC<FretboardProps> = ({
 				? detectionIntervals
 				: modes[mode] || modes["major"];
 	const keyShift = getKeyShift(root);
-
-	const handleInput = (newRange: [number, number]) => {
-		setMutedFrets(newRange);
-	};
 
 	const calculateInterval = (fret: number, stringIndex: number) => {
 		const stringNoteShift = getKeyShift(tuning[stringIndex]);
@@ -125,6 +123,7 @@ const Fretboard: React.FC<FretboardProps> = ({
 					</div>
 				))}
 			</div>
+
 			{Array.from({ length: strings }).map((_, stringIndex) => (
 				<div
 					className="flex border-y-1 border-l-8 border-transparent"
@@ -152,11 +151,11 @@ const Fretboard: React.FC<FretboardProps> = ({
 								onMouseMove={handleMouseMove}
 								onMouseLeave={handleMouseLeave}
 							>
-								{fretIndex >= mutedFrets[0] &&
-								fretIndex <= mutedFrets[1] - 1 &&
-								stringIndex >= mutedStrings[0] &&
-								stringIndex <= mutedStrings[1] - 1 &&
-								note ? (
+								{mutedFrets.some(
+									(range) => fretIndex >= range[0] && fretIndex < range[1],
+								) &&
+									activeStrings[stringIndex] &&
+									note ? (
 									<div
 										className="rounded-full h-5 w-5 text-xs flex items-center justify-center hover:bg-blue-950"
 										style={{
@@ -177,8 +176,8 @@ const Fretboard: React.FC<FretboardProps> = ({
 				<div
 					className="absolute px-2 py-1 rounded text-xl text-white bg-gray-800"
 					style={{
-						left: mousePos.x + 10,
-						top: mousePos.y + 10,
+						left: mousePos.x - 230,
+						top: mousePos.y - 230,
 						opacity: 0.6,
 						borderRadius: "8px",
 						pointerEvents: "none",
@@ -189,15 +188,20 @@ const Fretboard: React.FC<FretboardProps> = ({
 					{intervalNames[hoveredInterval]}
 				</div>
 			)}
-			<div className="ml-2 pt-2.5">
-				<RangeSlider
-					id="range-slider"
-					min={0}
-					max={frets}
-					step={1}
-					value={mutedFrets}
-					onInput={handleInput}
-				/>
+			<div className="ml-2 pt-2.5 flex flex-col gap-2">
+				{mutedFrets.map((range, idx) => (
+					<RangeSlider
+						key={idx}
+						className="thin-slider"
+						min={0}
+						max={frets}
+						step={1}
+						value={range}
+						onInput={(val: [number, number]) =>
+							handleFretSliderChange(idx, val)
+						}
+					/>
+				))}
 			</div>
 		</div>
 	);
