@@ -13,7 +13,7 @@
     "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.15.0",
     "lucide-react": "^0.511.0",
-    "next": "15.3.2",
+    "next": "15.3.8",
     "next-sitemap": "^4.2.3",
     "pitchy": "^4.1.0",
     "react": "^19.0.0",
