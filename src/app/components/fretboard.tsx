@@ -176,8 +176,8 @@ const Fretboard: React.FC<FretboardProps> = ({
 				<div
 					className="absolute px-2 py-1 rounded text-xl text-white bg-gray-800"
 					style={{
-						left: mousePos.x - 180,
-						top: mousePos.y - 280,
+						left: mousePos.x - 10,
+						top: mousePos.y - 10,
 						opacity: 0.6,
 						borderRadius: "8px",
 						pointerEvents: "none",
