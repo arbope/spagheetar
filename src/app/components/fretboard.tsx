@@ -154,8 +154,8 @@ const Fretboard: React.FC<FretboardProps> = ({
 								{mutedFrets.some(
 									(range) => fretIndex >= range[0] && fretIndex < range[1],
 								) &&
-									activeStrings[stringIndex] &&
-									note ? (
+								activeStrings[stringIndex] &&
+								note ? (
 									<div
 										className="rounded-full h-5 w-5 text-xs flex items-center justify-center hover:bg-blue-950"
 										style={{
@@ -176,8 +176,8 @@ const Fretboard: React.FC<FretboardProps> = ({
 				<div
 					className="absolute px-2 py-1 rounded text-xl text-white bg-gray-800"
 					style={{
-						left: mousePos.x - 230,
-						top: mousePos.y - 230,
+						left: mousePos.x - 180,
+						top: mousePos.y - 280,
 						opacity: 0.6,
 						borderRadius: "8px",
 						pointerEvents: "none",

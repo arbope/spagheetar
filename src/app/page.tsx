@@ -89,15 +89,15 @@ export default function Home() {
 		return nextActive;
 	}, [sliderRanges, strings]);
 
-	const activeFrets = useMemo(() => {
-		const nextActive = Array(frets).fill(false);
-		mutedFrets.forEach(([min, max]) => {
-			for (let i = Math.floor(min); i < Math.ceil(max); i++) {
-				if (i >= 0 && i < frets) nextActive[i] = true;
-			}
-		});
-		return nextActive;
-	}, [mutedFrets, frets]);
+	// const activeFrets = useMemo(() => {
+	// 	const nextActive = Array(frets).fill(false);
+	// 	mutedFrets.forEach(([min, max]) => {
+	// 		for (let i = Math.floor(min); i < Math.ceil(max); i++) {
+	// 			if (i >= 0 && i < frets) nextActive[i] = true;
+	// 		}
+	// 	});
+	// 	return nextActive;
+	// }, [mutedFrets, frets]);
 
 	// --- 6. SYNC EFFECTS (LocalStorage & Boundaries) ---
 
@@ -260,14 +260,14 @@ export default function Home() {
 		setDetectedScales([]);
 	};
 
-	const detectScale = (intervals: number[], root: string) => {
-		if (intervals.length === 0) return [];
-		const notesInScale = intervals.map((interval) =>
-			Note.transpose(root, Interval.fromSemitones(interval)),
-		);
-
-		return Scale.detect(notesInScale);
-	};
+	// const detectScale = (intervals: number[], root: string) => {
+	// 	if (intervals.length === 0) return [];
+	// 	const notesInScale = intervals.map((interval) =>
+	// 		Note.transpose(root, Interval.fromSemitones(interval)),
+	// 	);
+	//
+	// 	return Scale.detect(notesInScale);
+	// };
 
 	function updateColor(index: number, newColor: string) {
 		COLORS[index] = newColor;
@@ -424,7 +424,7 @@ export default function Home() {
 						toggleDetectionInterval={toggleDetectionInterval}
 						detectionIntervals={detectionIntervals}
 						activeStrings={activeStrings} // Now derived instantly via useMemo
-						setActiveStrings={() => {}} // Placeholder: derived state doesn't need a setter
+						setActiveStrings={() => { }} // Placeholder: derived state doesn't need a setter
 						handleActiveStringsChange={handleSliderChange}
 						sliderRanges={sliderRanges}
 						mutedFrets={mutedFrets}

@@ -58,7 +58,7 @@ const ShurikenRain: React.FC<ShurikenRainProps> = ({ enabled }) => {
 				>
 					<img
 						src="/shuriken.png"
-						alt="shuriken"
+						alt="tetas gordas"
 						className="opacity-90"
 						style={{
 							width: `${flake.size*3}px`,

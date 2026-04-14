@@ -1,19 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Fretboard from "./fretboard";
 import StringTuner from "./stringTuner";
 import { modes } from "../constants";
 import StringMuter from "./stringMuter";
 const GuitarApp = ({
 	mode,
-	setMode,
 	root,
 	setRoot,
 	strings,
-	setStrings,
 	frets,
-	setFrets,
 	tuning,
 	setTuning,
 	customIntervals,
@@ -23,7 +20,6 @@ const GuitarApp = ({
 	activeStrings,
 	sliderRanges,
 	handleActiveStringsChange: handleSliderChange,
-	setActiveStrings,
 	mutedFrets,
 	handleFretSliderChange,
 }: {
