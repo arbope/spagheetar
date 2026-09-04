@@ -1,4 +1,5 @@
-import { ScaleType, Interval } from "tonal";
+import { ScaleType, Interval, ChordType } from "tonal";
+
 export const modes: Record<string, number[]> = Object.fromEntries([
   ...ScaleType.names().map((name) => [
     name,
@@ -8,6 +9,15 @@ export const modes: Record<string, number[]> = Object.fromEntries([
   ]),
   ["custom", [0]],
   ["detection", [0]],
+]);
+
+export const chords: Record<string, number[]> = Object.fromEntries([
+  ...ChordType.names().map((name) => [
+    name,
+    ChordType.get(name).intervals.map((interval) =>
+      Interval.semitones(interval),
+    ),
+  ]),
 ]);
 
 export const notes = [
@@ -39,50 +49,6 @@ export const notes2 = [
   "b",
   " ",
 ];
-
-// export const modes = {
-//   major: [0, 2, 4, 5, 7, 9, 11],
-//   minor: [0, 2, 3, 5, 7, 8, 10],
-//   melodic: [0, 2, 3, 5, 7, 9, 11],
-//   harmonic: [0, 2, 3, 5, 7, 8, 11],
-//   blues: [0, 3, 5, 6, 7, 10],
-//   penta_maj: [0, 2, 4, 7, 9],
-//   penta_min: [0, 3, 5, 7, 10],
-//   bebop_maj: [0, 2, 4, 5, 7, 8, 9, 11],
-//   bebop_min: [0, 2, 3, 5, 7, 8, 9, 10],
-//   bebop_dom: [0, 2, 4, 5, 7, 9, 10, 11],
-//   arabic: [0, 1, 4, 5, 7, 8, 11],
-//   hung_min: [0, 2, 3, 6, 7, 8, 11],
-//   flamenco: [0, 1, 4, 5, 7, 8, 10],
-//   whole: [0, 2, 4, 6, 8, 10],
-//   chromatic: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-//   majChord: [0, 4, 7], // 1 - 3 - 5
-//   minChord: [0, 3, 7], // 1 - b3 - 5
-//   dimiChord: [0, 3, 6], // 1 - b3 - b5
-//   augChord: [0, 4, 8], // 1 - 3 - #5
-//   sus2Chord: [0, 2, 7], // 1 - 2 - 5
-//   sus4Chord: [0, 5, 7], // 1 - 4 - 5
-//   maj7Chord: [0, 4, 7, 11], // 1 - 3 - 5 - 7
-//   dom7Chord: [0, 4, 7, 10], // 1 - 3 - 5 - b7
-//   min7Chord: [0, 3, 7, 10], // 1 - b3 - 5 - b7
-//   hlfDim7Chord: [0, 3, 6, 10], // 1 - b3 - b5 - b7
-//   dimi7Chord: [0, 3, 6, 9], // 1 - b3 - b5 - bb7
-//   minMaj7Chord: [0, 3, 7, 11], // 1 - b3 - 5 - 7
-//   aug7Chord: [0, 4, 8, 10],
-//   maj9Chord: [0, 4, 7, 11, 14], // 1 - 3 - 5 - 7 - 9
-//   dom9Chord: [0, 4, 7, 10, 14], // 1 - 3 - 5 - b7 - 9
-//   min9Chord: [0, 3, 7, 10, 14], // 1 - b3 - 5 - b7 - 9
-//   maj11Chord: [0, 4, 7, 11, 14, 17], // 1 - 3 - 5 - 7 - 9 - 11
-//   min11Chord: [0, 3, 7, 10, 14, 17], // 1 - b3 - 5 - b7 - 9 - 11
-//   dom13Chord: [0, 4, 7, 10, 14, 21],
-//   add9Chord: [0, 4, 7, 14], // 1 - 3 - 5 - 9
-//   add11Chord: [0, 4, 7, 17],
-//   maj7shrp11Chord: [0, 4, 7, 11, 18], // Lydian flavor
-//   dominant7flat5: [0, 4, 6, 10],
-//   dominant7sharp5: [0, 4, 8, 10],
-//   custom: [0],
-//   detection: [],
-// };
 
 export function getKeyShift(root: string | undefined | null): number {
   if (!root) return 0;
@@ -159,14 +125,12 @@ export const getNoteColor = (note: string | null, root: string): string => {
 };
 
 export function getContrastingTextColor(bgColor: string) {
-  // Remove hash if present
   const color = bgColor.charAt(0) === "#" ? bgColor.slice(1) : bgColor;
 
-  const r = parseInt(color.slice(0, 2), 16); // Red
-  const g = parseInt(color.slice(2, 4), 16); // Green
-  const b = parseInt(color.slice(4, 6), 16); // Blue
+  const r = parseInt(color.slice(0, 2), 16);
+  const g = parseInt(color.slice(2, 4), 16);
+  const b = parseInt(color.slice(4, 6), 16);
 
-  // Calculate luminance
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 
   return luminance > 0.5 ? "black" : "white";

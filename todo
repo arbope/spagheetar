@@ -1,0 +1,13 @@
+in the popups show positions TILL current fret size + 3
+in the scale chord popup SHOW the current chord if showing chords
+add hover intervals in the popups
+add ROMAN thing in the chords
+change colors of popup according to scale behind 
+add a toggle as well 
+preview chord at scale
+add more or less range sliders via buttons,
+refine a better tuner
+close ANY popup on esc pressing
+add EVEN MORE KEYMAPS YEAAAAAHH
+add better UI (hovers and intuitive things for menubar)
+add a tutorial?

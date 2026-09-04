@@ -154,7 +154,7 @@ export default function Tuner({ setShowTuner, showTuner }: TunerProps) {
         aria-label="Open tuner"
         className="text-2xl cursor-pointer transition-transform duration-700 transform hover:text-gray-800 z-10"
       >
-        <Waves size={36}/>
+        <Waves size={36} />
       </div>
 
       {showTuner && (

@@ -1,15 +1,24 @@
 "use client";
 
-import { RefreshCcw, Github } from "lucide-react";
+import { RefreshCcw, Github, AudioLines } from "lucide-react";
 import Tuner from "./components/tuner";
+import ChordPopup from "./components/chords";
+import ScaleChordsPopup from "./components/scaleChords";
 import { useState, useEffect, useMemo } from "react"; // Added useMemo
 import { motion } from "framer-motion";
 import GuitarApp from "./components/guitarApp";
-import { Scale, Interval, Note } from "tonal";
+import { Scale, Interval, Note, Progression } from "tonal";
 import StyleSidebar from "./components/styleSidebar";
 import SnowFlake from "./components/snowFlake";
 import SettingsSidebar from "./components/settingsSidebar";
-import { COLORS, modes, notes, getKeyShift, DEF_COLORS } from "./constants";
+import {
+	COLORS,
+	modes,
+	chords,
+	notes,
+	getKeyShift,
+	DEF_COLORS,
+} from "./constants";
 
 export default function Home() {
 	// -- 1. UI & SIDEBAR STATE ---
@@ -42,7 +51,7 @@ export default function Home() {
 		return saved ? JSON.parse(saved) : 12;
 	});
 
-	const [mode, setMode] = useState<keyof typeof modes>(() => {
+	const [mode, setMode] = useState<string>(() => {
 		if (typeof window === "undefined") return "major";
 		const saved = localStorage.getItem("mode");
 		return saved ? JSON.parse(saved) : "major";
@@ -287,6 +296,10 @@ export default function Home() {
 		setBgColors((prev) => ({ ...prev, [name]: color }));
 	}
 
+	function showChords() {
+		console.log(chords);
+	}
+
 	function resetSettings() {
 		localStorage.removeItem("strings");
 		setStrings(6);
@@ -307,7 +320,6 @@ export default function Home() {
 	}
 
 	const animationClass = animatedBg ? "animated-gradient-bg" : "";
-
 	// --- 8. RENDER ---
 	return (
 		<motion.div
@@ -365,7 +377,20 @@ export default function Home() {
 				</button>
 
 				<Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
-
+				<ChordPopup
+					tuning={tuning}
+					strings={strings}
+					onPreview={(preview) => setPreviewScale(preview)}
+				/>
+				<ScaleChordsPopup
+					tuning={tuning}
+					strings={strings}
+					root={root}
+					mode={mode}
+					setRoot={setRoot}
+					setMode={setMode}
+					onPreview={(preview) => setPreviewScale(preview)}
+				/>
 				<SettingsSidebar
 					strings={strings}
 					setStrings={setStrings}
@@ -378,6 +403,14 @@ export default function Home() {
 					settingsSidebarOpen={settingsSidebarOpen}
 					setSettingsSidebarOpen={setSettingsSidebarOpen}
 				/>
+				<button
+					type="button"
+					onClick={resetSettings}
+					aria-label="Show chords"
+					className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-gray-800 z-10"
+				>
+					<AudioLines size={36} />
+				</button>
 			</div>
 
 			<div className="w-screen h-screen verflow-hidden flex items-center justify-center">
@@ -424,7 +457,7 @@ export default function Home() {
 						toggleDetectionInterval={toggleDetectionInterval}
 						detectionIntervals={detectionIntervals}
 						activeStrings={activeStrings} // Now derived instantly via useMemo
-						setActiveStrings={() => { }} // Placeholder: derived state doesn't need a setter
+						setActiveStrings={() => {}} // Placeholder: derived state doesn't need a setter
 						handleActiveStringsChange={handleSliderChange}
 						sliderRanges={sliderRanges}
 						mutedFrets={mutedFrets}

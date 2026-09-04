@@ -47,10 +47,10 @@ const StringTuner: React.FC<StringProps> = ({
 	};
 
 	return (
-		<div className="h-min w-8 mt-11">
+		<div className="h-min w-8 mt-9">
 			<div
 				onClick={tuneUp}
-				className="rotate-90 cursor-pointer transition-transform transform text-xl hover:text-gray-400"
+				className="mr-2 mb-2 rotate-180 cursor-pointer transition-transform transform text-xl hover:text-gray-400"
 			>
 				<ArrowDownFromLine strokeWidth={3} />
 			</div>
@@ -92,7 +92,7 @@ const StringTuner: React.FC<StringProps> = ({
 			})}
 			<div
 				onClick={tuneDown}
-				className="rotate-270 cursor-pointer transition-transform transform hover:text-gray-600"
+				className="pt-2 pl-2 rotate-360 cursor-pointer transition-transform transform hover:text-gray-600"
 			>
 				<ArrowDownFromLine strokeWidth={3} />
 			</div>

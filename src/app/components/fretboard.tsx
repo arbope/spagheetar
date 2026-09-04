@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import {
 	notes,
 	modes,
+	chords,
 	getKeyShift,
 	getNoteColor,
 	getContrastingTextColor,
@@ -16,7 +17,7 @@ import "react-range-slider-input/dist/style.css";
 interface FretboardProps {
 	strings: number;
 	frets: number;
-	mode: keyof typeof modes;
+	mode: string;
 	root: string;
 	setRoot: (value: string) => void;
 	tuning: string[];
@@ -54,7 +55,7 @@ const Fretboard: React.FC<FretboardProps> = ({
 			? customIntervals
 			: mode === "detection"
 				? detectionIntervals
-				: modes[mode] || modes["major"];
+				: modes[mode] || chords[mode] || modes["major"];
 	const keyShift = getKeyShift(root);
 
 	const calculateInterval = (fret: number, stringIndex: number) => {
@@ -85,7 +86,6 @@ const Fretboard: React.FC<FretboardProps> = ({
 				onToggleCustomInterval(interval);
 			}
 		} else {
-			console.log("pepe");
 			if (detectionIntervals.length === 0) {
 				const rawNote = notes[(interval + keyShift) % 12];
 				setRoot(rawNote.toLowerCase());

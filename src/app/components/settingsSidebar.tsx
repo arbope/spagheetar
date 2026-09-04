@@ -3,18 +3,18 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Cog } from "lucide-react";
-import { modes, notes } from "../constants";
+import { modes, notes, chords } from "../constants";
 
 interface SidebarProps {
 	settingsSidebarOpen: boolean;
 	setSettingsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	strings: number;
 	frets: number;
-	mode: keyof typeof modes;
+	mode: string;
 	root: string;
 	setFrets: (value: number) => void;
 	setStrings: (value: number) => void;
-	setMode: React.Dispatch<React.SetStateAction<keyof typeof modes>>;
+	setMode: React.Dispatch<React.SetStateAction<string>>;
 	setRoot: (value: string) => void;
 }
 
@@ -32,6 +32,26 @@ export default function SettingsSidebar({
 }: SidebarProps) {
 	const sidebarRef = useRef<HTMLDivElement>(null);
 	const settingsRef = useRef<HTMLDivElement>(null);
+
+	// Group chords dynamically by their interval count (number of notes)
+	const chordsByCount = Object.entries(chords).reduce(
+		(acc, [name, intervals]) => {
+			const count = intervals.length;
+			if (!acc[count]) acc[count] = [];
+			acc[count].push(name);
+			return acc;
+		},
+		{} as Record<number, string[]>,
+	);
+
+	// Sort note counts numerically (e.g., 2, 3, 4, 5, 6...)
+	const sortedCounts = Object.keys(chordsByCount)
+		.map(Number)
+		.sort((a, b) => a - b);
+
+	// Patched checks: strictly separate scales from chords using their respective objects
+	const isScale = Object.prototype.hasOwnProperty.call(modes, mode);
+	const isChord = Object.prototype.hasOwnProperty.call(chords, mode);
 
 	useEffect(() => {
 		function handleKeyDown(event: KeyboardEvent) {
@@ -74,9 +94,9 @@ export default function SettingsSidebar({
 				initial={{ x: 250 }}
 				animate={{ x: settingsSidebarOpen ? 0 : 250 }}
 				transition={{ type: "spring", stiffness: 300, damping: 30 }}
-				className={`fixed top-0 right-0 h-full w-56 bg-red/80 backdrop-blur-md shadow-lg p-4 overflow-y-auto z-50 rounded-tl-lg rounded-bl-lg transition-opacity duration-300 ${settingsSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+				className={`fixed top-0 right-0 h-full w-64 bg-red/80 backdrop-blur-md shadow-lg p-4 overflow-y-auto z-50 rounded-tl-lg rounded-bl-lg transition-opacity duration-300 ${settingsSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
 			>
-				<div className="flex flex-col justify-evenly h-full text-sm text-gray-900">
+				<div className="flex flex-col justify-evenly h-full text-sm text-gray-900 gap-4">
 					<div className="text-center">
 						<h2 className="text-lg font-semibold mb-2">Strings</h2>
 						<input
@@ -119,17 +139,44 @@ export default function SettingsSidebar({
 						/>
 					</div>
 
+					{/* Scale / Mode Dropdown */}
 					<div className="text-center">
-						<h2 className="text-lg font-semibold mb-2">Mode</h2>
+						<h2 className="text-lg font-semibold mb-2">Scale / Mode</h2>
 						<select
 							className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black truncate"
-							value={mode}
-							onChange={(e) => setMode(e.target.value as keyof typeof modes)}
+							value={isScale ? mode : ""}
+							onChange={(e) => setMode(e.target.value)}
 						>
-							{Object.keys(modes).map((mode) => (
-								<option key={mode} value={mode}>
-									{mode}
+							<option value="" disabled>
+								Select scale...
+							</option>
+							{Object.keys(modes).map((m) => (
+								<option key={m} value={m}>
+									{m}
 								</option>
+							))}
+						</select>
+					</div>
+
+					{/* Grouped Chord Dropdown */}
+					<div className="text-center">
+						<h2 className="text-lg font-semibold mb-2">Chord</h2>
+						<select
+							className="w-full px-3 py-1.5 rounded border border-black shadow-sm focus:outline-none focus:ring-1 focus:ring-black truncate"
+							value={isChord ? mode : ""}
+							onChange={(e) => setMode(e.target.value)}
+						>
+							<option value="" disabled>
+								Select chord...
+							</option>
+							{sortedCounts.map((count) => (
+								<optgroup key={count} label={`${count} Intervals`}>
+									{chordsByCount[count].map((chordName) => (
+										<option key={chordName} value={chordName}>
+											{chordName}
+										</option>
+									))}
+								</optgroup>
 							))}
 						</select>
 					</div>
