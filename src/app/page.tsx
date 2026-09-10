@@ -335,8 +335,6 @@ export default function Home() {
 
 				<Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
 
-				<Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
-
 				<ChordPopup
 					tuning={tuning}
 					strings={strings}
@@ -355,19 +353,6 @@ export default function Home() {
 					setRoot={setRoot}
 					setMode={setMode}
 					onPreview={(preview) => setPreviewScale(preview)}
-				/>
-
-				<SettingsSidebar
-					strings={strings}
-					setStrings={setStrings}
-					frets={frets}
-					setFrets={setFrets}
-					mode={mode}
-					setMode={setMode}
-					root={root}
-					setRoot={setRoot}
-					settingsSidebarOpen={settingsSidebarOpen}
-					setSettingsSidebarOpen={setSettingsSidebarOpen}
 				/>
 
 				<SettingsSidebar
