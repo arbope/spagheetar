@@ -4,24 +4,22 @@ import { RefreshCcw, Github, AudioLines } from "lucide-react";
 import Tuner from "./components/tuner";
 import ChordPopup from "./components/chords";
 import ScaleChordsPopup from "./components/scaleChords";
-import { useState, useEffect, useMemo } from "react"; // Added useMemo
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import GuitarApp from "./components/guitarApp";
-import { Scale, Interval, Note, Progression } from "tonal";
+import { Scale, Interval, Note } from "tonal";
 import StyleSidebar from "./components/styleSidebar";
 import SnowFlake from "./components/snowFlake";
 import SettingsSidebar from "./components/settingsSidebar";
-import {
-	COLORS,
-	modes,
-	chords,
-	notes,
-	getKeyShift,
-	DEF_COLORS,
-} from "./constants";
+import { COLORS, modes, notes, getKeyShift, DEF_COLORS } from "./constants";
+
+const NUM_STRING_SLIDERS = 2;
+const NUM_FRET_SLIDERS = 2;
 
 export default function Home() {
-	// -- 1. UI & SIDEBAR STATE ---
+	const [mounted, setMounted] = useState(false);
+
+	// --- 1. UI & SIDEBAR STATE ---
 	const [stylesSidebarOpen, setStylesSidebarOpen] = useState(false);
 	const [settingsSidebarOpen, setSettingsSidebarOpen] = useState(false);
 	const [animatedBg, setAnimatedBg] = useState(false);
@@ -38,56 +36,65 @@ export default function Home() {
 		root: string;
 		mode: string;
 	} | null>(null);
-	// --- 2. CORE GUITAR CONFIGURATION (with LocalStorage) ---
-	const [strings, setStrings] = useState<number>(() => {
-		if (typeof window === "undefined") return 6;
-		const saved = localStorage.getItem("strings");
-		return saved ? JSON.parse(saved) : 6;
-	});
 
-	const [frets, setFrets] = useState<number>(() => {
-		if (typeof window === "undefined") return 12;
-		const saved = localStorage.getItem("frets");
-		return saved ? JSON.parse(saved) : 12;
-	});
-
-	const [mode, setMode] = useState<string>(() => {
-		if (typeof window === "undefined") return "major";
-		const saved = localStorage.getItem("mode");
-		return saved ? JSON.parse(saved) : "major";
-	});
-
-	const [root, setRoot] = useState<string>(() => {
-		if (typeof window === "undefined") return "c";
-		const saved = localStorage.getItem("root");
-		return saved ? JSON.parse(saved) : "c";
-	});
-
-	const [tuning, setTuning] = useState<string[]>(() => {
-		if (typeof window === "undefined") return ["e", "b", "g", "d", "a", "e"];
-		const saved = localStorage.getItem("tuning");
-		return saved ? JSON.parse(saved) : ["e", "b", "g", "d", "a", "e"];
-	});
+	// --- 2. CORE GUITAR CONFIGURATION ---
+	const [strings, setStrings] = useState<number>(6);
+	const [frets, setFrets] = useState<number>(12);
+	const [mode, setMode] = useState<string>("major");
+	const [root, setRoot] = useState<string>("c");
+	const [tuning, setTuning] = useState<string[]>([
+		"e",
+		"b",
+		"g",
+		"d",
+		"a",
+		"e",
+	]);
 
 	// --- 3. INTERVALS & COLORS ---
 	const [customIntervals, setCustomIntervals] = useState<number[]>([]);
 	const [detectionIntervals, setDetectionIntervals] = useState<number[]>([]);
-	const [customColors, setCustomColors] = useState([...COLORS]);
+	const [customColors, setCustomColors] = useState<string[]>([...COLORS]);
 
 	// --- 4. SELECTION & MUTING STATE ---
-	const numStringSliders = 2;
-	const numFretSliders = 2;
-
 	const [sliderRanges, setSliderRanges] = useState<[number, number][]>(
-		Array.from({ length: numStringSliders }, () => [0, strings]),
+		Array.from({ length: NUM_STRING_SLIDERS }, () => [0, 6]),
 	);
-
 	const [mutedFrets, setMutedFrets] = useState<[number, number][]>(
-		Array.from({ length: numFretSliders }, () => [0, frets]),
+		Array.from({ length: NUM_FRET_SLIDERS }, () => [0, 12]),
 	);
 
-	// --- 5. DERIVED STATE (REPLACES PREVIOUS SYNC EFFECTS) ---
-	// This logic ensures that activeStrings/activeFrets are ALWAYS the right size
+	const [bgColors, setBgColors] = useState({
+		first: "#034f1b",
+		second: "#bd3634",
+		third: "#ceac5c",
+	});
+
+	// Hydrate from localStorage and DOM styles after mount
+	useEffect(() => {
+		setMounted(true);
+
+		const savedStrings = localStorage.getItem("strings");
+		const savedFrets = localStorage.getItem("frets");
+		const savedMode = localStorage.getItem("mode");
+		const savedRoot = localStorage.getItem("root");
+		const savedTuning = localStorage.getItem("tuning");
+
+		if (savedStrings) setStrings(JSON.parse(savedStrings));
+		if (savedFrets) setFrets(JSON.parse(savedFrets));
+		if (savedMode) setMode(JSON.parse(savedMode));
+		if (savedRoot) setRoot(JSON.parse(savedRoot));
+		if (savedTuning) setTuning(JSON.parse(savedTuning));
+
+		const rootStyles = getComputedStyle(document.documentElement);
+		setBgColors({
+			first: rootStyles.getPropertyValue("--first-color").trim() || "#034f1b",
+			second: rootStyles.getPropertyValue("--second-color").trim() || "#bd3634",
+			third: rootStyles.getPropertyValue("--third-color").trim() || "#ceac5c",
+		});
+	}, []);
+
+	// --- 5. DERIVED STATE ---
 	const activeStrings = useMemo(() => {
 		const nextActive = Array(strings).fill(false);
 		sliderRanges.forEach(([min, max]) => {
@@ -98,27 +105,24 @@ export default function Home() {
 		return nextActive;
 	}, [sliderRanges, strings]);
 
-	// const activeFrets = useMemo(() => {
-	// 	const nextActive = Array(frets).fill(false);
-	// 	mutedFrets.forEach(([min, max]) => {
-	// 		for (let i = Math.floor(min); i < Math.ceil(max); i++) {
-	// 			if (i >= 0 && i < frets) nextActive[i] = true;
-	// 		}
-	// 	});
-	// 	return nextActive;
-	// }, [mutedFrets, frets]);
-
-	// --- 6. SYNC EFFECTS (LocalStorage & Boundaries) ---
-
-	useEffect(() => localStorage.setItem("mode", JSON.stringify(mode)), [mode]);
-	useEffect(() => localStorage.setItem("root", JSON.stringify(root)), [root]);
-	useEffect(
-		() => localStorage.setItem("tuning", JSON.stringify(tuning)),
-		[tuning],
-	);
-
-	// Adjust slider ranges when string/fret counts change
+	// --- 6. PERSISTENCE & BOUNDS SYNC ---
 	useEffect(() => {
+		if (!mounted) return;
+		localStorage.setItem("mode", JSON.stringify(mode));
+	}, [mode, mounted]);
+
+	useEffect(() => {
+		if (!mounted) return;
+		localStorage.setItem("root", JSON.stringify(root));
+	}, [root, mounted]);
+
+	useEffect(() => {
+		if (!mounted) return;
+		localStorage.setItem("tuning", JSON.stringify(tuning));
+	}, [tuning, mounted]);
+
+	useEffect(() => {
+		if (!mounted) return;
 		localStorage.setItem("strings", JSON.stringify(strings));
 		setSliderRanges((prev) =>
 			prev.map(([min, max]) => [
@@ -126,9 +130,10 @@ export default function Home() {
 				max >= strings - 1 || max === 0 ? strings : Math.min(max, strings),
 			]),
 		);
-	}, [strings]);
+	}, [strings, mounted]);
 
 	useEffect(() => {
+		if (!mounted) return;
 		localStorage.setItem("frets", JSON.stringify(frets));
 		setMutedFrets((prev) =>
 			prev.map(([min, max]) => [
@@ -136,9 +141,8 @@ export default function Home() {
 				max >= frets - 1 || max === 0 ? frets : Math.min(max, frets),
 			]),
 		);
-	}, [frets]);
+	}, [frets, mounted]);
 
-	// Sync Tuning array size with String count
 	useEffect(() => {
 		setTuning((prev) => {
 			if (prev.length === strings) return prev;
@@ -154,27 +158,16 @@ export default function Home() {
 		});
 	}, [strings]);
 
-	// Background Color Management
-	const body = typeof window !== "undefined" ? document.documentElement : null;
-	const getCssVar = (name: string, fallback: string) =>
-		body
-			? getComputedStyle(body).getPropertyValue(name).trim() || fallback
-			: fallback;
-
-	const [bgColors, setBgColors] = useState({
-		first: getCssVar("--first-color", "#034f1b"),
-		second: getCssVar("--second-color", "#bd3634"),
-		third: getCssVar("--third-color", "#ceac5c"),
-	});
-
 	useEffect(() => {
-		if (body && animatedBg) {
-			body.style.setProperty("--duration", duration.toString());
+		if (animatedBg) {
+			document.documentElement.style.setProperty(
+				"--duration",
+				duration.toString(),
+			);
 		}
-	}, [duration, animatedBg, body]);
+	}, [duration, animatedBg]);
 
-	// --- 7. HANDLERS & LOGIC ---
-
+	// --- 7. HANDLERS ---
 	const handleSliderChange = (index: number, newRange: [number, number]) => {
 		setSliderRanges((prev) => {
 			const next = [...prev];
@@ -217,40 +210,20 @@ export default function Home() {
 				: [...prev, interval];
 
 			if (mode === "detection" && next.length > 0) {
-				// 1. Get the actual note names (e.g., "C", "G", "A")
 				const notesInSet = next.map((i) =>
 					Note.transpose(root, Interval.fromSemitones(i)),
 				);
-
-				// 2. Get unique pitch classes (removes octaves/duplicates)
 				const distinctNotes = [
 					...new Set(notesInSet.map((n) => Note.get(n).pc)),
 				];
 
-				console.log("--- Detection Debug ---");
-				console.log("Selected Notes:", distinctNotes);
-
 				let allMatches: string[] = [];
-
-				// 3. Force the library to check EVERY clicked note as a potential root
 				distinctNotes.forEach((tonic) => {
-					const matches = Scale.detect(notesInSet, { tonic: tonic });
-					console.log(`Checking root [${tonic}]:`, matches);
+					const matches = Scale.detect(notesInSet, { tonic });
 					allMatches = [...allMatches, ...matches];
 				});
 
-				// 4. Fallback: If no exact scales found, find scales that START with these notes
-				if (allMatches.length === 0) {
-					console.log(
-						"No exact matches. Finding scales that contain these notes...",
-					);
-					// This is where you'd see more "suggested" results
-				}
-
-				const finalResults = [...new Set(allMatches)];
-				console.log("Final List:", finalResults);
-
-				setDetectedScales(finalResults);
+				setDetectedScales([...new Set(allMatches)]);
 			} else {
 				setDetectedScales([]);
 			}
@@ -259,68 +232,52 @@ export default function Home() {
 	};
 
 	const handleSelectDetectedScale = (scaleName: string) => {
-		const parts = scaleName.split(" ");
-		const newRoot = parts[0];
-		const newMode = parts.slice(1).join(" ");
-		setRoot(newRoot.toLowerCase());
-		setMode(newMode as keyof typeof modes);
-
+		const { root: newRoot, mode: newMode } = parseScale(scaleName);
+		setRoot(newRoot);
+		setMode(newMode);
 		setDetectionIntervals([]);
 		setDetectedScales([]);
 	};
 
-	// const detectScale = (intervals: number[], root: string) => {
-	// 	if (intervals.length === 0) return [];
-	// 	const notesInScale = intervals.map((interval) =>
-	// 		Note.transpose(root, Interval.fromSemitones(interval)),
-	// 	);
-	//
-	// 	return Scale.detect(notesInScale);
-	// };
-
 	function updateColor(index: number, newColor: string) {
-		COLORS[index] = newColor;
-		setCustomColors([...COLORS]);
+		setCustomColors((prev) => {
+			const next = [...prev];
+			next[index] = newColor;
+			return next;
+		});
 	}
 
 	function resetColors() {
-		for (let i = 0; i < COLORS.length - 1; i++) {
-			COLORS[i] = DEF_COLORS[i];
-		}
-		setCustomColors([...COLORS]);
+		setCustomColors([...DEF_COLORS]);
 	}
 
 	function updateBgColor(name: "first" | "second" | "third", color: string) {
-		if (!body) return;
-		body.style.setProperty(`--${name}-color`, color);
+		document.documentElement.style.setProperty(`--${name}-color`, color);
 		setBgColors((prev) => ({ ...prev, [name]: color }));
-	}
-
-	function showChords() {
-		console.log(chords);
 	}
 
 	function resetSettings() {
 		localStorage.removeItem("strings");
-		setStrings(6);
 		localStorage.removeItem("frets");
-		setFrets(12);
 		localStorage.removeItem("mode");
-		setMode("major");
 		localStorage.removeItem("root");
-		setRoot("c");
 		localStorage.removeItem("tuning");
+
+		setStrings(6);
+		setFrets(12);
+		setMode("major");
+		setRoot("c");
 		setTuning(["e", "b", "g", "d", "a", "e"]);
 		setCustomIntervals([]);
 		setDetectionIntervals([]);
 		resetColors();
 		setAnimatedBg(false);
-		setSliderRanges(Array.from({ length: numStringSliders }, () => [0, 6]));
-		setMutedFrets(Array.from({ length: numFretSliders }, () => [0, 12]));
+		setSliderRanges(Array.from({ length: NUM_STRING_SLIDERS }, () => [0, 6]));
+		setMutedFrets(Array.from({ length: NUM_FRET_SLIDERS }, () => [0, 12]));
 	}
 
 	const animationClass = animatedBg ? "animated-gradient-bg" : "";
-	// --- 8. RENDER ---
+
 	return (
 		<motion.div
 			initial={{ opacity: 0 }}
@@ -334,7 +291,7 @@ export default function Home() {
 		>
 			<SnowFlake enabled={animatedBg} />
 
-			<p className="absolute top-2 left-1/2 -translate-x-1/2 text-5xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center">
+			<p className="absolute top-2 left-1/2 -translate-x-1/2 text-5xl transform transition-all duration-1500 hover:translate-y-3 hover:text-black text-center select-none">
 				𝕾𝕻𝕬𝕲𝕳𝕰𝕰𝕿𝕬𝕽
 			</p>
 
@@ -377,11 +334,19 @@ export default function Home() {
 				</button>
 
 				<Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
+
+				<Tuner showTuner={showTuner} setShowTuner={setShowTuner} />
+
 				<ChordPopup
 					tuning={tuning}
 					strings={strings}
+					root={root}
+					mode={mode}
+					setRoot={setRoot}
+					setMode={setMode}
 					onPreview={(preview) => setPreviewScale(preview)}
 				/>
+
 				<ScaleChordsPopup
 					tuning={tuning}
 					strings={strings}
@@ -391,6 +356,7 @@ export default function Home() {
 					setMode={setMode}
 					onPreview={(preview) => setPreviewScale(preview)}
 				/>
+
 				<SettingsSidebar
 					strings={strings}
 					setStrings={setStrings}
@@ -403,17 +369,31 @@ export default function Home() {
 					settingsSidebarOpen={settingsSidebarOpen}
 					setSettingsSidebarOpen={setSettingsSidebarOpen}
 				/>
+
+				<SettingsSidebar
+					strings={strings}
+					setStrings={setStrings}
+					frets={frets}
+					setFrets={setFrets}
+					mode={mode}
+					setMode={setMode}
+					root={root}
+					setRoot={setRoot}
+					settingsSidebarOpen={settingsSidebarOpen}
+					setSettingsSidebarOpen={setSettingsSidebarOpen}
+				/>
+
 				<button
 					type="button"
-					onClick={resetSettings}
-					aria-label="Show chords"
-					className="text-2xl cursor-pointer transition-transform duration-700 transform hover:-rotate-[180deg] hover:text-gray-800 z-10"
+					// onClick={() => setShowChordsPopup((prev) => !prev)}
+					aria-label="Toggle chord display"
+					className="text-2xl cursor-pointer transition-transform duration-700 transform hover:text-gray-800 z-10"
 				>
 					<AudioLines size={36} />
 				</button>
 			</div>
 
-			<div className="w-screen h-screen verflow-hidden flex items-center justify-center">
+			<div className="w-screen h-screen overflow-hidden flex items-center justify-center">
 				{mode === "detection" && detectedScales.length > 0 && (
 					<motion.div
 						initial={{ y: 20, opacity: 0 }}
@@ -438,10 +418,13 @@ export default function Home() {
 						</div>
 					</motion.div>
 				)}
+
 				<div className="rotate-90 md:rotate-0 origin-center">
 					<GuitarApp
 						mode={
-							previewScale ? (previewScale.mode as keyof typeof modes) : mode
+							previewScale
+								? (previewScale.mode as keyof typeof modes)
+								: (mode as keyof typeof modes)
 						}
 						root={previewScale ? previewScale.root : root}
 						setMode={setMode}
@@ -456,8 +439,8 @@ export default function Home() {
 						toggleCustomInterval={toggleCustomInterval}
 						toggleDetectionInterval={toggleDetectionInterval}
 						detectionIntervals={detectionIntervals}
-						activeStrings={activeStrings} // Now derived instantly via useMemo
-						setActiveStrings={() => {}} // Placeholder: derived state doesn't need a setter
+						activeStrings={activeStrings}
+						setActiveStrings={() => {}}
 						handleActiveStringsChange={handleSliderChange}
 						sliderRanges={sliderRanges}
 						mutedFrets={mutedFrets}

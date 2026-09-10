@@ -3,13 +3,40 @@
 import React, { useEffect, useRef, useState } from "react";
 import "@coderline/alphatab";
 
+interface AlphaTabApi {
+    playerReady: {
+        on: (callback: () => void) => void;
+    };
+    playerStateChanged: {
+        on: (callback: (e: PlayerStateEvent) => void) => void;
+    };
+    playPause: () => void;
+    stop: () => void;
+    destroy: () => void;
+}
+
+interface PlayerStateEvent {
+    state: number;
+}
+
+interface WindowWithAlphaTab extends Window {
+    alphaTab: {
+        AlphaTabApi: new (container: HTMLElement, settings: unknown) => AlphaTabApi;
+        synth: {
+            PlayerState: {
+                Playing: number;
+            };
+        };
+    };
+}
+
 interface AlphaTabPlayerProps {
 	fileUrl: string;
 }
 
 export default function AlphaTabPlayer({ fileUrl }: AlphaTabPlayerProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const apiRef = useRef<any>(null);
+	const apiRef = useRef<AlphaTabApi | null>(null);
 
 	const [isReady, setIsReady] = useState(false);
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -28,7 +55,8 @@ export default function AlphaTabPlayer({ fileUrl }: AlphaTabPlayerProps) {
 		};
 
 		// Initialize alphaTab instance
-		const api = new (window as any).alphaTab.AlphaTabApi(
+		const win = window as unknown as WindowWithAlphaTab;
+		const api = new win.alphaTab.AlphaTabApi(
 			containerRef.current,
 			settings,
 		);
@@ -39,9 +67,9 @@ export default function AlphaTabPlayer({ fileUrl }: AlphaTabPlayerProps) {
 			setIsReady(true);
 		});
 
-		api.playerStateChanged.on((e: any) => {
+		api.playerStateChanged.on((e: PlayerStateEvent) => {
 			setIsPlaying(
-				e.state === (window as any).alphaTab.synth.PlayerState.Playing,
+				e.state === win.alphaTab.synth.PlayerState.Playing,
 			);
 		});
 

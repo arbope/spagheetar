@@ -6,13 +6,16 @@ import { BookOpenCheck, ArrowBigLeft, ArrowBigRight, EyeClosed } from "lucide-re
 import { notes, chords, getKeyShift, getNoteColor, getContrastingTextColor } from "../constants";
 import { Scale, Note } from "tonal";
 
-interface ScaleChordPopupProps {
+export interface ScaleChordPopupProps {
     tuning: string[];
     strings: number;
     root: string;
     mode: string;
     setRoot?: (root: string) => void;
     setMode?: (mode: string) => void;
+    isOpen?: boolean;
+    setIsOpen?: (isOpen: boolean) => void;
+    onClose?: () => void;
     onPreview?: (preview: { root: string; mode: string } | null) => void;
 }
 
@@ -23,9 +26,26 @@ export default function ScaleChordPopup({
     mode,
     setRoot,
     setMode,
+    isOpen: controlledIsOpen,
+    setIsOpen: controlledSetIsOpen,
+    onClose,
     onPreview,
 }: ScaleChordPopupProps) {
-    const [isOpen, setIsOpen] = useState(false);
+    const [internalIsOpen, setInternalIsOpen] = useState(false);
+    const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+
+    const setIsOpen = (value: boolean | ((prev: boolean) => boolean)) => {
+        const nextValue = typeof value === "function" ? value(isOpen) : value;
+        if (controlledSetIsOpen) {
+            controlledSetIsOpen(nextValue);
+        } else {
+            setInternalIsOpen(nextValue);
+        }
+        if (!nextValue && onClose) {
+            onClose();
+        }
+    };
+
     const [chordRoot, setChordRoot] = useState<string>(root.toLowerCase());
     const [selectedChordType, setSelectedChordType] = useState<string>("major");
     const [positionIndex, setPositionIndex] = useState<number>(0);
@@ -108,11 +128,11 @@ export default function ScaleChordPopup({
 
     // Filter available chord types
     const availableChordTypes = useMemo(() => {
-        const rootShift = getKeyShift(chordRoot);
+        const rootPitchShift = getKeyShift(chordRoot);
         const matching: string[] = [];
 
         for (const [cName, intervals] of Object.entries(chords)) {
-            const chordPitches = intervals.map((i) => (rootShift + i) % 12);
+            const chordPitches = intervals.map((i) => (rootPitchShift + i) % 12);
             const allNotesInScale = chordPitches.every((pitch) => {
                 return scaleNotes.some((scaleNote) => getKeyShift(scaleNote) % 12 === pitch);
             });
@@ -146,7 +166,10 @@ export default function ScaleChordPopup({
         }
     }, [availableChordTypes, selectedChordType]);
 
-    const chordIntervals = chords[selectedChordType] || [0, 4, 7];
+    const chordIntervals = useMemo(() => {
+        return chords[selectedChordType] || [0, 4, 7];
+    }, [selectedChordType]);
+
     const rootShift = getKeyShift(chordRoot);
     const chordSemis = useMemo(() => {
         return chordIntervals.map((i) => (rootShift + i) % 12);
@@ -193,12 +216,10 @@ export default function ScaleChordPopup({
                 }
             }
 
-            let rootFound = false;
             for (let s = 0; s < strings; s++) {
                 if (stringNotes[s] !== null) {
-                    const pitch = (getKeyShift(tuning[s]) + stringNotes[s]) % 12;
+                    const pitch = (getKeyShift(tuning[s]) + (stringNotes[s] as number)) % 12;
                     if (pitch === rootPitch) {
-                        rootFound = true;
                         for (let mutingS = 0; mutingS < s; mutingS++) {
                             stringNotes[mutingS] = null;
                         }
@@ -220,7 +241,7 @@ export default function ScaleChordPopup({
                 const signature = stringNotes.join(",");
                 if (!seenSignatures.has(signature)) {
                     seenSignatures.add(signature);
-                    const playedFrets = stringNotes.filter(f => f !== null && f !== 0) as number[];
+                    const playedFrets = stringNotes.filter((f) => f !== null && f !== 0) as number[];
                     let displayStart = 1;
                     let displayEnd = 4;
                     if (playedFrets.length > 0) {
@@ -238,7 +259,7 @@ export default function ScaleChordPopup({
             validWindows.push({ start: 1, end: 4, notesOnStrings: Array(strings).fill(null) });
         }
         return validWindows;
-    }, [chordSemis, tuning, strings, rootShift]);
+    }, [chordSemis, tuning, strings]);
 
     useEffect(() => {
         if (positionIndex >= positions.length) setPositionIndex(0);
@@ -263,7 +284,7 @@ export default function ScaleChordPopup({
         onPreview?.(null);
     };
 
-    // Eye Click Toggle & Commit Handler
+    // Eye Click Pin & Commit Handler
     const handleEyeClick = () => {
         const nextPinned = !isPinned;
         setIsPinned(nextPinned);
@@ -273,14 +294,12 @@ export default function ScaleChordPopup({
             setMode?.(selectedChordType);
             onPreview?.(null);
             setIsHoveringEye(false);
-        } else {
-            if (previousState) {
-                setRoot?.(previousState.root);
-                setMode?.(previousState.mode);
-                setChordRoot(previousState.chordRoot);
-                setSelectedChordType(previousState.selectedChordType);
-                setPreviousState(null);
-            }
+        } else if (previousState) {
+            setRoot?.(previousState.root);
+            setMode?.(previousState.mode);
+            setChordRoot(previousState.chordRoot);
+            setSelectedChordType(previousState.selectedChordType);
+            setPreviousState(null);
         }
     };
 
@@ -325,9 +344,7 @@ export default function ScaleChordPopup({
                                 onChange={(e) => {
                                     setChordRoot(e.target.value);
                                     setPositionIndex(0);
-                                    if (isPinned) {
-                                        setRoot?.(e.target.value);
-                                    }
+                                    if (isPinned) setRoot?.(e.target.value);
                                 }}
                                 className="px-2.5 py-1.5 h-9 rounded-lg bg-white/50 dark:bg-black/50 border border-black/20 dark:border-white/20 text-sm font-bold focus:outline-none shrink-0"
                             >
@@ -344,9 +361,7 @@ export default function ScaleChordPopup({
                                 onChange={(e) => {
                                     setSelectedChordType(e.target.value);
                                     setPositionIndex(0);
-                                    if (isPinned) {
-                                        setMode?.(e.target.value);
-                                    }
+                                    if (isPinned) setMode?.(e.target.value);
                                 }}
                                 className="px-3 py-1.5 h-9 rounded-lg bg-white/50 dark:bg-black/50 border border-black/20 dark:border-white/20 text-sm font-semibold flex-1 focus:outline-none truncate"
                             >
@@ -361,7 +376,7 @@ export default function ScaleChordPopup({
                                 ))}
                             </select>
 
-                            {/* EyeClosed Toggle & Preview Button (1U) */}
+                            {/* Eye Preview / Pin Button */}
                             <button
                                 onMouseEnter={handleEyeMouseEnter}
                                 onMouseLeave={handleEyeMouseLeave}
@@ -384,7 +399,6 @@ export default function ScaleChordPopup({
                                     const actualSIdx = strings - 1 - sIdx;
                                     const note = tuning[actualSIdx];
                                     const playedFret = currentPos.notesOnStrings[actualSIdx];
-                                    
                                     const isMuted = playedFret === null;
                                     const isNoteInChord = chordSemis.includes(getKeyShift(note) % 12);
                                     const textColor = isNoteInChord ? getNoteColor(note, root) : "#D1D5DB";
@@ -392,7 +406,9 @@ export default function ScaleChordPopup({
                                     return (
                                         <div
                                             key={sIdx}
-                                            className={`h-7 flex-1 rounded-sm flex items-center justify-center text-xs font-bold shadow-sm transition-opacity ${isMuted ? 'bg-gray-600/50 opacity-40' : 'bg-gray-700 opacity-100'}`}
+                                            className={`h-7 flex-1 rounded-sm flex items-center justify-center text-xs font-bold shadow-sm transition-opacity ${
+                                                isMuted ? "bg-gray-600/50 opacity-40" : "bg-gray-700 opacity-100"
+                                            }`}
                                             style={{ color: textColor }}
                                         >
                                             {note.toUpperCase()}
@@ -408,7 +424,10 @@ export default function ScaleChordPopup({
                                     const actualFret = startFret + fretOffset;
 
                                     return (
-                                        <div key={fretOffset} className="flex w-full h-8 border-b border-black/30 dark:border-white/30 relative">
+                                        <div
+                                            key={fretOffset}
+                                            className="flex w-full h-8 border-b border-black/30 dark:border-white/30 relative"
+                                        >
                                             <span className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-gray-700 dark:text-gray-300 w-6 text-center">
                                                 {actualFret}
                                             </span>
@@ -416,16 +435,21 @@ export default function ScaleChordPopup({
                                                 const actualSIdx = strings - 1 - sIdx;
                                                 const playedFret = currentPos.notesOnStrings[actualSIdx];
                                                 const isNoteHere = playedFret === actualFret;
-                                                
                                                 const stringNoteShift = getKeyShift(tuning[actualSIdx]);
                                                 const noteName = notes[(stringNoteShift + actualFret) % 12];
                                                 const bgColor = isNoteHere ? getNoteColor(noteName, root) : "transparent";
                                                 const textColor = isNoteHere ? getContrastingTextColor(bgColor) : "transparent";
 
                                                 return (
-                                                    <div key={sIdx} className="flex-1 flex items-center justify-center border-r border-black/20 dark:border-white/20 last:border-r-0 relative">
+                                                    <div
+                                                        key={sIdx}
+                                                        className="flex-1 flex items-center justify-center border-r border-black/20 dark:border-white/20 last:border-r-0 relative"
+                                                    >
                                                         {isNoteHere && (
-                                                            <div className="rounded-full h-5 w-5 text-xs font-normal flex items-center justify-center z-10 shadow-md" style={{ backgroundColor: bgColor, color: textColor }}>
+                                                            <div
+                                                                className="rounded-full h-5 w-5 text-xs font-normal flex items-center justify-center z-10 shadow-md"
+                                                                style={{ backgroundColor: bgColor, color: textColor }}
+                                                            >
                                                                 {noteName}
                                                             </div>
                                                         )}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface Flake {
 	id: number;
@@ -56,16 +57,14 @@ const ShurikenRain: React.FC<ShurikenRainProps> = ({ enabled }) => {
 						animation: `fall ${flake.duration}s linear ${flake.delay}s forwards`,
 					}}
 				>
-					<img
+					<Image
 						src="/shuriken.png"
-						alt="tetas gordas"
+						alt="shuriken"
+						width={flake.size * 3}
+						height={flake.size * 3}
 						className="opacity-90"
 						style={{
-							width: `${flake.size*3}px`,
-							height: `${flake.size*3}px`,
 							objectFit: "contain",
-							// This image only handles the spinning
-							// It also applies the horizontal drift here 
 							transform: `translateX(${flake.drift}px)`,
 							animation: `spin 0.6s linear infinite`,
 						}}
